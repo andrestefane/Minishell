@@ -1,35 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Mini.h                                             :+:      :+:    :+:   */
+/*   Tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 19:10:59 by astefane         ###   ########.fr       */
+/*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
+/*   Updated: 2025/04/17 19:15:10 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINI_H
-# define MINI_H
+#include "../Mini.h"
 
-# include "libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
-
-typedef struct tokens
+void	count_args(t_token *list)
 {
-	char	**tokens;
-	char	*input;
-	int		num_tokens;
+	int	count;
+	int	i;
 
-}	t_token;
+	i = 0;
+	count = 0;
+	while (list->tokens[count])
+		list->num_tokens++;
+}
 
-// Tokens
-void	tokenizer(t_token *list);
-void	count_args(t_token *list);
+void	split_tokens(t_token *list)
+{
+	int	i;
 
-// Ejecucion
-void	ft_exec(t_token *list);
+	i = 0;
+	while (list->input[i])
+	{
+		list->tokens[i] = *ft_split(&list->input[i], ' ');
+		i++;
+	}
+	list->tokens[i] = NULL;
+}
 
-#endif
+void	tokenizer(t_token *list)
+{
+	count_args(list);
+	split_tokens(list);
+}

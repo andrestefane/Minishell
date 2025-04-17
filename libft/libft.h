@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/12 18:17:13 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:29:45 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_list
 
 void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);
+void		free_split(char **str);
 
 // String Fuctions
 
@@ -100,10 +101,16 @@ int			ft_lstsize(t_list *lst);
 # endif
 
 char		*get_next_line(int fd, int node);
-char		*ft_reading(int fd, char *str);
-char		*ft_cleanline(char *str);
-char		*ft_free(char **str);
-char		*ft_get_line(char *str);
+void		*ft_memcpy_gnl(void *dst, const void *src, size_t n);
+char		*ft_substr_gnl(char const *s, unsigned int start, size_t len);
+char		*ft_strjoin_gnl(char *s1, char *s2);
+char		*ft_strchr_gnl(char *s, int c);
+size_t		ft_strlen_gnl(const char *s);
+char		*ft_free_gnl(char **str);
+char		*ft_cleanline_gnl(char *str);
+char		*ft_get_line_gnl(char *str);
+char		*ft_reading_gnl(int fd, char *str);
+
 
 // GNL UTILS
 

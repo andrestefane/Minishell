@@ -6,7 +6,7 @@
 #    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/12 17:34:42 by astefane          #+#    #+#              #
-#    Updated: 2025/04/12 18:36:24 by astefane         ###   ########.fr        #
+#    Updated: 2025/04/17 19:10:04 by astefane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,13 @@ LIBFT_LIB = $(LIBFT_DIR)libft.a
 LDFLAGS = -lreadline
 
 SRCS = \
-	main.c
+	main.c \
+	./Tokenizer/Tokens.c \
+	./Exec/Execute.c
 
 OBJS = $(SRCS:.c=.o)
 NAME = Mini
-INCLUDES = -I includes
+INCLUDES = -I. -I includes
 
 TOTAL_FILES := $(words $(SRCS))
 COUNT = 0
@@ -34,14 +36,14 @@ $(LIBFT_LIB):
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 
 $(NAME): $(OBJS) $(LIBFT_LIB)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)  # Asegúrate de que LDFLAGS esté aquí
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)
 
 %.o: %.c
 	@if [ "$(COUNT)" -eq "0" ]; then echo "\033[1;33mCompiling So_long...\033[0m"; fi
 	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))
 	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))
 	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	@echo "\033[1;33mCleaning all .o files...\033[0m"

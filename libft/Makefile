@@ -6,7 +6,7 @@
 #    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/21 17:31:38 by astefane          #+#    #+#              #
-#    Updated: 2025/04/12 17:32:41 by astefane         ###   ########.fr        #
+#    Updated: 2025/04/17 16:59:13 by astefane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ ft_lstsize.c \
 get_next_line.c \
 get_next_line_utils.c \
 ft_strndup.c \
+free_split.c \
 Pipex/More_utils.c \
 Pipex/pipex_utils.c \
 Pipex/pipex.c \
@@ -67,7 +68,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = cc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 NAME = libft.a
 
@@ -95,7 +96,5 @@ fclean: clean
 
 re: fclean $(NAME)
 
-bonus: $(OBJS)
-	@ar rcs $(NAME) $(OBJS)
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re

@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Mini.h                                             :+:      :+:    :+:   */
+/*   free_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 19:10:59 by astefane         ###   ########.fr       */
+/*   Created: 2025/04/15 10:52:53 by astefane          #+#    #+#             */
+/*   Updated: 2025/04/15 10:59:48 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINI_H
-# define MINI_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
-
-typedef struct tokens
+void	free_split(char **str)
 {
-	char	**tokens;
-	char	*input;
-	int		num_tokens;
+	int	i;
 
-}	t_token;
-
-// Tokens
-void	tokenizer(t_token *list);
-void	count_args(t_token *list);
-
-// Ejecucion
-void	ft_exec(t_token *list);
-
-#endif
+	i = 0;
+	if (*str)
+	{
+		while (str[i])
+		{
+			free(str[i]);
+			i++;
+		}
+		free(str);
+	}
+}

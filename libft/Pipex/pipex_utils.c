@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 20:06:04 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/12 17:24:04 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:52:19 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,5 @@ char	*create_path(char *possible_path, char *command)
 	if (!temp)
 		return (NULL);
 	path = ft_strjoin(temp, command);
-	free(temp);
 	return (path);
 }
