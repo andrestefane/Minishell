@@ -6,26 +6,36 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:31:08 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/12 17:31:41 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:26:12 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	free_struct(t_fd_pipex	*data, char *message, int i)
+void	free_struct(t_pipex *data, char *message, int exit_code, int std)
 {
+	ft_putstr("libero struct\n", 2);
 	if (data)
 	{
-		free(data->pid);
+		if (data->pid)
+		{
+			free(data->pid);
+			data->pid = NULL;
+		}
+		if (data->cmds)
+		{
+			ft_freedoom(data->cmds);
+			data->cmds = NULL;
+		}
 		free(data);
-		ft_putstr(message);
-		exit(i);
 	}
+	ft_putstr(message, std);
+	exit(exit_code);
 }
 
-void	exit_with_error(char *message, int exit_code)
+void	exit_with_error(char *message, int exit_code, int std)
 {
-	ft_putstr(message);
+	ft_putstr(message, std);
 	exit(exit_code);
 }
 
@@ -42,8 +52,7 @@ void	ft_freedoom(char **str)
 		str[i] = NULL;
 		i++;
 	}
-	free (str);
-	str = NULL;
+	free(str);
 }
 
 void	free_and_exit(char **args, char **paths, int exit_code)

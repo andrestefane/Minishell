@@ -6,13 +6,13 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 20:06:04 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 18:52:19 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:27:24 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	ft_cmd(t_fd_pipex *data, char *argv, char **envir)
+void	ft_cmd(t_pipex *data, char *argv, char **envir)
 {
 	char	**args;
 	char	**possible_paths;
@@ -22,30 +22,30 @@ void	ft_cmd(t_fd_pipex *data, char *argv, char **envir)
 		return ;
 	args = cmd_managment(data, argv);
 	if (!args || !*args)
-		free_struct(data, ERR_FLASH, 1);
+		free_struct(data, "Error with args\n", 1, 2);
 	path_line = find_execpath(envir);
 	if (!path_line)
 	{
 		ft_freedoom(args);
-		exit_with_error(ERR_FLASH, 1);
+		exit_with_error("Error with path\n", 1, 2);
 	}
 	possible_paths = ft_split(path_line, ':');
 	if (!possible_paths)
 	{
 		ft_freedoom(args);
-		exit_with_error(ERR_FLASH, 1);
+		exit_with_error("Error possible path\n", 1, 2);
 	}
-	execute_command(data, args, possible_paths, envir);
+	execute_command_bonus(data, args, possible_paths, envir);
 }
 
-char	**cmd_managment(t_fd_pipex *data, char *cmd)
+char	**cmd_managment(t_pipex *data, char *cmd)
 {
 	char	**cmd_split;
 	char	*cmd_only;
 	char	*arg_only;
 
 	if (!cmd || !*cmd)
-		free_struct(data, ERR_FLASH, 1);
+		free_struct(data, "Error cmd_managment\n", 1, 2);
 	cmd_split = ft_split(cmd, ' ');
 	if (!cmd_split || !cmd_split[0])
 	{
@@ -62,7 +62,7 @@ char	**cmd_managment(t_fd_pipex *data, char *cmd)
 	}
 	cmd_split = malloc(sizeof(char *) * 3);
 	if (!cmd_split)
-		free_struct(data, ERR_FLASH, 1);
+		free_struct(data, "Error cmd_split\n", 1, 2);
 	cmd_split = (char *[]){cmd_only, ft_strtrim(arg_only, "'"), NULL};
 	return (cmd_split);
 }
@@ -83,7 +83,7 @@ char	*find_execpath(char **envir)
 	return (NULL);
 }
 
-void	execute_command(t_fd_pipex *data, char **args,
+void	execute_command_bonus(t_pipex *data, char **args,
 char **paths, char **envir)
 {
 	char	*path;
@@ -102,8 +102,8 @@ char **paths, char **envir)
 		free(path);
 		i++;
 	}
-	perror(ERR_FLASH);
-	perror(args[0]);
+	write(2, "Error execution\n", 17);
+	ft_putstr(args[0], 2);
 	free(data->pid);
 	free(data);
 	free_and_exit(args, paths, 127);
