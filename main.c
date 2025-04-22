@@ -3,27 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 19:10:45 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:23:52 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
 
-int	main(int argc, char **env)
+int main(int argc, char **env)
 {
-	t_token	*list;
+    char *input;
+    int index;
+    t_token_type type;
+    char *token;
 
-	(void)env;
-	list = malloc(sizeof(t_token));
-	if (!list)
-		exit_with_error("Error in first malloc\n", 1);
-	if (argc != 1)
-		exit_with_error("Alot of arguments\n", 1);
-	*list = (t_token){0};
-	ft_exec(list); //Bucle infinito aqui
-	free(list);
-	return (0);
+    (void)env;
+    if (argc != 1)
+        exit_with_error("Alot of arguments\n", 1);
+    while (1)
+    {
+        input = readline("Minishell> ");
+        if (!input)
+        {
+            ft_putstr("\nLeaving...\n");
+            break;
+        }
+        if (*input)
+        {
+            add_history(input);
+            index = 0;
+            while (input[index])
+            {
+                token = extract_token(input, &index, &type);
+                if (!token)
+                    break;
+                printf("Token: %s, Type: %d, Index: %d\n", token, type, index);
+                free(token);
+            }
+        }
+        free(input);
+    }
+    return (0);
 }
