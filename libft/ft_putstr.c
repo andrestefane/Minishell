@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 14:00:31 by astefane          #+#    #+#             */
-/*   Updated: 2025/03/22 16:06:12 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:17:42 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr(char *s)
+void	ft_putstr(char *s, int std)
 {
 	int	i;
 
@@ -21,7 +21,7 @@ void	ft_putstr(char *s)
 	{
 		while (s[i] != '\0')
 		{
-			write(1, &s[i], 1);
+			write(std, &s[i], 1);
 			i++;
 		}
 	}

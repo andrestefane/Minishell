@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 18:29:45 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:25:18 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int			ft_toupper(int c);
 // Print
 
 void		ft_putendl(char *s);
-void		ft_putstr(char *s);
+void		ft_putstr(char *s, int std);
 void		ft_putchar(char c);
 void		ft_putnbr(int n);
 
@@ -120,40 +120,50 @@ char		*ft_strchr_gnl(char *s, int c);
 
 // PIPEX
 
-# define ERR_FLASH "Error"
-# define ERR_ARG "Error Arg or Pipe"
-# define ERR_PIPE "Error Pipe"
-# define ERR_FORK "Error Fork"
-# define ERRO_INFILE "Error infile"
-# define ERRO_DUP "Error DUP"
-# define ERRO_OUFILE "Error outfile"
-# define ERRO_DOC "Error here doc"
-# define ERRO_FEW "Few args"
+# define ERR_FLASH "Error\n"
+# define ERR_ARG "Error Arg or Pipe\n"
+# define ERR_PIPE "Error Pipe\n"
+# define ERR_FORK "Error Fork\n"
+# define ERRO_INFILE "Error infile\n"
+# define ERRO_DUP "Error DUP\n"
+# define ERRO_OUFILE "Error outfile\n"
+# define ERRO_DOC "Error here doc\n"
+# define ERRO_FEW "Few args\n"
 
 typedef struct s_fd_pipex
 {
 	int		processes;
 	int		heredoc;
+	int		i;
+	int		j;
+	int		count;
+	int		cmd_index;
+	int		cmd_start;
+	int		cmd_end;
+	int		out_index;
+	char	*limiter;
+	char	**cmds;
+	int		n_cmds;
+	char	*out_file;
+	pid_t	*pid;
 	int		infile;
 	int		outfile;
-	pid_t	*pid;
-}	t_fd_pipex;
+}	t_pipex;
 
-void		ft_cmd(t_fd_pipex *data, char *argv, char **envir);
+void		ft_cmd(t_pipex *data, char *argv, char **envir);
 char		*create_path(char *possible_path, char *command);
-void		free_struct(t_fd_pipex	*data, char *message, int i);
-void		ft_outfile(t_fd_pipex *data, int argc, char **argv);
-char		**cmd_managment(t_fd_pipex *data, char *cmd);
-void		ft_infile(char **argv, t_fd_pipex *data);
-t_fd_pipex	*bonus_struct(int argc, char **argv);
+void		free_struct(t_pipex	*data, char *message, int i, int std);
+void		ft_outfile(t_pipex *data, int argc, char **argv);
+char		**cmd_managment(t_pipex *data, char *cmd);
+void		ft_infile(char **argv, t_pipex *data);
+t_pipex		*pipex_parsing(int argc, char **argv, t_pipex *data);
 char		*find_execpath(char **envir);
 int			here_doc(char **argv);
-
-void		execute_command(t_fd_pipex *data, char **args,
-				char **paths, char **envir);
-void		process_and_exec(t_fd_pipex *data, int i,
+void		execute_command_bonus(t_pipex *data, char **args,
+			char **paths, char **envir);
+void		process_and_exec(t_pipex *data, int i,
 				char **argv, char **envir);
-void		exit_with_error(char *message, int exit_code);
+void		exit_with_error(char *message, int exit_code, int std);
 void		ft_freedoom(char **str);
 char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
