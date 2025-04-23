@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 04:06:06 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:45:08 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@ static t_token_type	get_operator_type(char *input, int i, int *len)
 	{
 		*len = 1;
 		return (T_PIPE);
+	}
+	if (input[i] == '<' && input[i + 1] == '<')
+	{
+		*len = 2;
+		return (T_HEREDOC);
+	}
+	if (input[i] == '>' && input[i + 1] == '>')
+	{
+		*len = 2;
+		return (T_RED_APPEND);
+	}
+	if (input[i] == '<')
+	{
+		*len = 1;
+		return (T_RED_IN);
+	}
+	if (input[i] == '>')
+	{
+		*len = 1;
+		return (T_RED_OUT);
 	}
 	return (T_WORD);
 }
