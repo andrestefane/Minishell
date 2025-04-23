@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/22 16:24:34 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/23 04:14:21 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,31 @@ typedef enum e_token_type
 	T_RED_IN,
 	T_RED_OUT,
 	T_RED_APPEND,
-	T_HEREDOC
+	T_HEREDOC,
+	T_INFILE,
+	T_OUTFILE
 }t_token_type;
 
-typedef struct s_single_token
+typedef struct s_single_token //almacena informacion de un token individual
 {
-	char  *value;
-	t_token_type type;
+	char  *value; // su valor
+	t_token_type type; // su tipo
 }t_single_token;
 
 typedef struct s_token
 {
-	t_single_token *tokens;
 	char *input;
 	int num_tokens;
+	t_single_token *tokens; // puntero a un bloque de memoria que almacena múltiples t_single_token consecutivos.
 }t_token;
 
 
 
 // Tokens
-// t_token *tokenizer(char *input);
+t_token	*init_token_list(char *input);
+void	count_args(t_token *list);
+int	split_tokens(t_token *list);
 
-// Ejecucion
-void	ft_exec(t_token *list);
 
 // Utilidades
 void	exit_with_error(char *message, int exit_code);
