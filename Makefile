@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
+#    By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/12 17:34:42 by astefane          #+#    #+#              #
-#    Updated: 2025/04/17 19:10:04 by astefane         ###   ########.fr        #
+#    Updated: 2025/04/23 04:15:07 by alejaro2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ LDFLAGS = -lreadline
 SRCS = \
 	main.c \
 	./Tokenizer/Tokens.c \
+	./Tokenizer/tokenizer_utils.c\
 	./Exec/Execute.c
 
 OBJS = $(SRCS:.c=.o)
