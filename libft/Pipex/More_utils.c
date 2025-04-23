@@ -6,78 +6,70 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:03:30 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/22 16:31:10 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:55:44 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_pipex	*pipex_parsing(int argc, char **argv, t_pipex *data)
+t_pipex	*pipex_parsing(t_token *token, t_pipex *data)
 {
-	// Detectar tipo de entrada
-	if (!ft_strcmp(argv[1], "_HEREDOC_"))
-	{
-		data->heredoc = 1;
-		data->limiter = argv[2];
-	}
-	else if (!ft_strcmp(argv[1], "_INFILE_"))
-	{
-		data->heredoc = 0;
-		data->limiter = argv[2];
-	}
-	else
-		free_struct(data, "pipex: se esperaba '<' o '<<'\n", 1, 2);
+	int	i;
 
-	// Buscar comandos
-	data->cmd_start = -1;
-	data->i = 3;
-	while (data->i < argc)
+	i = 0;
+// principio de linea
+	if (token->tokens[i].type == T_RED_IN || token->tokens[i].type == T_HEREDOC)
 	{
-		if (!ft_strcmp(argv[data->i], "_PIPE_") && argv[data->i + 1])
+		data->heredoc = (token->tokens[i].type == T_HEREDOC);
+		data->limiter = token->tokens[i + 1].value;
+		i += 2;
+	}
+	data->cmd_start = -1;
+	while (i < token->num_tokens)
+	{
+		if (token->tokens[i].type == T_PIPE && i + 1 < token->num_tokens)
 		{
-			data->cmd_start = data->i + 1;
+			data->cmd_start = i + 1;
 			break ;
 		}
-		data->i++;
+		i++;
 	}
 	if (data->cmd_start == -1)
 		free_struct(data, ": command not found\n", 127, 2);
-
-	// Detectar última redirección de salida: > o >>
+// Final de linea
 	data->out_index = -1;
-	data->i = argc - 2;
-	while (data->i > data->cmd_start)
+	i = token->num_tokens - 2;
+	while (i > data->cmd_start)
 	{
-		if (!ft_strcmp(argv[data->i], "_APPEND_") || !ft_strcmp(argv[data->i], "_OUTFILE_"))
+		if (token->tokens[i].type == T_RED_OUT
+			|| token->tokens[i].type == T_HEREDOC)
 		{
-			data->out_index = data->i;
-			data->out_file = argv[data->i + 1];
+			data->out_index = i;
+			data->out_file = token->tokens[i + 1].value;
 			break ;
 		}
-		data->i--;
+		i--;
 	}
-	if (data->out_index == -1 || !data->out_file)
-		free_struct(data, ": missing output redirection\n", 1, 2);
-
-	// Extraer comandos
+// extraer comandos entre principio y fin
 	data->cmd_end = data->out_index - 1;
-	data->i = data->cmd_start;
-	while (data->i <= data->cmd_end)
+	data->count = 0;
+	i = data->cmd_start;
+	while (i <= data->cmd_end)
 	{
-		if (ft_strcmp(argv[data->i], "_PIPE_") != 0)
+		if (token->tokens[i].type != T_PIPE)
 			data->count++;
-		data->i++;
+		i++;
 	}
 	data->cmds = malloc(sizeof(char *) * (data->count + 1));
 	if (!data->cmds)
 		free_struct(data, "Malloc cmds\n", 1, 2);
-
-	data->i = data->cmd_start;
-	while (data->i <= data->cmd_end)
+	data->j = 0;
+	i = data->cmd_start;
+	while (i <= data->cmd_end)
 	{
-		if (ft_strcmp(argv[data->i], "_PIPE_") != 0)
-			data->cmds[data->j++] = argv[data->i];
-		data->i++;
+		if (token->tokens[i].type != T_PIPE)
+			data->cmds[data->j++] = token->tokens[i].value;
+		i++;
 	}
 	data->cmds[data->j] = NULL;
 	data->n_cmds = data->j;

@@ -6,13 +6,14 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/22 16:25:18 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:47:44 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include "../Mini.h"
 # include <stdarg.h>
 # include <string.h>
 # include <stdlib.h>
@@ -23,6 +24,9 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
+
+struct					s_token;
+typedef struct s_token t_token;
 
 typedef struct s_list
 {
@@ -153,20 +157,20 @@ typedef struct s_fd_pipex
 void		ft_cmd(t_pipex *data, char *argv, char **envir);
 char		*create_path(char *possible_path, char *command);
 void		free_struct(t_pipex	*data, char *message, int i, int std);
-void		ft_outfile(t_pipex *data, int argc, char **argv);
+void		ft_outfile(t_pipex *data, t_token *token);
 char		**cmd_managment(t_pipex *data, char *cmd);
-void		ft_infile(char **argv, t_pipex *data);
-t_pipex		*pipex_parsing(int argc, char **argv, t_pipex *data);
+void		ft_infile(t_token *token, t_pipex *data);
+t_pipex		*pipex_parsing(t_token *token, t_pipex *data);
 char		*find_execpath(char **envir);
-int			here_doc(char **argv);
+int			here_doc(t_token *token);
 void		execute_command_bonus(t_pipex *data, char **args,
-			char **paths, char **envir);
+				char **paths, char **envir);
 void		process_and_exec(t_pipex *data, int i,
-				char **argv, char **envir);
+				t_token *token, char **envir);
 void		exit_with_error(char *message, int exit_code, int std);
 void		ft_freedoom(char **str);
 char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
-int			pipex(int argc, char **argv, char **envir);
+void		pipex(t_token *token, char **envir);
 
 #endif

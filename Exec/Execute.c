@@ -3,52 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   Execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:05:43 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/22 16:26:39 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:26:18 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Mini.h"
 
-// void	ft_exec(t_token *list)
-// {
-// 	while (1)
-// 	{
-// 		list->input = readline("Minishell> ");
-// 		if (list->input == NULL)
-// 		{
-// 			ft_putstr("\nLeaving...\n");
-// 			break ;
-// 		}
-// 		if (*list->input)
-// 			add_history(list->input);
-// 		list->tokens = ft_split(list->input, ' ');
-// 		if (!list->tokens)
-// 			exit_with_error("Error in count args\n", 1);
-// 		tokenizer(list);
-// 		/* if (list->num_tokens > 0)
-// 			pipex(list->num_tokens, list->tokens, env); */
-// 		for (int i = 0; i < list->num_tokens; i++) //esto sobrara
-// 			printf("%s", list->tokens[i]);
-// 		free(list->tokens);
-// 		free(list->input);
-// 	}
-// }
+void	check_type(t_token *token, char **envir)
+{
+	int	i;
+	int	has_input;
+	int	has_pipe;
+	int	has_output;
 
-// void ft_exec(t_token *list)
-// {
-// 	int i;
-// 	i = 0;
-//     // Esqueleto temporal: solo imprime tokens (para pruebas)
-//     if (list && list->num_tokens > 0)
-//     {
-//         while (i < list->num_tokens) 
-//         {
-//             printf("Token %d: %s (type: %d)\n", i, list->tokens[i].value, list->tokens[i].type);
-//             i++;
-//         }
-//         free_token_list(list);
-//     }
-// }
+	i = 0;
+	has_input = 0;
+	has_pipe = 0;
+	has_output = 0;
+	while (i < token->num_tokens)
+	{
+		if (token->tokens[i].type == T_RED_IN
+			|| token->tokens[i].type == T_HEREDOC)
+			has_input = 1;
+		else if (token->tokens[i].type == T_PIPE)
+			has_pipe = 1;
+		else if (token->tokens[i].type == T_RED_OUT
+			|| token->tokens[i].type == T_RED_APPEND)
+			has_output = 1;
+		i++;
+	}
+	if (has_input && has_pipe && has_output)
+		pipex(token, envir);
+}

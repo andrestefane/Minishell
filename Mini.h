@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 04:14:21 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:33:45 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef enum e_token_type
 	T_HEREDOC,
 	T_INFILE,
 	T_OUTFILE
-}t_token_type;
+
+}	t_token_type;
 
 typedef struct s_single_token //almacena informacion de un token individual
 {
@@ -49,11 +50,11 @@ typedef struct s_token
 t_token	*init_token_list(char *input);
 void	count_args(t_token *list);
 int	split_tokens(t_token *list);
-
-
-// Utilidades
-void	exit_with_error(char *message, int exit_code);
-
 char *extract_token(char *input, int *index, t_token_type *type);
+
+
+// Exec
+void	check_type(t_token *token, char **envir);
+
 
 #endif

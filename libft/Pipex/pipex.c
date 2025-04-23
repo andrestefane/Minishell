@@ -6,25 +6,25 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 19:37:18 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/22 16:30:23 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:05:24 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	ft_infile(char **argv, t_pipex *data)
+void	ft_infile(t_token *token, t_pipex *data)
 {
-	if (!argv[1])
+	if (!token->tokens[2].value)
 		free_struct(data, ERRO_INFILE, 1, 2);
 	if (data->heredoc == 0)
 	{
-		data->infile = open(argv[1], O_RDONLY);
+		data->infile = open(token->tokens[2].value, O_RDONLY);
 		if (data->infile == -1)
 			free_struct(data, ERRO_INFILE, 1, 2);
 	}
 	else
 	{
-		here_doc(argv);
+		here_doc(token);
 		data->infile = open("here_doc.temp", O_RDONLY, 0744);
 		if (data->infile == -1)
 			free_struct(data, ERRO_DOC, 1, 2);
@@ -36,21 +36,22 @@ void	ft_infile(char **argv, t_pipex *data)
 	close(data->infile);
 }
 
-void	ft_outfile(t_pipex *data, int argc, char **argv)
+void	ft_outfile(t_pipex *data, t_token *token)
 {
-	if (!argv[argc - 1])
+	if (!token->tokens[token->num_tokens - 1].value)
 		free_struct(data, ERRO_OUFILE, 1, 2);
 	if (data->heredoc == 1)
-		data->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY
-				| O_APPEND, 0644);
+		data->outfile = open(token->tokens[token->num_tokens - 1].value,
+				O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
-		data->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY
+		data->outfile = open(token->tokens[token->num_tokens - 1].value,
+				O_CREAT | O_WRONLY
 				| O_TRUNC, 0644);
 	if (data->outfile == -1)
 		free_struct(data, ERRO_OUFILE, 1, 2);
 }
 
-int	here_doc(char **argv)
+int	here_doc(t_token *token)
 {
 	int		infile;
 	char	*line;
@@ -67,8 +68,9 @@ int	here_doc(char **argv)
 		line = get_next_line(0, 0);
 		if (!line)
 			break ;
-		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0
-			&& line[ft_strlen(argv[2])] == '\n')
+		if (ft_strncmp(line, token->tokens[2].value,
+				ft_strlen(token->tokens[2].value)) == 0
+			&& line[ft_strlen(token->tokens[2].value)] == '\n')
 			break ;
 		write(infile, line, ft_strlen(line));
 		free(line);
@@ -78,7 +80,7 @@ int	here_doc(char **argv)
 	return (infile);
 }
 
-void	process_and_exec(t_pipex *data, int i, char **argv, char **envir)
+void	process_and_exec(t_pipex *data, int i, t_token *token, char **envir)
 {
 	int		fd[2];
 
@@ -92,7 +94,7 @@ void	process_and_exec(t_pipex *data, int i, char **argv, char **envir)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		ft_cmd(data, argv[2 + i + data->heredoc], envir);
+		ft_cmd(data, token->tokens[2 + i + data->heredoc].value, envir);
 	}
 	else
 	{
@@ -102,32 +104,31 @@ void	process_and_exec(t_pipex *data, int i, char **argv, char **envir)
 	}
 }
 
-int	pipex(int argc, char **argv, char **envir)
+void	pipex(t_token *token, char **envir)
 {
 	t_pipex	*data;
 
 	data = malloc(sizeof(t_pipex));
 	if (!data)
-		return (0);
+		return ;
 	ft_memset(data, 0, sizeof(t_pipex));
-	data = pipex_parsing(argc, argv, data);
-	ft_infile(argv, data);
-	ft_outfile(data, argc, argv);
+	data = pipex_parsing(token, data);
+	ft_infile(token, data);
+	ft_outfile(data, token);
 	data->i = 0;
 	while (data->i < data->processes - 1)
-		process_and_exec(data, data->i++, argv, envir);
+		process_and_exec(data, data->i++, token, envir);
 	if (data->heredoc == 1)
 		unlink("here_doc.temp");
 	data->pid[data->i] = fork();
 	if (!data->pid[data->i])
 	{
 		dup2(data->outfile, STDOUT_FILENO);
-		ft_cmd(data, argv[argc - 2], envir);
+		ft_cmd(data, token->tokens[token->num_tokens - 2].value, envir);
 	}
 	data->i = 0;
 	while (data->i++ < data->processes)
 		wait(NULL);
 	free(data->pid);
 	free(data);
-	return (0);
 }
