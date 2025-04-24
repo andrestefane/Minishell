@@ -6,11 +6,13 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 20:35:59 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:09:13 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
+
+/* extern char **environ; */
 
 static void	process_input(char *input, char **envir)
 {
@@ -35,15 +37,19 @@ static void	process_input(char *input, char **envir)
 			i++;
 		}
 		free(list->input);
-		free(list->tokens);
-		free(list);
 	}
 	check_type(list, envir);
+	free(list->tokens);
+	free(list);
 }
 
-int	main(int argc, char **env)
+int	main(int argc, char **argv, char **envir)
 {
 	char	*input;
+	char *path = find_execpath(envir);
+	/* char *path2 = find_execpath(envir); */
+	(void)argv;
+    printf("Exec path: %s\n", path);
 
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
@@ -55,7 +61,7 @@ int	main(int argc, char **env)
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, env);
+		process_input(input, envir);
 		free(input);
 	}
 	return (0);
