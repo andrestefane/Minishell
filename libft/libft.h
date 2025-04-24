@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 18:47:44 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/23 22:09:21 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,7 @@ char		*find_execpath(char **envir);
 int			here_doc(t_token *token);
 void		execute_command_bonus(t_pipex *data, char **args,
 				char **paths, char **envir);
-void		process_and_exec(t_pipex *data, int i,
-				t_token *token, char **envir);
+void		process_and_exec(t_pipex *data, int i, char **envir);
 void		exit_with_error(char *message, int exit_code, int std);
 void		ft_freedoom(char **str);
 char		**split_command(char *cmd);

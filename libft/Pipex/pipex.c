@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 19:37:18 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 20:05:24 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/23 22:41:36 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	ft_infile(t_token *token, t_pipex *data)
 {
-	if (!token->tokens[2].value)
+	if (!token->tokens[1].value)
 		free_struct(data, ERRO_INFILE, 1, 2);
 	if (data->heredoc == 0)
 	{
-		data->infile = open(token->tokens[2].value, O_RDONLY);
+		data->infile = open(token->tokens[1].value, O_RDONLY);
 		if (data->infile == -1)
 			free_struct(data, ERRO_INFILE, 1, 2);
 	}
@@ -80,7 +80,7 @@ int	here_doc(t_token *token)
 	return (infile);
 }
 
-void	process_and_exec(t_pipex *data, int i, t_token *token, char **envir)
+void	process_and_exec(t_pipex *data, int i, char **envir)
 {
 	int		fd[2];
 
@@ -94,7 +94,7 @@ void	process_and_exec(t_pipex *data, int i, t_token *token, char **envir)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		ft_cmd(data, token->tokens[2 + i + data->heredoc].value, envir);
+		ft_cmd(data, data->cmds[data->i], envir);
 	}
 	else
 	{
@@ -116,15 +116,15 @@ void	pipex(t_token *token, char **envir)
 	ft_infile(token, data);
 	ft_outfile(data, token);
 	data->i = 0;
-	while (data->i < data->processes - 1)
-		process_and_exec(data, data->i++, token, envir);
+	while (data->i < data->n_cmds - 1)
+		process_and_exec(data, data->i++, envir);
 	if (data->heredoc == 1)
 		unlink("here_doc.temp");
 	data->pid[data->i] = fork();
 	if (!data->pid[data->i])
 	{
 		dup2(data->outfile, STDOUT_FILENO);
-		ft_cmd(data, token->tokens[token->num_tokens - 2].value, envir);
+		ft_cmd(data, data->cmds[data->i], envir);
 	}
 	data->i = 0;
 	while (data->i++ < data->processes)
