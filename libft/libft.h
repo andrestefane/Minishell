@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 22:09:21 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:07:32 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,5 +171,10 @@ void		ft_freedoom(char **str);
 char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
 void		pipex(t_token *token, char **envir);
+void		count_commands(t_token *token, t_pipex *data);
+void		extract_commands(t_token *token, t_pipex *data);
+void		last_line_pipex(t_token *token, t_pipex *data);
+void		first_line_pipex(t_token *token, t_pipex *data);
+void		free_both_stucts(t_pipex *data);
 
 #endif

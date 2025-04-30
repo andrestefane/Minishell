@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 20:06:04 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/24 11:46:09 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:05:45 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ char **paths, char **envir)
 	while (paths[i] != NULL)
 	{
 		path = create_path(paths[i], args[0]);
-		printf("Exec path: %s\n", path);
 		if (!path)
 			free_and_exit(args, paths, 0);
 		if (access(path, X_OK) != -1)
