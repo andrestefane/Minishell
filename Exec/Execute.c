@@ -35,6 +35,6 @@ void	check_type(t_token *token, char **envir)
 			has_output = 1;
 		i++;
 	}
-	// if (has_input && has_pipe && has_output)
-	// 	pipex(token, envir);
+	if ((has_input && has_pipe && has_output )|| (has_input && has_output))
+		pipex(token, envir);
 }

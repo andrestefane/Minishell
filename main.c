@@ -12,7 +12,6 @@
 
 #include "Mini.h"
 
-/* extern char **environ; */
 
 static void	process_input(char *input, char **env)
 {
@@ -36,20 +35,20 @@ static void	process_input(char *input, char **env)
 	free_tokens(list);
 }
 
-int	main(int argc, char **argv, char **env)
+
+int	main(int argc, char **argv, char **envir)
 {
 	char	*input;
-	// char	*path;
+	int		saved_input;
 
-	/* char *path2 = find_execpath(envir); */
 	(void)argv;
-	// path = find_execpath(envir);
-	// printf("Exec path: %s\n", path);
+
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
 	
 	while (1)
 	{
+		saved_input = dup(STDIN_FILENO);
 		input = readline("Minishell> ");
 		if (!input)
 		{
@@ -57,7 +56,11 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		}
 		process_input(input, env);
+
 		free(input);
+		dup2(saved_input, STDIN_FILENO);
+		close(saved_input);
 	}
+	close(saved_input);
 	return (0);
 }

@@ -38,6 +38,14 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef enum e_expansion_type
+{
+	NO_EXPANSION,
+	TILDE_EXPANSION,
+	VAR_EXPANSION,
+	EXIT_STATUS_EXPANSION
+}	t_expansion_type;
+
 // Tokens
 void				add_token(t_token **head, char *value, t_token_type type);
 t_token_type		get_operator_type(char *input, int i, int *len);
@@ -49,4 +57,9 @@ int fill_tokens(t_token **token_list, char *input);
 void				check_type(t_token *token, char **env);
 char *extract_token(char *input, int *index, t_token_type *type, t_token_type prev_type);
 
+//Variables
+void	expand_token(t_token *token, char **env);
+int		is_simple_quotes(char *str);
+void	expand_tilde(t_single_token *token, char **env);
 #endif
+
