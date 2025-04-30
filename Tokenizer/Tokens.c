@@ -3,125 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   Tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/25 20:57:35 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:31:32 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Mini.h"
 
-static t_token_type	get_operator_type(char *input, int i, int *len)
+void	add_token(t_token **head, char *value, t_token_type type)
 {
-	if (!input || input[i] == '\0')
-		return (T_WORD);
-	if (input[i] == '|')
-	{
-		*len = 1;
-		return (T_PIPE);
-	}
-	if (input[i] == '<' && input[i + 1] == '<')
-	{
-		*len = 2;
-		return (T_HEREDOC);
-	}
-	if (input[i] == '>' && input[i + 1] == '>')
-	{
-		*len = 2;
-		return (T_RED_APPEND);
-	}
-	if (input[i] == '<')
-	{
-		*len = 1;
-		return (T_RED_IN);
-	}
-	if (input[i] == '>')
-	{
-		*len = 1;
-		return (T_RED_OUT);
-	}
-	return (T_WORD);
-}
+	t_token	*new_node;
+	t_token	*current;
 
-t_token	*init_token_list(char *input)
-{
-	t_token	*list;
-
-	list = malloc(sizeof(t_token));
-	if (!list)
-		return (NULL);
-	list->input = ft_strdup(input);
-	list->tokens = NULL;
-	list->num_tokens = 0;
-	return (list);
-}
-
-void	count_args(t_token *list)
-{
-	int	i;
-	int	op_len;
-
-	list->num_tokens = 0;
-	i = 0;
-	if (!list || !list->input)
+	new_node = malloc(sizeof(t_token));
+	if (!new_node)
 		return ;
-	while (list->input[i])
+	new_node->value = ft_strdup(value);
+	new_node->type = type;
+	new_node->next = NULL;
+	if (*head == NULL)
+		*head = new_node;
+	else
 	{
-		while (list->input[i] == ' ' || list->input[i] == '\t')
-			i++;
-		if (!list->input[i])
-			break ;
-		list->num_tokens++;
-		op_len = 0;
-		if (get_operator_type(list->input, i, &op_len) != T_WORD)
-			i += op_len;
-		else
-			while (list->input[i] && list->input[i] != ' '
-				&& list->input[i] != '\t' && get_operator_type(list->input, i,
-					&op_len) == T_WORD)
-				i++;
+		current = *head;
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
 	}
 }
 
-char	*extract_word(char *input, int *index, int start)
+void	free_tokens(t_token *head)
 {
-	int	len;
-	int	op_len;
+	t_token	*temp;
 
-	if (!input || !index)
-		return (NULL);
-	len = 0;
-	op_len = 0;
-	while (input[*index] && input[*index] != ' ' && input[*index] != '\t'
-		&& get_operator_type(input, *index, &op_len) == T_WORD)
+	while (head != NULL)
 	{
-		len++;
-		(*index)++;
+		temp = head;
+		head = head->next;
+		free(temp->value);
+		free(temp);
 	}
-	if (!len)
-		return (NULL);
-	return (ft_substr(input, start, len));
 }
 
-char	*extract_token(char *input, int *index, t_token_type *type)
+char *extract_word(char *input, int *index, int start)
 {
-	int	start;
-	int	op_len;
+    int len;
 
-	if (!input || !index)
-		return (NULL);
-	start = *index;
-	while (input[start] == ' ' || input[start] == '\t')
-		start++;
-	*index = start;
-	*type = T_WORD;
-	op_len = 0;
-	*type = get_operator_type(input, start, &op_len);
-	if (*type != T_WORD)
-	{
-		*index += op_len;
-		return (ft_substr(input, start, op_len));
-	}
-	return (extract_word(input, index, start));
+    if (!input || !index)
+        return (NULL);
+    len = 0;
+    while (input[*index] && input[*index] != ' ' && input[*index] != '\t'
+           && input[*index] != '|' && input[*index] != '<' && input[*index] != '>')
+    {
+        len++;
+        (*index)++;
+    }
+    if (!len)
+        return (NULL);
+    return (ft_substr(input, start, len));
+}
+
+char *extract_token(char *input, int *index, t_token_type *type, t_token_type prev_type)
+{
+    if (!input || !index || !type)
+        return (NULL);
+    while (input[*index] && (input[*index] == ' ' || input[*index] == '\t'))
+        (*index)++;
+    if (!input[*index])
+        return (NULL);
+    return (extract_token_aux(input, index, type, prev_type));
 }
