@@ -6,13 +6,12 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/24 16:09:13 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:13:44 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
 
-/* extern char **environ; */
 
 static void	process_input(char *input, char **envir)
 {
@@ -43,26 +42,34 @@ static void	process_input(char *input, char **envir)
 	free(list);
 }
 
+
 int	main(int argc, char **argv, char **envir)
 {
 	char	*input;
+	int		saved_input;
+	t_token	*list;
+
+	list = &(t_token){0};
 	char *path = find_execpath(envir);
-	/* char *path2 = find_execpath(envir); */
 	(void)argv;
     printf("Exec path: %s\n", path);
-
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
 	while (1)
 	{
+		saved_input = dup(STDIN_FILENO);
 		input = readline("Minishell> ");
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, envir);
+//Habra que hacer algo con esto
+		process_input(input, envir, list);
 		free(input);
+		dup2(saved_input, STDIN_FILENO);
+		close(saved_input);
 	}
+	close(saved_input);
 	return (0);
 }

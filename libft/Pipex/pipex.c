@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 19:37:18 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 22:41:36 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:57:40 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int	here_doc(t_token *token)
 		line = get_next_line(0, 0);
 		if (!line)
 			break ;
-		if (ft_strncmp(line, token->tokens[2].value,
-				ft_strlen(token->tokens[2].value)) == 0
-			&& line[ft_strlen(token->tokens[2].value)] == '\n')
+		if (ft_strncmp(line, token->tokens[1].value,
+				ft_strlen(token->tokens[1].value)) == 0
+			&& line[ft_strlen(token->tokens[1].value)] == '\n')
 			break ;
 		write(infile, line, ft_strlen(line));
 		free(line);
@@ -115,9 +115,9 @@ void	pipex(t_token *token, char **envir)
 	data = pipex_parsing(token, data);
 	ft_infile(token, data);
 	ft_outfile(data, token);
-	data->i = 0;
-	while (data->i < data->n_cmds - 1)
-		process_and_exec(data, data->i++, envir);
+	data->i = -1;
+	while (++data->i < data->n_cmds - 1)
+		process_and_exec(data, data->i, envir);
 	if (data->heredoc == 1)
 		unlink("here_doc.temp");
 	data->pid[data->i] = fork();
@@ -129,6 +129,5 @@ void	pipex(t_token *token, char **envir)
 	data->i = 0;
 	while (data->i++ < data->processes)
 		wait(NULL);
-	free(data->pid);
-	free(data);
+	free_both_stucts(data);
 }
