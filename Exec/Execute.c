@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:05:43 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 20:26:18 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:07:43 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ void	check_type(t_token *token, char **envir)
 			has_output = 1;
 		i++;
 	}
-	if (has_input && has_pipe && has_output)
-		pipex(token, envir);
+	// if (has_input && has_pipe && has_output)
+	// 	pipex(token, envir);
 }

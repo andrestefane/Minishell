@@ -1,66 +1,81 @@
 #include "../Mini.h"
 
-int	fill_tokens(t_token *list, int *token_idx)
+char *extract_token_aux(char *input, int *index, t_token_type *type, t_token_type prev_type)
 {
-	int				i;
-	t_token_type	type;
-	char			*token;
+    int start;
+    int len;
+    char *token;
 
-	i = 0;
-	while (list->input[i])
-	{
-		token = extract_token(list->input, &i, &type);
-		if (!token)
-			return (0);
-		if (*token)
-		{
-			list->tokens[*token_idx].value = token;
-			list->tokens[*token_idx].type = type;
-			(*token_idx)++;
-		}
-		else
-			free(token);
-	}
-	return (1);
+    start = *index;
+    len = 0;
+    *type = get_operator_type(input, *index, &len);
+    if (*type != T_WORD)
+    {
+        *index = *index + len;
+        token = ft_substr(input, start, len);
+        return (token);
+    }
+    if (prev_type == T_RED_IN || prev_type == T_HEREDOC)
+        *type = T_INFILE;
+    if (prev_type == T_RED_OUT || prev_type == T_RED_APPEND)
+        *type = T_OUTFILE;
+    return (extract_word(input, index, start));
 }
 
-int	split_tokens(t_token *list)
+int fill_tokens(t_token **token_list, char *input)
 {
-	int	token_idx;
+    int index;
+    t_token_type type;
+    t_token_type prev_type;
+    char *token;
 
-	if (!list || !list->input)
-		return (0);
-	token_idx = 0;
-	list->tokens = malloc(sizeof(t_single_token) * (list->num_tokens + 1));
-	if (!list->tokens)
-		return (0);
-	if (!fill_tokens(list, &token_idx))
-	{
-		free(list->tokens);
-		return (0);
-	}
-	list->tokens[token_idx].value = NULL;
-	list->num_tokens = token_idx;
-	return (1);
+    index = 0;
+    prev_type = T_WORD;
+    while (input[index])
+    {
+        token = extract_token(input, &index, &type, prev_type);
+        if (!token)
+            break;
+        add_token(token_list, token, type);
+        free(token);
+        prev_type = type;
+    }
+    return (1);
 }
 
-void	free_token_list(t_token *list)
-{
-	int	i;
 
-	if (!list)
-		return ;
-	if (list->input)
-		free(list->input);
-	if (list->tokens)
-	{
-		i = 0;
-		while (list->tokens[i].value)
-		{
-			free(list->tokens[i].value);
-			i++;
-		}
-		free(list->tokens);
-	}
-	free(list);
+t_token_type get_operator_type(char *input, int i, int *len)
+{
+    if (!input || input[i] == '\0')
+    {
+        *len = 0;
+        return (T_WORD);
+    }
+    if (input[i] == '|')
+    {
+        *len = 1;
+        return (T_PIPE);
+    }
+    if (input[i] == '<' && input[i + 1] == '<')
+    {
+        *len = 2;
+        return (T_HEREDOC);
+    }
+    if (input[i] == '>' && input[i + 1] == '>')
+    {
+        *len = 2;
+        return (T_RED_APPEND);
+    }
+    if (input[i] == '<')
+    {
+        *len = 1;
+        return (T_RED_IN);
+    }
+    if (input[i] == '>')
+    {
+        *len = 1;
+        return (T_RED_OUT);
+    }
+    *len = 0;
+    return (T_WORD);
 }

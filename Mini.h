@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/23 20:33:45 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:07:12 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 # define MINI_H
 
 # include "libft/libft.h"
-# include <readline/readline.h>
 # include <readline/history.h>
+# include <readline/readline.h>
 
 typedef enum e_token_type
 {
@@ -26,35 +26,27 @@ typedef enum e_token_type
 	T_RED_OUT,
 	T_RED_APPEND,
 	T_HEREDOC,
-	T_INFILE,
-	T_OUTFILE
+	T_INFILE, // despues de <
+	T_OUTFILE // despues de >
 
-}	t_token_type;
-
-typedef struct s_single_token //almacena informacion de un token individual
-{
-	char  *value; // su valor
-	t_token_type type; // su tipo
-}t_single_token;
+}					t_token_type;
 
 typedef struct s_token
 {
-	char *input;
-	int num_tokens;
-	t_single_token *tokens; // puntero a un bloque de memoria que almacena múltiples t_single_token consecutivos.
-}t_token;
-
-
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}					t_token;
 
 // Tokens
-t_token	*init_token_list(char *input);
-void	count_args(t_token *list);
-int	split_tokens(t_token *list);
-char *extract_token(char *input, int *index, t_token_type *type);
-
-
+void				add_token(t_token **head, char *value, t_token_type type);
+t_token_type		get_operator_type(char *input, int i, int *len);
+char				*extract_token_aux(char *input, int *index, t_token_type *type, t_token_type prev_type);
+char *extract_word(char *input, int *index, int start);
+void	free_tokens(t_token *head);
+int fill_tokens(t_token **token_list, char *input); 
 // Exec
-void	check_type(t_token *token, char **envir);
-
+void				check_type(t_token *token, char **env);
+char *extract_token(char *input, int *index, t_token_type *type, t_token_type prev_type);
 
 #endif
