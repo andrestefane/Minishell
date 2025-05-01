@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   More_utils_pipex.c                                 :+:      :+:    :+:   */
+/*   outfile.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 19:23:57 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 18:28:01 by astefane         ###   ########.fr       */
+/*   Created: 2025/04/30 19:50:06 by astefane          #+#    #+#             */
+/*   Updated: 2025/04/30 19:50:29 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	handle_input_redirection(t_token **tmp, t_pipex *data)
+void	ft_outfile(t_pipex *data, t_token *token)
 {
-	if ((*tmp)->type == T_HEREDOC)
-		data->heredoc = 1;
+	t_token	*last;
+
+	last = token;
+	while (last && last->next)
+		last = last->next;
+
+	if (!last || !last->value)
+		free_struct(data, ERRO_OUFILE, 1, 2);
+
+	if (data->heredoc == 1)
+		data->outfile = open(last->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
-		data->heredoc = 0;
-	if ((*tmp)->next)
-		data->limiter = (*tmp)->next->value;
-	*tmp = (*tmp)->next;
-	if (*tmp)
-		*tmp = (*tmp)->next;
+		data->outfile = open(last->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+
+	if (data->outfile == -1)
+		free_struct(data, ERRO_OUFILE, 1, 2);
 }

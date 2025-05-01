@@ -1,14 +1,14 @@
 
 #include "../Mini.h"
 
-int	is_simple_quotes(char *str)
+/* int	is_simple_quotes(char *str)
 {
 	if (!str)
 		return (0);
 	return (str[0] == '\'' && str[ft_strlen(str) - 1] == '\'');
-}
+} */
 
-void	expand_tilde(t_single_token *token, char **env)
+/* void	expand_tilde(t_single_token *token, char **env)
 {
 	char	*home;
 	char	*expanded;
@@ -34,3 +34,4 @@ void	expand_tilde(t_single_token *token, char **env)
 	free(token->value);
 	token->value = expanded;
 }
+ */

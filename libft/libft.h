@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/29 20:07:32 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:28:11 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ typedef struct s_fd_pipex
 {
 	int		processes;
 	int		heredoc;
+	int		n_heredocs;
+	char	**limiters;
 	int		i;
 	int		j;
 	int		count;
@@ -171,10 +173,11 @@ void		ft_freedoom(char **str);
 char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
 void		pipex(t_token *token, char **envir);
+void		handle_input_redirection(t_token **token, t_pipex *data);
+void		first_line_pipex(t_token *token, t_pipex *data);
+void		last_line_pipex(t_token *token, t_pipex *data);
 void		count_commands(t_token *token, t_pipex *data);
 void		extract_commands(t_token *token, t_pipex *data);
-void		last_line_pipex(t_token *token, t_pipex *data);
-void		first_line_pipex(t_token *token, t_pipex *data);
-void		free_both_stucts(t_pipex *data);
+void		free_stuct(t_pipex *data);
 
 #endif

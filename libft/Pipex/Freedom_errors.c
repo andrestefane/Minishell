@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:31:08 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/29 20:07:44 by astefane         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:19:17 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	free_struct(t_pipex *data, char *message, int exit_code, int std)
 {
-	ft_putstr("libero struct\n", 2);
 	if (data)
 	{
 		if (data->pid)
@@ -62,7 +61,7 @@ void	free_and_exit(char **args, char **paths, int exit_code)
 	exit(exit_code);
 }
 
-void	free_both_stucts(t_pipex *data)
+void	free_stuct(t_pipex *data)
 {
 	int	i;
 

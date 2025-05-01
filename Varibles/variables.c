@@ -1,7 +1,7 @@
 
 #include "../Mini.h"
 
-void	expand_token(t_token *token, char **env)
+/* void	expand_token(t_token *token, char **env)
 {
 	int	i;
 
@@ -14,11 +14,11 @@ void	expand_token(t_token *token, char **env)
 			{
 				if (token->tokens[i].expansion == TILDE_EXPANSION)
 					expand_tilde(&token->tokens[i], env);
-				/* else if (token->tokens[i].expansion == VAR_EXPANSION
+				else if (token->tokens[i].expansion == VAR_EXPANSION
 					|| token->tokens[i].expansion == EXIT_STATUS_EXPANSION)
-					expand_variable(&token->tokens[i], env); */
+					expand_variable(&token->tokens[i], env);
 			}
 		}
 		i++;
 	}
-}
+} */

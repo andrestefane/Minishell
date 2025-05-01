@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   More_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:03:30 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 18:08:35 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:31:06 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,68 +36,91 @@ char	**split_command(char *cmd)
 
 void	first_line_pipex(t_token *token, t_pipex *data)
 {
-	int	i = 0;
+	t_token	*tmp;
 
-	// Detectar redirección de entrada al inicio
-	if (token->tokens[i].type == T_RED_IN || token->tokens[i].type == T_HEREDOC)
+	tmp = token;
+	if (!tmp)
+		free_struct(data, "Empty token list\n", 1, 2);
+	data->cmd_start = -1;
+	if (tmp->type == T_RED_IN || tmp->type == T_HEREDOC)
+		handle_input_redirection(&tmp, data);
+	while (tmp)
 	{
-		data->heredoc = (token->tokens[i].type == T_HEREDOC);
-		data->limiter = token->tokens[i + 1].value;
-		i += 2;
-	}
-
-	// Buscar el primer comando real (ignorar redirecciones y pipes)
-	while (i < token->num_tokens)
-	{
-		if (token->tokens[i].type == T_WORD)
+		if (tmp->type == T_WORD)
 		{
-			data->cmd_start = i;
-			break;
+			data->cmd_start = 1;
+			break ;
 		}
-		i++;
+		tmp = tmp->next;
 	}
-
 	if (data->cmd_start == -1)
 		free_struct(data, ": command not found\n", 127, 2);
 }
 
 void	last_line_pipex(t_token *token, t_pipex *data)
 {
-	int	i;
+	t_token	*tmp;
 
-	data->out_index = -1;
+	tmp = token;
 	data->out_file = NULL;
-	i = token->num_tokens - 2; 
-// Buscar desde el final hacia cmd_start
-	while (i > data->cmd_start)
+	data->out_index = -1;
+
+	while (tmp && tmp->next)
 	{
-		if (token->tokens[i].type == T_RED_OUT
-			|| token->tokens[i].type == T_RED_APPEND)
+		if (tmp->type == T_RED_OUT || tmp->type == T_RED_APPEND)
 		{
-			data->out_index = i;
-			data->out_file = token->tokens[i + 1].value;
-			break ;
+			data->out_file = tmp->next->value;
+			data->out_index = 1;
 		}
-		i--;
+		tmp = tmp->next;
 	}
 }
 
 void	count_commands(t_token *token, t_pipex *data)
 {
-	int	i;
+	t_token	*tmp;
+	int		count;
 
-	if (data->out_index != -1)
-		data->cmd_end = data->out_index - 1;
-	else
-		data->cmd_end = token->num_tokens - 1;
-	data->count = 0;
-	i = data->cmd_start;
-	while (i <= data->cmd_end)
+	tmp = token;
+	count = 0;
+
+	while (tmp)
 	{
-		if (token->tokens[i++].type != T_PIPE)
-			data->count++;
+		if (tmp->type == T_WORD)
+			count++;
+		if (tmp->type == T_RED_OUT || tmp->type == T_RED_APPEND)
+			break ;
+		tmp = tmp->next;
 	}
-	data->cmds = malloc(sizeof(char *) * (data->count + 1));
+	data->count = count;
+	data->cmds = malloc(sizeof(char *) * (count + 1));
 	if (!data->cmds)
 		free_struct(data, "Malloc cmds\n", 1, 2);
+}
+
+void	extract_commands(t_token *token, t_pipex *data)
+{
+	t_token	*tmp;
+	int		j;
+
+	tmp = token;
+	j = 0;
+	while (tmp)
+	{
+		if (tmp->type == T_WORD)
+		{
+			data->cmds[j] = ft_strdup(tmp->value);
+			if (!data->cmds[j])
+				free_struct(data, "Malloc ft_strdup\n", 1, 2);
+			j++;
+		}
+		if (tmp->type == T_RED_OUT || tmp->type == T_RED_APPEND)
+			break ;
+		tmp = tmp->next;
+	}
+	data->cmds[j] = NULL;
+	data->n_cmds = j;
+	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
+	if (!data->pid)
+		free_struct(data, "Malloc pids\n", 1, 2);
 }

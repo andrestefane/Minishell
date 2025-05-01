@@ -3,82 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 19:37:18 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 18:09:03 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:18:48 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
-
-void	ft_infile(t_token *token, t_pipex *data)
-{
-	if (!token->tokens[1].value)
-		free_struct(data, ERRO_INFILE, 1, 2);
-	if (data->heredoc == 0)
-	{
-		data->infile = open(token->tokens[1].value, O_RDONLY);
-		if (data->infile == -1)
-			free_struct(data, ERRO_INFILE, 1, 2);
-	}
-	else
-	{
-		here_doc(token);
-		data->infile = open("here_doc.temp", O_RDONLY, 0744);
-		if (data->infile == -1)
-			free_struct(data, ERRO_DOC, 1, 2);
-	}
-	if (data->infile == -1)
-		exit_with_error(ERRO_INFILE, 1, 2);
-	if (dup2(data->infile, STDIN_FILENO) == -1)
-		exit_with_error(ERRO_DUP, 1, 2);
-	close(data->infile);
-}
-
-void	ft_outfile(t_pipex *data, t_token *token)
-{
-	if (!token->tokens[token->num_tokens - 1].value)
-		free_struct(data, ERRO_OUFILE, 1, 2);
-	if (data->heredoc == 1)
-		data->outfile = open(token->tokens[token->num_tokens - 1].value,
-				O_CREAT | O_WRONLY | O_APPEND, 0644);
-	else
-		data->outfile = open(token->tokens[token->num_tokens - 1].value,
-				O_CREAT | O_WRONLY
-				| O_TRUNC, 0644);
-	if (data->outfile == -1)
-		free_struct(data, ERRO_OUFILE, 1, 2);
-}
-
-int	here_doc(t_token *token)
-{
-	int		infile;
-	char	*line;
-
-	infile = open("here_doc.temp", O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (infile == -1)
-	{
-		unlink("here_doc");
-		exit_with_error(ERRO_DOC, 1, 2);
-	}
-	while (1)
-	{
-		write(1, "> ", 2);
-		line = get_next_line(0, 0);
-		if (!line)
-			break ;
-		if (ft_strncmp(line, token->tokens[1].value,
-				ft_strlen(token->tokens[1].value)) == 0
-			&& line[ft_strlen(token->tokens[1].value)] == '\n')
-			break ;
-		write(infile, line, ft_strlen(line));
-		free(line);
-	}
-	free(line);
-	close(infile);
-	return (infile);
-}
 
 void	process_and_exec(t_pipex *data, int i, char **envir)
 {
@@ -129,5 +61,5 @@ void	pipex(t_token *token, char **envir)
 	data->i = 0;
 	while (data->i++ < data->processes)
 		wait(NULL);
-	free_both_stucts(data);
+	free_stuct(data);
 }

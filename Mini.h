@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 18:07:12 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:19:08 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ char *extract_token(char *input, int *index, t_token_type *type, t_token_type pr
 //Variables
 void	expand_token(t_token *token, char **env);
 int		is_simple_quotes(char *str);
-void	expand_tilde(t_single_token *token, char **env);
+/* void	expand_tilde(t_single_token *token, char **env); */
 #endif
 
