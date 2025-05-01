@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:03:30 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 18:08:35 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:39:30 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	first_line_pipex(t_token *token, t_pipex *data)
 	int	i = 0;
 
 	// Detectar redirección de entrada al inicio
-	if (token->tokens[i].type == T_RED_IN || token->tokens[i].type == T_HEREDOC)
+	if (token->type == T_RED_IN || token->type == T_HEREDOC)
 	{
-		data->heredoc = (token->tokens[i].type == T_HEREDOC);
-		data->limiter = token->tokens[i + 1].value;
+		data->heredoc = (token->type == T_HEREDOC);
+		data->limiter = token->next;
 		i += 2;
 	}
 

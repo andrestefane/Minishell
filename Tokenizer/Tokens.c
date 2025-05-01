@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 16:31:32 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:51:22 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,5 @@ char *extract_token(char *input, int *index, t_token_type *type, t_token_type pr
         return (NULL);
     return (extract_token_aux(input, index, type, prev_type));
 }
+
+

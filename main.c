@@ -6,14 +6,14 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 18:06:54 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:09:29 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
 
 
-static void	process_input(char *input, char **env)
+static void	process_input(char *input)
 {
 	t_token	*list;
 	t_token	*current;
@@ -31,36 +31,35 @@ static void	process_input(char *input, char **env)
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	check_type(list, env);
+	// check_type(list, env);
 	free_tokens(list);
 }
 
 
-int	main(int argc, char **argv, char **envir)
+int	main(int argc, char **argv)
 {
 	char	*input;
-	int		saved_input;
+	// int		saved_input;
 
 	(void)argv;
-
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
 	
 	while (1)
 	{
-		saved_input = dup(STDIN_FILENO);
+		// saved_input = dup(STDIN_FILENO);
 		input = readline("Minishell> ");
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, env);
+		process_input(input);
 
 		free(input);
-		dup2(saved_input, STDIN_FILENO);
-		close(saved_input);
+		// dup2(saved_input, STDIN_FILENO);
+		// close(saved_input);
 	}
-	close(saved_input);
+	// close(saved_input);
 	return (0);
 }
