@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/30 19:09:29 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:34:12 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	process_input(char *input)
 }
 
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	// int		saved_input;
@@ -44,7 +44,6 @@ int	main(int argc, char **argv)
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
-	
 	while (1)
 	{
 		// saved_input = dup(STDIN_FILENO);

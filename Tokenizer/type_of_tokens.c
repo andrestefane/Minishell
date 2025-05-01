@@ -1,6 +1,6 @@
 #include "../Mini.h"
 
-void	expasion_and_tokens(t_token *token)
+/* void	expasion_and_tokens(t_token *token)
 {
 	int	i;
 
@@ -26,3 +26,4 @@ void	expasion_and_tokens(t_token *token)
 		i++;
 	}
 }
+ */
