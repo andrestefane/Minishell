@@ -6,7 +6,7 @@
 #    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/21 17:31:38 by astefane          #+#    #+#              #
-#    Updated: 2025/04/29 19:24:50 by astefane         ###   ########.fr        #
+#    Updated: 2025/04/30 19:51:14 by astefane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,10 @@ Pipex/More_utils.c \
 Pipex/pipex_utils.c \
 Pipex/pipex.c \
 Pipex/Freedom_errors.c \
-Pipex/More_utils_pipex.c 
+Pipex/More_utils_pipex.c \
+Pipex/Infile.c \
+Pipex/outfile.c \
+Pipex/heredoc.c
 
 OBJS = $(SRCS:.c=.o)
 
