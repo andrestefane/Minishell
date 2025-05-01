@@ -1,5 +1,6 @@
 
-#include "../Mini.h"
+// #include "../Mini.h"
+
 
 /* void	expand_token(t_token *token, char **env)
 {
@@ -22,3 +23,4 @@
 		i++;
 	}
 } */
+

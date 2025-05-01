@@ -13,7 +13,7 @@
 #include "Mini.h"
 
 
-static void	process_input(char *input, char **env)
+static void	process_input(char *input)
 {
 	t_token	*list;
 	t_token	*current;
@@ -31,7 +31,7 @@ static void	process_input(char *input, char **env)
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	check_type(list, env);
+	// check_type(list, env);
 	free_tokens(list);
 }
 
@@ -39,26 +39,26 @@ static void	process_input(char *input, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	int		saved_input;
+	// int		saved_input;
 
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
 	while (1)
 	{
-		saved_input = dup(STDIN_FILENO);
+		// saved_input = dup(STDIN_FILENO);
 		input = readline("Minishell> ");
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, env);
+		process_input(input);
 
 		free(input);
-		dup2(saved_input, STDIN_FILENO);
-		close(saved_input);
+		// dup2(saved_input, STDIN_FILENO);
+		// close(saved_input);
 	}
-	close(saved_input);
+	// close(saved_input);
 	return (0);
 }

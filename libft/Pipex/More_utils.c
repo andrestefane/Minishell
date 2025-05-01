@@ -6,6 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:03:30 by astefane          #+#    #+#             */
+/*   Updated: 2025/05/01 18:39:30 by alejaro2         ###   ########.fr       */
 /*   Updated: 2025/05/01 18:31:06 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -37,6 +38,7 @@ char	**split_command(char *cmd)
 void	first_line_pipex(t_token *token, t_pipex *data)
 {
 	t_token	*tmp;
+
 
 	tmp = token;
 	if (!tmp)

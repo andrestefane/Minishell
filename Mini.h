@@ -6,7 +6,11 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:35:27 by astefane          #+#    #+#             */
+
+/*   Updated: 2025/05/01 16:54:27 by alejaro2         ###   ########.fr       */
+
 /*   Updated: 2025/04/30 20:19:08 by astefane         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +22,10 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
+#define NORMAL MODE 0
+#define DOUBLE_MODE 1
+#define SIMPLE_MODE 2
+
 typedef enum e_token_type
 {
 	T_WORD,
@@ -28,7 +36,6 @@ typedef enum e_token_type
 	T_HEREDOC,
 	T_INFILE, // despues de <
 	T_OUTFILE // despues de >
-
 }					t_token_type;
 
 typedef struct s_token
@@ -37,6 +44,12 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }					t_token;
+
+typedef struct s_tokenizer {
+    char    *input;         // String completo
+    int     position;       // Posición actual
+    int     mode;           // Estado actual (NORMAL/DOUBLE/SIMPLE)
+} t_tokenizer;
 
 typedef enum e_expansion_type
 {
@@ -60,6 +73,10 @@ char *extract_token(char *input, int *index, t_token_type *type, t_token_type pr
 //Variables
 void	expand_token(t_token *token, char **env);
 int		is_simple_quotes(char *str);
+
+// void	expand_tilde(t_single_token *token, char **env);
+
 /* void	expand_tilde(t_single_token *token, char **env); */
+
 #endif
 
