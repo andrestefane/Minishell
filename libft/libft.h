@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 18:28:11 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/03 14:35:33 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ typedef struct s_list
 
 // Memory
 
-void		ft_bzero(void *s, size_t n);
+void		free_and_error(char *str, char *message, int exit_code, int std);
 void		*ft_calloc(size_t count, size_t size);
+void		ft_bzero(void *s, size_t n);
 void		free_split(char **str);
 
 // String Fuctions
@@ -115,7 +116,6 @@ char		*ft_cleanline_gnl(char *str);
 char		*ft_get_line_gnl(char *str);
 char		*ft_reading_gnl(int fd, char *str);
 
-
 // GNL UTILS
 
 void		*ft_memcpy_gnl(void *dst, const void *src, size_t n);
@@ -128,7 +128,7 @@ char		*ft_strchr_gnl(char *s, int c);
 # define ERR_ARG "Error Arg or Pipe\n"
 # define ERR_PIPE "Error Pipe\n"
 # define ERR_FORK "Error Fork\n"
-# define ERRO_INFILE "Error infile\n"
+# define ERRO_INFILE "No such file or directory\n"
 # define ERRO_DUP "Error DUP\n"
 # define ERRO_OUFILE "Error outfile\n"
 # define ERRO_DOC "Error here doc\n"
@@ -146,6 +146,11 @@ typedef struct s_fd_pipex
 	int		cmd_index;
 	int		cmd_start;
 	int		cmd_end;
+	int		append;
+	int		count_fd;
+	int		count_heredoc;
+	char	*heredoc_path;
+	int		last_type;
 	int		out_index;
 	char	*limiter;
 	char	**cmds;
@@ -154,6 +159,7 @@ typedef struct s_fd_pipex
 	pid_t	*pid;
 	int		infile;
 	int		outfile;
+	int		fd;
 }	t_pipex;
 
 void		ft_cmd(t_pipex *data, char *argv, char **envir);
@@ -164,7 +170,8 @@ char		**cmd_managment(t_pipex *data, char *cmd);
 void		ft_infile(t_token *token, t_pipex *data);
 t_pipex		*pipex_parsing(t_token *token, t_pipex *data);
 char		*find_execpath(char **envir);
-int			here_doc(t_token *token);
+int			here_doc(t_token *token, const char *filename);
+int			is_limiter(char *line, char *limiter);
 void		execute_command_bonus(t_pipex *data, char **args,
 				char **paths, char **envir);
 void		process_and_exec(t_pipex *data, int i, char **envir);
@@ -179,5 +186,9 @@ void		last_line_pipex(t_token *token, t_pipex *data);
 void		count_commands(t_token *token, t_pipex *data);
 void		extract_commands(t_token *token, t_pipex *data);
 void		free_stuct(t_pipex *data);
+void		count_red_in(t_token *token, t_pipex *data);
+char		*handle_all_heredocs(t_token *token);
+char		*get_filename(int index);
+void		delete_heredoc_files(int n);
 
 #endif

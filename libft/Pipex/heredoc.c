@@ -6,39 +6,109 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:56:24 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 18:27:28 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/03 14:33:35 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-int	here_doc(t_token *token)
+char	*get_filename(int index)
+{
+	char	*number;
+	char	*filename;
+	char	*temp;
+
+	number = ft_itoa(index);
+	if (!number)
+		return (NULL);
+	temp = ft_strjoin("temp/here_doc_", number);
+	free(number);
+	if (!temp)
+		return (NULL);
+	filename = ft_strjoin(temp, ".temp");
+	free(temp);
+	return (filename);
+}
+
+char	*handle_all_heredocs(t_token *token)
+{
+	t_token	*tmp;
+	int		count;
+	char	*filename;
+	char	*last_filename;
+
+	tmp = token;
+	count = 0;
+	last_filename = NULL;
+	while (tmp)
+	{
+		if (tmp->type == T_HEREDOC && tmp->next && tmp->next->value)
+		{
+			filename = get_filename(count);
+			if (!filename)
+				exit_with_error("filename of heredoc failed\n", 1, 2);
+			if (here_doc(tmp, filename) == -1)
+				free_and_error(filename, "Error Reading heredoc\n", 1, 2);
+			free(last_filename);
+			last_filename = filename;
+			count++;
+		}
+		tmp = tmp->next;
+	}
+	return (last_filename);
+}
+
+int	is_limiter(char *line, char *limiter)
+{
+	if (!limiter)
+		return (0);
+	if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+		&& line[ft_strlen(limiter)] == '\n')
+		return (1);
+	return (0);
+}
+
+int	here_doc(t_token *token, const char *filename)
 {
 	int		fd;
-	char	*line;
 	t_token	*next;
+	char	*line;
 
 	next = token->next;
-	fd = open("here_doc.temp", O_CREAT | O_WRONLY | O_APPEND, 0644);
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		unlink("here_doc.temp");
+		unlink(filename);
 		exit_with_error(ERRO_DOC, 1, 2);
 	}
 	while (1)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(0, 0);
-		if (!line)
-			break ;
-		if (next && ft_strncmp(line, next->value, ft_strlen(next->value)) == 0
-			&& line[ft_strlen(next->value)] == '\n')
+		if (!line || is_limiter(line, next->value))
 			break ;
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
 	free(line);
 	close(fd);
-	return (fd);
+	return (0);
 }
 
+void	delete_heredoc_files(int n)
+{
+	int		i;
+	char	*filename;
+
+	i = 0;
+	while (i < n)
+	{
+		filename = get_filename(i);
+		if (filename)
+		{
+			unlink(filename);
+			free(filename);
+		}
+		i++;
+	}
+}

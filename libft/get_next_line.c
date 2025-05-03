@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 11:25:54 by astefane          #+#    #+#             */
-/*   Updated: 2025/04/17 18:30:46 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:01:32 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,24 +87,31 @@ char	*ft_reading_gnl(int fd, char *str)
 
 char	*get_next_line(int fd, int mode)
 {
-	static char	*str;
+	static char	*str[1024];
 	char		*line;
+	int			i;
 
+	i = 0;
 	if (mode == 1)
 	{
-		ft_free_gnl(&str);
+		while (i < 1024)
+		{
+			free(str[i]);
+			str[i] = NULL;
+			i++;
+		}
 		return (NULL);
 	}
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if ((str && !ft_strchr_gnl(str, '\n')) || !str)
-		str = ft_reading_gnl(fd, str);
-	if (!str)
+	if ((str[fd] && !ft_strchr_gnl(str[fd], '\n')) || !str[fd])
+		str[fd] = ft_reading_gnl(fd, str[fd]);
+	if (!str[fd])
 		return (NULL);
-	line = ft_get_line_gnl(str);
+	line = ft_get_line_gnl(str[fd]);
 	if (!line)
-		return (ft_free_gnl(&str));
-	str = ft_cleanline_gnl(str);
+		return (ft_free_gnl(&str[fd]));
+	str[fd] = ft_cleanline_gnl(str[fd]);
 	return (line);
 }
 

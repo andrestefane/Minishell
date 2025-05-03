@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 19:37:18 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 18:39:42 by alejaro2         ###   ########.fr       */
-/*   Updated: 2025/04/30 20:18:48 by astefane         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../libft.h"
 
@@ -46,6 +34,8 @@ void	pipex(t_token *token, char **envir)
 		return ;
 	ft_memset(data, 0, sizeof(t_pipex));
 	data = pipex_parsing(token, data);
+	if (data->heredoc > 0)
+		data->heredoc_path = handle_all_heredocs(token);
 	ft_infile(token, data);
 	ft_outfile(data, token);
 	data->i = -1;
@@ -62,5 +52,6 @@ void	pipex(t_token *token, char **envir)
 	data->i = 0;
 	while (data->i++ < data->processes)
 		wait(NULL);
+	delete_heredoc_files(data->count_heredoc);
 	free_stuct(data);
 }
