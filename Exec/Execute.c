@@ -16,12 +16,12 @@
 
 #include "../Mini.h"
 
-void	check_type(t_token *token, char **envir)
+void	check_type(t_token *token, char **envir, t_command *cmd)
 {
-	int	has_input;
-	int	has_pipe;
-	int	has_output;
-	t_token	*tmp;
+	int			has_input;
+	int			has_pipe;
+	int			has_output;
+	t_token		*tmp;
 
 	has_input = 0;
 	has_pipe = 0;
@@ -39,6 +39,8 @@ void	check_type(t_token *token, char **envir)
 	}
 	if ((has_input && has_pipe && has_output) || (has_input && has_output))
 		pipex(token, envir);
+	else
+		execute_command(cmd, envir);
 }
 
 void execute_command(t_command *cmd, char **envp)
