@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 14:35:33 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:32:33 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,10 @@ void		count_commands(t_token *token, t_pipex *data);
 void		extract_commands(t_token *token, t_pipex *data);
 void		free_stuct(t_pipex *data);
 void		count_red_in(t_token *token, t_pipex *data);
-char		*handle_all_heredocs(t_token *token);
+void		handle_all_heredocs(t_token *token, t_pipex *data);
 char		*get_filename(int index);
 void		delete_heredoc_files(int n);
+int			get_heredoc_index(t_token *token, t_token *target);
+t_token		*get_last_input(t_token *token);
 
 #endif

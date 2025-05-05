@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:56:24 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 14:33:35 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:31:22 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,14 @@ char	*get_filename(int index)
 	return (filename);
 }
 
-char	*handle_all_heredocs(t_token *token)
+void	handle_all_heredocs(t_token *token, t_pipex *data)
 {
 	t_token	*tmp;
-	int		count;
 	char	*filename;
-	char	*last_filename;
+	int		count;
 
 	tmp = token;
 	count = 0;
-	last_filename = NULL;
 	while (tmp)
 	{
 		if (tmp->type == T_HEREDOC && tmp->next && tmp->next->value)
@@ -49,13 +47,12 @@ char	*handle_all_heredocs(t_token *token)
 				exit_with_error("filename of heredoc failed\n", 1, 2);
 			if (here_doc(tmp, filename) == -1)
 				free_and_error(filename, "Error Reading heredoc\n", 1, 2);
-			free(last_filename);
-			last_filename = filename;
+			free(filename);
 			count++;
 		}
 		tmp = tmp->next;
 	}
-	return (last_filename);
+	data->count_heredoc = count;
 }
 
 int	is_limiter(char *line, char *limiter)
