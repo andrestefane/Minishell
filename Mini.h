@@ -66,7 +66,8 @@ char					*extract_word(char *input, int *index, int start);
 void					free_tokens(t_token *head);
 int						fill_tokens(t_token **token_list, char *input);
 // Exec
-void					check_type(t_token *token, char **env);
+
+void					check_type(t_token *token, char **envir, t_command *cmd);
 char					*extract_token(char *input, int *index,
 							t_token_type *type, t_token_type prev_type);
 void execute_command(t_command *cmd, char **envp);
