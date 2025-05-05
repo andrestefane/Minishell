@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
+#    By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/12 17:34:42 by astefane          #+#    #+#              #
-#    Updated: 2025/05/03 20:26:40 by astefane         ###   ########.fr        #
+#    Updated: 2025/05/05 16:49:41 by alejaro2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS = \
 	./Tokenizer/type_of_tokens.c \
 	./Varibles/variables.c \
 	./Varibles/Utils_variables.c \
-	./Exec/Execute.c
+	./Exec/Execute.c \
+	./Parser/parser.c
 
 OBJS = $(SRCS:.c=.o)
 NAME = Mini

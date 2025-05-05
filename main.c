@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 19:38:49 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:03:48 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
 
-
 static void	process_input(char *input, char **env)
 {
-	t_token	*list;
-	t_token	*current;
+	t_token		*list;
+	t_token		*current;
+	t_command	*cmd;
 
 	list = NULL;
 	add_history(input);
@@ -31,10 +31,11 @@ static void	process_input(char *input, char **env)
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	check_type(list, env);
+	cmd = parse_single_command(list);
+	execute_command(cmd, env);
+	// check_type(list, env);
 	free_tokens(list);
 }
-
 
 int	main(int argc, char **argv, char **env)
 {
@@ -54,7 +55,6 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		}
 		process_input(input, env);
-
 		free(input);
 		dup2(saved_input, STDIN_FILENO);
 		close(saved_input);

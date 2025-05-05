@@ -40,3 +40,18 @@ void	check_type(t_token *token, char **envir)
 	if ((has_input && has_pipe && has_output) || (has_input && has_output))
 		pipex(token, envir);
 }
+
+void execute_command(t_command *cmd, char **envp)
+{
+    pid_t pid = fork();
+    if (pid < 0)
+        perror("fork");
+    else if (pid == 0)
+    {
+        execve(cmd->argv[0], cmd->argv, envp);
+        perror("execve");
+        exit(EXIT_FAILURE);
+    }
+    else
+        waitpid(pid, NULL, 0);
+}
