@@ -34,15 +34,11 @@ void	pipex(t_token *token, char **envir)
 		return ;
 	ft_memset(data, 0, sizeof(t_pipex));
 	data = pipex_parsing(token, data);
-	if (data->heredoc > 0)
-		data->heredoc_path = handle_all_heredocs(token);
 	ft_infile(token, data);
 	ft_outfile(data, token);
 	data->i = -1;
 	while (++data->i < data->n_cmds - 1)
 		process_and_exec(data, data->i, envir);
-	if (data->heredoc == 1)
-		unlink("here_doc.temp");
 	data->pid[data->i] = fork();
 	if (!data->pid[data->i])
 	{
