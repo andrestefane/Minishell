@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:21:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 21:10:42 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:02:20 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 		free_struct(data, ERRO_INFILE, 1, 2);
 } */
 
-t_token	*get_last_input(t_token *token)
+/* t_token	*get_last_input(t_token *token)
 {
 	t_token	*last;
 
@@ -73,7 +73,7 @@ void	ft_infile(t_token *token, t_pipex *data)
 	if (dup2(data->infile, STDIN_FILENO) == -1)
 		exit_with_error(ERRO_DUP, 1, 2);
 	close(data->infile);
-}
+} */
 
 int	get_heredoc_index(t_token *token, t_token *target)
 {

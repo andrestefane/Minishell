@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 20:32:33 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:27:02 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,32 +134,34 @@ char		*ft_strchr_gnl(char *s, int c);
 # define ERRO_DOC "Error here doc\n"
 # define ERRO_FEW "Few args\n"
 
+typedef struct s_command t_command;
+
 typedef struct s_fd_pipex
 {
-	int		processes;
-	int		heredoc;
-	int		n_heredocs;
-	char	**limiters;
-	int		i;
-	int		j;
-	int		count;
-	int		cmd_index;
-	int		cmd_start;
-	int		cmd_end;
-	int		append;
-	int		count_fd;
-	int		count_heredoc;
-	char	*heredoc_path;
-	int		last_type;
-	int		out_index;
-	char	*limiter;
-	char	**cmds;
-	int		n_cmds;
-	char	*out_file;
-	pid_t	*pid;
-	int		infile;
-	int		outfile;
-	int		fd;
+	int			processes;
+	int			heredoc;
+	int			n_heredocs;
+	char		**limiters;
+	int			i;
+	int			j;
+	int			count;
+	int			cmd_index;
+	int			cmd_start;
+	int			cmd_end;
+	int			append;
+	int			count_fd;
+	int			count_heredoc;
+	char		*heredoc_path;
+	int			last_type;
+	int			out_index;
+	char		*limiter;
+	int			n_cmds;
+	char		*out_file;
+	pid_t		*pid;
+	t_command	*commands;
+	int			infile;
+	int			outfile;
+	int			fd;
 }	t_pipex;
 
 void		ft_cmd(t_pipex *data, char *argv, char **envir);
@@ -167,30 +169,39 @@ char		*create_path(char *possible_path, char *command);
 void		free_struct(t_pipex	*data, char *message, int i, int std);
 void		ft_outfile(t_pipex *data, t_token *token);
 char		**cmd_managment(t_pipex *data, char *cmd);
-void		ft_infile(t_token *token, t_pipex *data);
-t_pipex		*pipex_parsing(t_token *token, t_pipex *data);
+t_command	*parse_commands(t_token *token);
 char		*find_execpath(char **envir);
-int			here_doc(t_token *token, const char *filename);
-int			is_limiter(char *line, char *limiter);
+int			here_doc(char *limiter, const char *filename);
 void		execute_command_bonus(t_pipex *data, char **args,
 				char **paths, char **envir);
-void		process_and_exec(t_pipex *data, int i, char **envir);
 void		exit_with_error(char *message, int exit_code, int std);
 void		ft_freedoom(char **str);
 char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
 void		pipex(t_token *token, char **envir);
-void		handle_input_redirection(t_token **token, t_pipex *data);
-void		first_line_pipex(t_token *token, t_pipex *data);
-void		last_line_pipex(t_token *token, t_pipex *data);
-void		count_commands(t_token *token, t_pipex *data);
-void		extract_commands(t_token *token, t_pipex *data);
 void		free_stuct(t_pipex *data);
 void		count_red_in(t_token *token, t_pipex *data);
-void		handle_all_heredocs(t_token *token, t_pipex *data);
 char		*get_filename(int index);
 void		delete_heredoc_files(int n);
 int			get_heredoc_index(t_token *token, t_token *target);
-t_token		*get_last_input(t_token *token);
+void		init_strucs(t_pipex **data, t_command **cmds);
+void		free_command_list(t_command *cmd);
+
+void		process_and_exec(t_pipex *data, t_command *cmd,
+				int i, char **envir);
+void		child_process(t_pipex *data, t_command *cmd,
+				int fd[2], char **envir);
+void		redir_outfile(t_command *cmd);
+void		redir_infile(t_command *cmd);
+void		redir_heredoc(t_command *cmd);
+void		parent_process(int fd[2]);
+void		handle_heredoc_in_command(t_command *cmd, char *limiter, int index);
+void		add_arg_to_command(t_command *cmd, char *arg);
+void		add_command_to_list(t_command **head, t_command *new_cmd);
+void	apply_redirections(t_command *cmd);
+t_command	*init_new_command(void);
+int	count_commands_list(t_command *cmd);
+
+
 
 #endif
