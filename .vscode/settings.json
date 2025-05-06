@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "*.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "parse_utils": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

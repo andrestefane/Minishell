@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 13:17:24 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 13:31:11 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:07:24 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,5 @@ char	*ft_strjoin(char *s1, const char *s2)
 	if (s1)
 		ft_memcpy(result, s1, lens1);
 	ft_memcpy(result + lens1, s2, lens2 + 1);
-	/* if (s1)
-		free(s1); */
 	return (result);
 }

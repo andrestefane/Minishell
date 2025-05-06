@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/03/21 17:31:38 by astefane          #+#    #+#              #
-#    Updated: 2025/05/03 12:18:22 by astefane         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SRCS = \
 ft_atoi.c \
 ft_bzero.c \
@@ -64,13 +52,17 @@ Pipex/More_utils.c \
 Pipex/pipex_utils.c \
 Pipex/pipex.c \
 Pipex/Freedom_errors.c \
-Pipex/More_utils_pipex.c \
 Pipex/Infile.c \
 Pipex/outfile.c \
 Pipex/heredoc.c \
-Pipex/count_red_in.c \
+Pipex/heredoc_utils.c \
+Pipex/Init_strucs.c \
+Pipex/Parse_pipex.c \
+Pipex/Parse_utils.c \
 
+OBJ_DIR = libft_obj
 OBJS = $(SRCS:.c=.o)
+OBJ_FILES = $(addprefix $(OBJ_DIR)/,$(OBJS))
 
 CC = cc
 RM = rm -f
@@ -81,13 +73,17 @@ NAME = libft.a
 TOTAL_FILES := $(words $(SRCS))
 COUNT = 0
 
-all: $(NAME)
+all: $(OBJ_DIR) $(NAME)
 
-$(NAME): $(OBJS)
-	@ar rcs $(NAME) $(OBJS)
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(NAME): $(OBJ_FILES)
+	@ar rcs $(NAME) $(OBJ_FILES)
 	@echo "\033[1;33mLeaving Libft...\033[0m"
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@) # asegura crear subdirectorios si los hay
 	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))
 	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))
 	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"
@@ -95,12 +91,12 @@ $(NAME): $(OBJS)
 
 clean:
 	@echo "\033[1;33mCleaning all .o files...\033[0m"
-	@$(RM) $(OBJS) > /dev/null 2>&1
+	@$(RM) $(OBJ_FILES) > /dev/null 2>&1
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
 	@$(RM) $(NAME) > /dev/null 2>&1
 
-re: fclean $(NAME)
-
+re: fclean all
 
 .PHONY: all clean fclean re

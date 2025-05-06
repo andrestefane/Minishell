@@ -6,25 +6,38 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:50:06 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/03 14:35:07 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:25:01 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	ft_outfile(t_pipex *data, t_token *token)
+void	redir_outfile(t_command *cmd)
 {
-	t_token	*last;
+	int	fd_out;
 
-	last = token;
-	while (last && last->next)
-		last = last->next;
-	if (!last || !last->value)
-		free_struct(data, ERRO_OUFILE, 1, 2);
-	if (data->append == 1)
-		data->outfile = open(last->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (cmd->append == 1)
+		fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		data->outfile = open(last->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (data->outfile == -1)
-		free_struct(data, ERRO_OUFILE, 1, 2);
+		fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
+		exit_with_error("Error opening outfile\n", 1, 2);
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+		exit_with_error("Error doing dup2 outfile\n", 1, 2);
+	close(fd_out);
+}
+
+void	apply_outfile(t_command *cmd)
+{
+	int	fd_out;
+
+	if (cmd->append == 1)
+		fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
+		exit_with_error("Error opening outfile\n", 1, 2);
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+		exit_with_error("Error dup2 outfile\n", 1, 2);
+	close(fd_out);
 }

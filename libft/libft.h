@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 13:27:02 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:27:51 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,11 @@ typedef struct s_fd_pipex
 	int			fd;
 }	t_pipex;
 
-void		ft_cmd(t_pipex *data, char *argv, char **envir);
+void		ft_cmd(t_pipex *data, char **argv, char **envir);
 char		*create_path(char *possible_path, char *command);
 void		free_struct(t_pipex	*data, char *message, int i, int std);
-void		ft_outfile(t_pipex *data, t_token *token);
 char		**cmd_managment(t_pipex *data, char *cmd);
-t_command	*parse_commands(t_token *token);
+t_command	*parse_commands(t_token *token, t_pipex *data);
 char		*find_execpath(char **envir);
 int			here_doc(char *limiter, const char *filename);
 void		execute_command_bonus(t_pipex *data, char **args,
@@ -180,13 +179,11 @@ char		**split_command(char *cmd);
 void		free_and_exit(char **args, char **paths, int exit_code);
 void		pipex(t_token *token, char **envir);
 void		free_stuct(t_pipex *data);
-void		count_red_in(t_token *token, t_pipex *data);
 char		*get_filename(int index);
 void		delete_heredoc_files(int n);
 int			get_heredoc_index(t_token *token, t_token *target);
 void		init_strucs(t_pipex **data, t_command **cmds);
 void		free_command_list(t_command *cmd);
-
 void		process_and_exec(t_pipex *data, t_command *cmd,
 				int i, char **envir);
 void		child_process(t_pipex *data, t_command *cmd,
@@ -198,10 +195,19 @@ void		parent_process(int fd[2]);
 void		handle_heredoc_in_command(t_command *cmd, char *limiter, int index);
 void		add_arg_to_command(t_command *cmd, char *arg);
 void		add_command_to_list(t_command **head, t_command *new_cmd);
-void	apply_redirections(t_command *cmd);
+void		apply_redirections(t_command *cmd);
+void		apply_heredoc(t_command *cmd);
+void		apply_outfile(t_command *cmd);
+void		apply_infile(t_command *cmd);
 t_command	*init_new_command(void);
-int	count_commands_list(t_command *cmd);
-
-
+int			count_commands_list(t_command *cmd);
+void		parse_heredoc(t_command *cmd, t_token **token,
+				t_pipex *data, int *index);
+void		parse_red_append(t_command *cmd, t_token **token);
+void		parse_red_out(t_command *cmd, t_token **token);
+void		parse_red_in(t_command *cmd, t_token **token);
+void		process_token(t_command **curr, t_token **token,
+				t_pipex *data, int *index);
+void		execute_pipeline(t_pipex *data, t_command *cmds, char **envir);
 
 #endif
