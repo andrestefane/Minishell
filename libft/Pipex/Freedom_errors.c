@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:31:08 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 13:00:39 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:08:58 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,4 @@ void	free_and_exit(char **args, char **paths, int exit_code)
 	ft_freedoom(args);
 	ft_freedoom(paths);
 	exit(exit_code);
-}
-
-void	free_stuct(t_pipex *data)
-{
-	if (data->pid)
-		free(data->pid);
-	free(data);
 }

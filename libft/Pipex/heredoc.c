@@ -6,29 +6,11 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:56:24 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 12:00:27 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:44:19 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
-
-char	*get_filename(int index)
-{
-	char	*number;
-	char	*filename;
-	char	*temp;
-
-	number = ft_itoa(index);
-	if (!number)
-		return (NULL);
-	temp = ft_strjoin("temp/here_doc_", number);
-	free(number);
-	if (!temp)
-		return (NULL);
-	filename = ft_strjoin(temp, ".temp");
-	free(temp);
-	return (filename);
-}
 
 int	is_limiter(char *line, char *limiter)
 {
@@ -63,20 +45,15 @@ int	here_doc(char *limiter, const char *filename)
 	return (0);
 }
 
-void	delete_heredoc_files(int n)
+void	handle_heredoc_in_command(t_command *cmd, char *limiter, int index)
 {
-	int		i;
 	char	*filename;
 
-	i = 0;
-	while (i < n)
-	{
-		filename = get_filename(i);
-		if (filename)
-		{
-			unlink(filename);
-			free(filename);
-		}
-		i++;
-	}
+	filename = get_filename(index);
+	if (!filename)
+		exit_with_error("malloc filename failed\n", 1, 2);
+	if (here_doc(limiter, filename) == -1)
+		free_and_error(filename, "Error reading heredoc\n", 1, 2);
+	cmd->is_heredoc = 1;
+	cmd->heredoc_file = filename;
 }
