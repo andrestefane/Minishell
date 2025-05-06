@@ -36,12 +36,6 @@ typedef struct s_tokenizer
 	int mode;     // Estado actual (NORMAL/DOUBLE/SIMPLE)
 }						t_tokenizer;
 
-typedef struct s_command
-{
-	char				**argv;
-	struct s_command	*next;
-}						t_command;
-
 typedef enum e_expansion_type
 {
 	NO_EXPANSION,
@@ -50,11 +44,19 @@ typedef enum e_expansion_type
 	EXIT_STATUS_EXPANSION
 }						t_expansion_type;
 
+typedef struct s_command
+{
+	char				**argv;
+	char				*infile;
+	char				*outfile;
+	int					append;
+	int					is_heredoc;
+	char				*heredoc_file;
+	struct s_command	*next;
+}	t_command;
+
 // Parse
 t_command	*parse_single_command(t_token *tokens);
-
-
-
 
 // Tokens
 void					add_token(t_token **head, char *value,

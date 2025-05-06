@@ -1,0 +1,20 @@
+total 1372
+drwxr-xr-x 10 astefane 2019     255 May  6 13:44 .
+drwxr-xr-x  7 astefane 2019      86 May  2 17:57 ..
+-rw-r--r--  1 astefane 2019    1393 May  1 18:53 Chuleta_git.md
+drwxr-xr-x  2 astefane 2019      40 May  6 13:44 Exec
+drwxr-xr-x  8 astefane 2019     220 May  5 18:26 .git
+-rw-r--r--  1 astefane 2019      17 May  6 13:35 infile
+drwxr-xr-x  3 astefane 2019    4096 May  6 13:44 libft
+-rw-r--r--  1 astefane 2019    1833 May  5 18:19 main.c
+-rw-r--r--  1 astefane 2019    9952 May  6 13:44 main.o
+-rw-r--r--  1 astefane 2019    2172 May  5 17:00 Makefile
+-rwxr-xr-x  1 astefane 2019 1356528 May  6 13:44 Mini
+-rw-r--r--  1 astefane 2019    1881 May  6 12:54 Mini.h
+-rw-r--r--  1 astefane 2019       0 May  6 13:55 outfile
+drwxr-xr-x  2 astefane 2019      38 May  6 13:44 Parser
+-rw-r--r--  1 astefane 2019      46 May  1 18:53 README.md
+drwxr-xr-x  2 astefane 2019      75 May  6 13:46 temp
+drwxr-xr-x  2 astefane 2019     136 May  6 13:44 Tokenizer
+drwxr-xr-x  2 astefane 2019      94 May  6 13:44 Varibles
+drwxr-xr-x  2 astefane 2019      46 May  1 18:53 .vscode
