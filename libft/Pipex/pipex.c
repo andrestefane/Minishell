@@ -12,7 +12,12 @@ void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
 	if (data->pid[i] == 0)
 		child_process(data, cmd, fd, envir);
 	else
-		parent_process(fd);
+	{
+		if (data->prev_fd != -1)
+			close(data->prev_fd);
+		data->prev_fd = fd[0];
+		close(fd[1]);
+	}
 }
 
 void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
@@ -23,19 +28,17 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 		redir_infile(cmd);
 	if (cmd->outfile != NULL)
 		redir_outfile(cmd);
+	if (data->prev_fd != -1)
+	{
+		if (dup2(data->prev_fd, STDIN_FILENO) == -1)
+			exit_with_error("Dup2 prev_fd error\n", 1, 2);
+		close(data->prev_fd);
+	}
 	close(fd[0]);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 		exit_with_error("Dup2 pipe write error\n", 1, 2);
 	close(fd[1]);
 	ft_cmd(data, cmd->argv, envir);
-}
-
-void	parent_process(int fd[2])
-{
-	close(fd[1]);
-	if (dup2(fd[0], STDIN_FILENO) == -1)
-		exit_with_error("Dup2 pipe read error\n", 1, 2);
-	close(fd[0]);
 }
 
 void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
@@ -45,23 +48,38 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 
 	curr = cmds;
 	i = 0;
+	data->prev_fd = -1;
 	while (curr && i < data->n_cmds - 1)
 	{
 		process_and_exec(data, curr, i, envir);
 		curr = curr->next;
 		i++;
 	}
+	execute_last_command(data, curr, envir, i);
+	if (data->prev_fd != -1)
+		close(data->prev_fd);
+	i = 0;
+	while (i++ < data->n_cmds)
+		wait(NULL);
+}
+
+void	execute_last_command(t_pipex *data, t_command *curr,
+	char **envir, int i)
+{
 	data->pid[i] = fork();
 	if (data->pid[i] == -1)
 		free_struct(data, ERR_FORK, 1, 2);
 	if (data->pid[i] == 0)
 	{
+		if (data->prev_fd != -1)
+		{
+			if (dup2(data->prev_fd, STDIN_FILENO) == -1)
+				exit_with_error("dup2 final prev_fd failed\n", 1, 2);
+			close(data->prev_fd);
+		}
 		apply_redirections(curr);
 		ft_cmd(data, curr->argv, envir);
 	}
-	i = 0;
-	while (i++ < data->processes)
-		wait(NULL);
 }
 
 void	pipex(t_token *token, char **envir)

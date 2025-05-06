@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:37:01 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 13:37:54 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:02:17 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	process_input(char *input, char **env)
 		current = current->next;
 	}
 	cmd = parse_single_command(list);
-	check_type(list, env, cmd);
+	check_type(list, env);
 	free_commands(cmd);
 	free_tokens(list);
 }
