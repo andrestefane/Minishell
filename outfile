@@ -1,20 +1,168 @@
-total 1364$
-drwxr-xr-x 11 astefane 2019     252 May  6 17:24 .$
-drwxr-xr-x  7 astefane 2019      86 May  2 17:57 ..$
--rw-r--r--  1 astefane 2019    1393 May  1 18:53 Chuleta_git.md$
-drwxr-xr-x  2 astefane 2019      43 May  6 16:33 Exec$
-drwxr-xr-x  8 astefane 2019     220 May  6 13:58 .git$
--rw-r--r--  1 astefane 2019      17 May  6 13:35 infile$
-drwxr-xr-x  4 astefane 2019    4096 May  6 17:24 libft$
--rw-r--r--  1 astefane 2019    1854 May  6 13:58 main.c$
--rw-r--r--  1 astefane 2019    1525 May  6 16:34 Makefile$
--rwxr-xr-x  1 astefane 2019 1365408 May  6 17:24 Mini$
--rw-r--r--  1 astefane 2019    1960 May  6 13:58 Mini.h$
-drwxr-xr-x  6 astefane 2019      79 May  6 17:24 obj$
--rw-r--r--  1 astefane 2019       0 May  6 17:25 outfile$
-drwxr-xr-x  2 astefane 2019      44 May  6 16:33 Parser$
--rw-r--r--  1 astefane 2019      46 May  1 18:53 README.md$
-drwxr-xr-x  2 astefane 2019       6 May  6 16:38 temp$
-drwxr-xr-x  2 astefane 2019      71 May  6 16:33 Tokenizer$
-drwxr-xr-x  2 astefane 2019      50 May  6 16:33 Varibles$
-drwxr-xr-x  2 astefane 2019      46 May  1 18:53 .vscode$
+CC = cc$
+CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address$
+LIBFT = libft$
+LIBFT_DIR = libft/$
+LIBFT_LIB = $(LIBFT_DIR)libft.a$
+LDFLAGS = -lreadline$
+$
+OBJ_DIR = obj$
+SRCS = \$
+	main.c \$
+	./Tokenizer/Tokens.c \$
+	./Tokenizer/tokenizer_utils.c \$
+	./Tokenizer/type_of_tokens.c \$
+	./Varibles/variables.c \$
+	./Varibles/Utils_variables.c \$
+	./Exec/Execute.c \$
+	./Exec/path_utils.c \$
+	./Parser/parser.c \$
+	./Parser/parser_utils.c$
+$
+# Cambio importante: generamos la ruta de cada .o dentro de obj/ manteniendo subdirectorios$
+OBJS = $(SRCS:.c=.o)$
+OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))$
+$
+NAME = Mini$
+INCLUDES = -I. -I includes$
+$
+TOTAL_FILES := $(words $(SRCS))$
+COUNT = 0$
+$
+all: $(LIBFT_LIB) $(NAME)$
+$
+$(LIBFT_LIB):$
+	@echo "\033[1;33mCompiling libft...\033[0m"$
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory$
+$
+$(NAME): $(OBJ_FILES) $(LIBFT_LIB)$
+	@$(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)$
+$
+$(OBJ_DIR)/%.o: %.c$
+	@mkdir -p $(dir $@)$
+	@if [ "$(COUNT)" -eq "0" ]; then echo "\033[1;33mCompiling Mini...\033[0m"; fi$
+	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))$
+	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))$
+	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"$
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@$
+$
+clean:$
+	@echo "\033[1;33mCleaning all .o files...\033[0m"$
+	@rm -rf $(OBJ_DIR) > /dev/null 2>&1$
+	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1$
+$
+fclean: clean$
+	@rm -rf $(NAME) > /dev/null 2>&1$
+	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1$
+$
+re: fclean all$
+$
+.PHONY: all clean fclean reCC = cc$
+CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address$
+LIBFT = libft$
+LIBFT_DIR = libft/$
+LIBFT_LIB = $(LIBFT_DIR)libft.a$
+LDFLAGS = -lreadline$
+$
+OBJ_DIR = obj$
+SRCS = \$
+	main.c \$
+	./Tokenizer/Tokens.c \$
+	./Tokenizer/tokenizer_utils.c \$
+	./Tokenizer/type_of_tokens.c \$
+	./Varibles/variables.c \$
+	./Varibles/Utils_variables.c \$
+	./Exec/Execute.c \$
+	./Exec/path_utils.c \$
+	./Parser/parser.c \$
+	./Parser/parser_utils.c$
+$
+# Cambio importante: generamos la ruta de cada .o dentro de obj/ manteniendo subdirectorios$
+OBJS = $(SRCS:.c=.o)$
+OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))$
+$
+NAME = Mini$
+INCLUDES = -I. -I includes$
+$
+TOTAL_FILES := $(words $(SRCS))$
+COUNT = 0$
+$
+all: $(LIBFT_LIB) $(NAME)$
+$
+$(LIBFT_LIB):$
+	@echo "\033[1;33mCompiling libft...\033[0m"$
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory$
+$
+$(NAME): $(OBJ_FILES) $(LIBFT_LIB)$
+	@$(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)$
+$
+$(OBJ_DIR)/%.o: %.c$
+	@mkdir -p $(dir $@)$
+	@if [ "$(COUNT)" -eq "0" ]; then echo "\033[1;33mCompiling Mini...\033[0m"; fi$
+	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))$
+	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))$
+	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"$
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@$
+$
+clean:$
+	@echo "\033[1;33mCleaning all .o files...\033[0m"$
+	@rm -rf $(OBJ_DIR) > /dev/null 2>&1$
+	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1$
+$
+fclean: clean$
+	@rm -rf $(NAME) > /dev/null 2>&1$
+	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1$
+$
+re: fclean all$
+$
+.PHONY: all clean fclean reChuleta_git.md
+Exec
+infile
+libft
+main.c
+Makefile
+Mini
+Mini.h
+obj
+outfile
+Parser
+README.md
+temp
+Tokenizer
+Varibles
+Chuleta_git.md
+Exec
+infile
+libft
+main.c
+Makefile
+Mini
+Mini.h
+obj
+outfile
+Parser
+README.md
+temp
+Tokenizer
+Varibles
+total 1368
+drwxr-xr-x 11 astefane 2019     252 May  6 18:18 .
+drwxr-xr-x  7 astefane 2019      86 May  2 17:57 ..
+-rw-r--r--  1 astefane 2019    1393 May  1 18:53 Chuleta_git.md
+drwxr-xr-x  2 astefane 2019      43 May  6 16:33 Exec
+drwxr-xr-x  8 astefane 2019     220 May  6 17:30 .git
+-rw-r--r--  1 astefane 2019      17 May  6 13:35 infile
+drwxr-xr-x  4 astefane 2019    4096 May  6 18:18 libft
+-rw-r--r--  1 astefane 2019    1849 May  6 18:02 main.c
+-rw-r--r--  1 astefane 2019    1525 May  6 16:34 Makefile
+-rwxr-xr-x  1 astefane 2019 1365616 May  6 18:18 Mini
+-rw-r--r--  1 astefane 2019    1944 May  6 18:02 Mini.h
+drwxr-xr-x  6 astefane 2019      79 May  6 18:18 obj
+-rw-r--r--  1 astefane 2019    3394 May  6 18:19 outfile
+drwxr-xr-x  2 astefane 2019      44 May  6 16:33 Parser
+-rw-r--r--  1 astefane 2019      46 May  1 18:53 README.md
+drwxr-xr-x  2 astefane 2019      29 May  6 18:19 temp
+drwxr-xr-x  2 astefane 2019      71 May  6 16:33 Tokenizer
+drwxr-xr-x  2 astefane 2019      50 May  6 16:33 Varibles
+drwxr-xr-x  2 astefane 2019      46 May  1 18:53 .vscode
+h2
+

@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 16:27:51 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:18:08 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ typedef struct s_fd_pipex
 	char		**limiters;
 	int			i;
 	int			j;
+	int			prev_fd;
 	int			count;
 	int			cmd_index;
 	int			cmd_start;
@@ -209,5 +210,7 @@ void		parse_red_in(t_command *cmd, t_token **token);
 void		process_token(t_command **curr, t_token **token,
 				t_pipex *data, int *index);
 void		execute_pipeline(t_pipex *data, t_command *cmds, char **envir);
+void		execute_last_command(t_pipex *data, t_command *curr,
+				char **envir, int i);
 
 #endif
