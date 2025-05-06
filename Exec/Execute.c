@@ -18,10 +18,10 @@
 
 void	check_type(t_token *token, char **envir, t_command *cmd)
 {
-	int			has_input;
-	int			has_pipe;
-	int			has_output;
-	t_token		*tmp;
+	int		has_input;
+	int		has_pipe;
+	int		has_output;
+	t_token	*tmp;
 
 	has_input = 0;
 	has_pipe = 0;
@@ -43,17 +43,30 @@ void	check_type(t_token *token, char **envir, t_command *cmd)
 		execute_command(cmd, envir);
 }
 
-void execute_command(t_command *cmd, char **envp)
+void	execute_command(t_command *cmd, char **envp)
 {
-    pid_t pid = fork();
-    if (pid < 0)
-        perror("fork");
-    else if (pid == 0)
-    {
-        execve(cmd->argv[0], cmd->argv, envp);
-        perror("execve");
-        exit(EXIT_FAILURE);
-    }
-    else
-        waitpid(pid, NULL, 0);
+	pid_t	pid;
+	char    *path;
+
+	pid = fork();
+	if (pid < 0)
+		perror("fork");
+	if (pid == 0)
+	{
+		if (ft_strchr(cmd->argv[0], '/') != NULL)
+			path = cmd->argv[0];
+		else
+			path = find_in_path(cmd->argv[0], envp);
+		if (path == NULL)
+		{
+			ft_putstr(cmd->argv[0], STDERR_FILENO);
+			ft_putstr(": command not found\n", STDERR_FILENO);
+			exit(127);
+		}
+		execve(path, cmd->argv, envp);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else
+		waitpid(pid, NULL, 0);
 }
