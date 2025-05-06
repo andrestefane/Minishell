@@ -6,7 +6,7 @@
 #    By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/12 17:34:42 by astefane          #+#    #+#              #
-#    Updated: 2025/05/05 16:49:41 by alejaro2         ###   ########.fr        #
+#    Updated: 2025/05/06 13:38:46 by alejaro2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ SRCS = \
 	./Varibles/variables.c \
 	./Varibles/Utils_variables.c \
 	./Exec/Execute.c \
-	./Parser/parser.c
+	./Exec/path_utils.c \
+	./Parser/parser.c \
+	./Parser/parser_utils.c
 
 OBJS = $(SRCS:.c=.o)
 NAME = Mini
