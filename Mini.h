@@ -6,10 +6,6 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-# define NORMAL MODE 0
-# define DOUBLE_MODE 1
-# define SIMPLE_MODE 2
-
 typedef enum e_token_type
 {
 	T_WORD,
@@ -22,18 +18,27 @@ typedef enum e_token_type
 	T_OUTFILE // despues de >
 }						t_token_type;
 
+typedef enum e_token_quote
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE
+}						t_token_quote;
+
 typedef struct s_token
 {
 	char				*value;
 	t_token_type		type;
+	t_token_quote		quote;
 	struct s_token		*next;
 }						t_token;
 
 typedef struct s_tokenizer
 {
-	char *input;  // String completo
-	int position; // Posición actual
-	int mode;     // Estado actual (NORMAL/DOUBLE/SIMPLE)
+	char *input; // String completo
+	int pos;     // Posición actual
+	t_token_type		prev_type;
+	int					err;
 }						t_tokenizer;
 
 typedef enum e_expansion_type
@@ -53,27 +58,28 @@ typedef struct s_command
 	int					is_heredoc;
 	char				*heredoc_file;
 	struct s_command	*next;
-}	t_command;
+}						t_command;
 
 // Parse
-t_command	*parse_single_command(t_token *tokens);
-void	free_commands(t_command *cmd);
+t_command				*parse_single_command(t_token *tokens);
+void					free_commands(t_command *cmd);
 
 // Tokens
-void					add_token(t_token **head, char *value,
-							t_token_type type);
-t_token_type			get_operator_type(char *input, int i, int *len);
-char					*extract_token_aux(char *input, int *index,
-							t_token_type *type, t_token_type prev_type);
-char					*extract_word(char *input, int *index, int start);
+void	add_token(t_token **head, char *value, t_token_type type, t_token_quote quote);
+char					*extract_word(t_tokenizer *tok, t_token_type *type);
 void					free_tokens(t_token *head);
 int						fill_tokens(t_token **token_list, char *input);
+int						extract_metachar(t_tokenizer *tok, t_token_type *type,
+							t_token_quote *quote);
+char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
+		t_token_quote *quote);
+
 // Exec
-char	*find_in_path(char *cmd, char **envp);
+char					*find_in_path(char *cmd, char **envp);
 void					check_type(t_token *token, char **envir);
-char					*extract_token(char *input, int *index,
-							t_token_type *type, t_token_type prev_type);
-void execute_command(t_command *cmd, char **envp);
+char					*extract_token(t_tokenizer *tok, t_token_type *type,
+							t_token_quote *quote);
+void					execute_command(t_command *cmd, char **envp);
 
 // Variables
 void					expand_token(t_token *token, char **env);
