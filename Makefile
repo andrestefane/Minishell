@@ -11,6 +11,7 @@ SRCS = \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
 	./Tokenizer/type_of_tokens.c \
+	./Tokenizer/metachar_utils.c \
 	./Varibles/variables.c \
 	./Varibles/Utils_variables.c \
 	./Exec/Execute.c \

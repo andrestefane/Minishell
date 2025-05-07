@@ -6,13 +6,13 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/01 16:51:22 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:32:52 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Mini.h"
 
-void	add_token(t_token **head, char *value, t_token_type type)
+void	add_token(t_token **head, char *value, t_token_type type, t_token_quote quote)
 {
 	t_token	*new_node;
 	t_token	*current;
@@ -22,6 +22,7 @@ void	add_token(t_token **head, char *value, t_token_type type)
 		return ;
 	new_node->value = ft_strdup(value);
 	new_node->type = type;
+	new_node->quote = quote;
 	new_node->next = NULL;
 	if (*head == NULL)
 		*head = new_node;
@@ -47,33 +48,44 @@ void	free_tokens(t_token *head)
 	}
 }
 
-char *extract_word(char *input, int *index, int start)
-{
-    int len;
+/* tokenizer_utils.c */
 
-    if (!input || !index)
-        return (NULL);
-    len = 0;
-    while (input[*index] && input[*index] != ' ' && input[*index] != '\t'
-           && input[*index] != '|' && input[*index] != '<' && input[*index] != '>')
-    {
-        len++;
-        (*index)++;
-    }
-    if (!len)
-        return (NULL);
-    return (ft_substr(input, start, len));
+char	*extract_word(t_tokenizer *tok, t_token_type *type)
+{
+	int	start;
+
+	start = tok->pos;
+	while (tok->input[tok->pos] && tok->input[tok->pos] != ' '
+		&& tok->input[tok->pos] != '\t' && tok->input[tok->pos] != '|'
+		&& tok->input[tok->pos] != '<' && tok->input[tok->pos] != '>')
+	{
+		tok->pos++;
+	}
+	if (tok->pos == start)
+		return (NULL);
+	*type = T_WORD;
+	return (ft_substr(tok->input, start, tok->pos - start));
 }
 
-char *extract_token(char *input, int *index, t_token_type *type, t_token_type prev_type)
+char	*extract_token(t_tokenizer *tok, t_token_type *type,
+		t_token_quote *quote)
 {
-    if (!input || !index || !type)
-        return (NULL);
-    while (input[*index] && (input[*index] == ' ' || input[*index] == '\t'))
-        (*index)++;
-    if (!input[*index])
-        return (NULL);
-    return (extract_token_aux(input, index, type, prev_type));
+	char	*val;
+
+	while (tok->input[tok->pos] == ' ' || tok->input[tok->pos] == '\t')
+		tok->pos++;
+	if (tok->input[tok->pos] == '\0')
+		return (NULL);
+	if (tok->input[tok->pos] == '\'' || tok->input[tok->pos] == '"')
+	{
+		val = extract_quoted_token(tok, type, quote);
+		if (!val)
+			tok->err = 1;
+		return (val);
+	}
+	if (extract_metachar(tok, type, quote))
+		return (ft_strdup(""));
+	*quote = Q_NONE;
+	val = extract_word(tok, type);
+	return (val);
 }
-
-

@@ -1,81 +1,50 @@
 #include "../Mini.h"
 
-char *extract_token_aux(char *input, int *index, t_token_type *type, t_token_type prev_type)
+int fill_tokens(t_token **list, char *input)
 {
-    int start;
-    int len;
-    char *token;
+    t_tokenizer    tok = { input, 0, T_WORD, 0 };
+    t_token_type   type;
+    t_token_quote  quote;
+    char          *val;
 
-    start = *index;
-    len = 0;
-    *type = get_operator_type(input, *index, &len);
-    if (*type != T_WORD)
+    while (!tok.err)
     {
-        *index = *index + len;
-        token = ft_substr(input, start, len);
-        return (token);
-    }
-    if (prev_type == T_RED_IN || prev_type == T_HEREDOC)
-        *type = T_INFILE;
-    if (prev_type == T_RED_OUT || prev_type == T_RED_APPEND)
-        *type = T_OUTFILE;
-    return (extract_word(input, index, start));
-}
-
-int fill_tokens(t_token **token_list, char *input)
-{
-    int index;
-    t_token_type type;
-    t_token_type prev_type;
-    char *token;
-
-    index = 0;
-    prev_type = T_WORD;
-    while (input[index])
-    {
-        token = extract_token(input, &index, &type, prev_type);
-        if (!token)
+        val = extract_token(&tok, &type, &quote);
+        if (tok.err)                   /* comilla sin cerrar */
             break;
-        add_token(token_list, token, type);
-        free(token);
-        prev_type = type;
+        if (!val)                      /* fin de línea */
+            return (1);
+        add_token(list, val, type, quote);
+        free(val);
+        tok.prev_type = type;
     }
-    return (1);
+    /* si tok.err == 1, hubo error */
+    free_tokens(*list);
+    return (0);
 }
 
-
-t_token_type get_operator_type(char *input, int i, int *len)
+char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
+		t_token_quote *quote)
 {
-    if (!input || input[i] == '\0')
-    {
-        *len = 0;
-        return (T_WORD);
-    }
-    if (input[i] == '|')
-    {
-        *len = 1;
-        return (T_PIPE);
-    }
-    if (input[i] == '<' && input[i + 1] == '<')
-    {
-        *len = 2;
-        return (T_HEREDOC);
-    }
-    if (input[i] == '>' && input[i + 1] == '>')
-    {
-        *len = 2;
-        return (T_RED_APPEND);
-    }
-    if (input[i] == '<')
-    {
-        *len = 1;
-        return (T_RED_IN);
-    }
-    if (input[i] == '>')
-    {
-        *len = 1;
-        return (T_RED_OUT);
-    }
-    *len = 0;
-    return (T_WORD);
+	char	quote_char;
+	int		j;
+	char	*val;
+
+	quote_char = tok->input[tok->pos];
+	j = tok->pos + 1;
+	while (tok->input[j] && tok->input[j] != quote_char)
+		j++;
+	if (tok->input[j] == '\0')
+	{
+		tok->err = 1;
+		return (NULL);
+	}
+	val = ft_substr(tok->input, tok->pos + 1, j - tok->pos - 1);
+	*type = T_WORD;
+	if (quote_char == '\'')
+		*quote = Q_SINGLE;
+	else
+		*quote = Q_DOUBLE;
+	tok->pos = j + 1;
+	return (val);
 }
