@@ -2,12 +2,11 @@
 
 void	init_strucs(t_pipex **data, t_command **cmds)
 {
-	*cmds = malloc(sizeof(t_command));
+	*cmds = init_new_command();
 	*data = malloc(sizeof(t_pipex));
 	if (!cmds || !data)
 		return ;
 	ft_memset(*data, 0, sizeof(t_pipex));
-	ft_memset(*cmds, 0, sizeof(t_pipex));
 }
 
 t_command	*init_new_command(void)

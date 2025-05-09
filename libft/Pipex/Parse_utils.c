@@ -34,6 +34,8 @@ void	parse_red_append(t_command *cmd, t_token **token)
 void	parse_heredoc(t_command *cmd, t_token **token,
 	t_pipex *data, int *index)
 {
+	if (!(*token)->next || !(*token)->next->value)
+		exit_with_error("heredoc: missing or invalid limiter\n", 1, 2);
 	if (cmd->heredoc_file)
 		free(cmd->heredoc_file);
 	handle_heredoc_in_command(cmd, (*token)->next->value, *index);
