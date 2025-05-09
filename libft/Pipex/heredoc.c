@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:56:24 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/06 15:44:19 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:51:41 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	here_doc(char *limiter, const char *filename)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(0, 0);
+		if (!limiter || !*limiter)
+			exit_with_error("heredoc: empty limiter\n", 1, 2);
 		if (!line || ft_strcmp(line, limiter) == 0 || is_limiter(line, limiter))
 			break ;
 		write(fd, line, ft_strlen(line));
