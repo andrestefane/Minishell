@@ -1,5 +1,4 @@
-
-#include "../Mini.h"
+#include "../libft.h"
 
 t_command	*parse_commands(t_token *token, t_pipex *data)
 {
