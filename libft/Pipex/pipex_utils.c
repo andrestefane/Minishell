@@ -1,4 +1,16 @@
-#include "../Mini.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/18 20:06:04 by astefane          #+#    #+#             */
+/*   Updated: 2025/05/06 16:27:30 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../libft.h"
 
 void	ft_cmd(t_pipex *data, char **argv, char **envir)
 {
@@ -57,21 +69,6 @@ char	*find_execpath(char **envir)
 	return (NULL);
 }
 
-char	*create_path(char *possible_path, char *command)
-{
-	char	*path;
-	char	*temp;
-
-	if (ft_strchr(command, '/'))
-		return (ft_strdup(command));
-	temp = ft_strjoin(possible_path, "/");
-	if (!temp)
-		return (NULL);
-	path = ft_strjoin(temp, command);
-	free(temp);
-	return (path);
-}
-
 void	execute_command_bonus(t_pipex *data, char **args,
 char **paths, char **envir)
 {
@@ -96,4 +93,19 @@ char **paths, char **envir)
 	free(data->pid);
 	free(data);
 	free_and_exit(args, paths, 127);
+}
+
+char	*create_path(char *possible_path, char *command)
+{
+	char	*path;
+	char	*temp;
+
+	if (ft_strchr(command, '/'))
+		return (ft_strdup(command));
+	temp = ft_strjoin(possible_path, "/");
+	if (!temp)
+		return (NULL);
+	path = ft_strjoin(temp, command);
+	free(temp);
+	return (path);
 }

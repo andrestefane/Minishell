@@ -47,6 +47,18 @@ get_next_line.c \
 get_next_line_utils.c \
 ft_strndup.c \
 free_split.c \
+free_string.c \
+Pipex/More_utils.c \
+Pipex/pipex_utils.c \
+Pipex/pipex.c \
+Pipex/Freedom_errors.c \
+Pipex/Infile.c \
+Pipex/outfile.c \
+Pipex/heredoc.c \
+Pipex/heredoc_utils.c \
+Pipex/Init_strucs.c \
+Pipex/Parse_pipex.c \
+Pipex/Parse_utils.c \
 
 OBJ_DIR = libft_obj
 OBJS = $(SRCS:.c=.o)
@@ -71,7 +83,7 @@ $(NAME): $(OBJ_FILES)
 	@echo "\033[1;33mLeaving Libft...\033[0m"
 
 $(OBJ_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
+	@mkdir -p $(dir $@) # asegura crear subdirectorios si los hay
 	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))
 	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))
 	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"
