@@ -1,4 +1,5 @@
-#include "../libft.h"
+
+#include "../Mini.h"
 
 char	*get_filename(int index)
 {
