@@ -1,4 +1,5 @@
-#include "../libft.h"
+
+#include "../Mini.h"
 
 void	init_strucs(t_pipex **data, t_command **cmds)
 {
