@@ -1,4 +1,5 @@
-#include "../libft.h"
+
+#include "../Mini.h"
 
 void	parse_red_in(t_command *cmd, t_token **token)
 {
