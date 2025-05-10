@@ -6,8 +6,6 @@ LIBFT_LIB = $(LIBFT_DIR)libft.a
 LDFLAGS = -lreadline
 
 OBJ_DIR = obj
-TEMP_DIR = .temp
-
 SRCS = \
 	main.c \
 	./Tokenizer/Tokens.c \
@@ -15,14 +13,24 @@ SRCS = \
 	./Tokenizer/type_of_tokens.c \
 	./Tokenizer/metachar_utils.c \
 	./Varibles/variables.c \
-	./Varibles/Utils_variables.c \
+	./Exec/Execute_add_commands.c \
+	./Exec/Execute_freedom.c \
+	./Exec/Execute_freedoom_utils.c \
+	./Exec/Execute_heredoc_utils.c \
+	./Exec/Execute_heredoc.c \
+	./Exec/Execute_infile.c \
+	./Exec/Execute_init.c \
+	./Exec/Execute_outfile.c \
+	./Exec/Execute_parse_utils.c \
+	./Exec/Execute_parse.c \
+	./Exec/Execute_utils.c \
 	./Exec/Execute.c \
-	./Exec/path_utils.c \
 	./Parser/parser.c \
-	./Parser/parser_utils.c
+	./Parser/parser_utils.c \
 
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
+TEMP_DIR = .temp
 
 NAME = Mini
 INCLUDES = -I. -I includes
@@ -30,20 +38,17 @@ INCLUDES = -I. -I includes
 TOTAL_FILES := $(words $(SRCS))
 COUNT = 0
 
-all: $(TEMP_DIR) $(OBJ_DIR) $(LIBFT_LIB) $(NAME)
-
-$(TEMP_DIR):
-	@mkdir -p $(TEMP_DIR)
-
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
+all: $(LIBFT_LIB) $(NAME) $(TEMP_DIR)
 
 $(LIBFT_LIB):
 	@echo "\033[1;33mCompiling libft...\033[0m"
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 
 $(NAME): $(OBJ_FILES) $(LIBFT_LIB)
-	@$(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)
+	@ $(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)
+
+$(TEMP_DIR):
+	@mkdir -p $(TEMP_DIR)
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
@@ -55,11 +60,11 @@ $(OBJ_DIR)/%.o: %.c
 
 clean:
 	@echo "\033[1;33mCleaning all .o files...\033[0m"
-	@rm -rf $(OBJ_DIR) $(TEMP_DIR) > /dev/null 2>&1
+	@rm -rf $(OBJ_DIR) > /dev/null 2>&1
 	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1
 
 fclean: clean
-	@rm -rf $(NAME) > /dev/null 2>&1
+	@rm -rf $(NAME) $(TEMP_DIR) > /dev/null 2>&1
 	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1
 
 re: fclean all

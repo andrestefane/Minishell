@@ -72,31 +72,11 @@ typedef struct s_command
 
 typedef struct s_fd_pipex
 {
-	int			processes;
-	int			heredoc;
-	int			n_heredocs;
-	char		**limiters;
-	int			i;
-	int			j;
 	int			prev_fd;
-	int			count;
-	int			cmd_index;
-	int			cmd_start;
-	int			cmd_end;
-	int			append;
-	int			count_fd;
 	int			count_heredoc;
-	char		*heredoc_path;
-	int			last_type;
-	int			out_index;
-	char		*limiter;
 	int			n_cmds;
-	char		*out_file;
 	pid_t		*pid;
 	t_command	*commands;
-	int			infile;
-	int			outfile;
-	int			fd;
 }	t_pipex;
 
 // Parse
