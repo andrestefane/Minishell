@@ -1,4 +1,5 @@
-#include "../libft.h"
+
+#include "../Mini.h"
 
 void	add_command_to_list(t_command **head, t_command *new_cmd)
 {

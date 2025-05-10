@@ -13,13 +13,21 @@ SRCS = \
 	./Tokenizer/type_of_tokens.c \
 	./Tokenizer/metachar_utils.c \
 	./Varibles/variables.c \
-	./Varibles/Utils_variables.c \
+	./Exec/Execute_add_commands.c \
+	./Exec/Execute_freedom.c \
+	./Exec/Execute_freedoom_utils.c \
+	./Exec/Execute_heredoc_utils.c \
+	./Exec/Execute_heredoc.c \
+	./Exec/Execute_infile.c \
+	./Exec/Execute_init.c \
+	./Exec/Execute_outfile.c \
+	./Exec/Execute_parse_utils.c \
+	./Exec/Execute_parse.c \
+	./Exec/Execute_utils.c \
 	./Exec/Execute.c \
-	./Exec/path_utils.c \
 	./Parser/parser.c \
-	./Parser/parser_utils.c
+	./Parser/parser_utils.c \
 
-# Cambio importante: generamos la ruta de cada .o dentro de obj/ manteniendo subdirectorios
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
 
