@@ -79,6 +79,7 @@ typedef struct s_fd_pipex
 	t_command	*commands;
 }	t_pipex;
 
+
 // Parse
 t_command				*parse_single_command(t_token *tokens);
 void					free_commands(t_command *cmd);
