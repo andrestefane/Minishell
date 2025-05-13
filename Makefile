@@ -14,15 +14,24 @@ SRCS = \
 	./Tokenizer/metachar_utils.c \
 	./Tokenizer/quoted_utils.c \
 	./Varibles/variables.c \
-	./Varibles/Utils_variables.c \
+	./Exec/Execute_add_commands.c \
+	./Exec/Execute_freedom.c \
+	./Exec/Execute_freedoom_utils.c \
+	./Exec/Execute_heredoc_utils.c \
+	./Exec/Execute_heredoc.c \
+	./Exec/Execute_infile.c \
+	./Exec/Execute_init.c \
+	./Exec/Execute_outfile.c \
+	./Exec/Execute_parse_utils.c \
+	./Exec/Execute_parse.c \
+	./Exec/Execute_utils.c \
 	./Exec/Execute.c \
-	./Exec/path_utils.c \
 	./Parser/parser.c \
-	./Parser/parser_utils.c
+	./Parser/parser_utils.c \
 
-# Cambio importante: generamos la ruta de cada .o dentro de obj/ manteniendo subdirectorios
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
+TEMP_DIR = .temp
 
 NAME = Mini
 INCLUDES = -I. -I includes
@@ -30,7 +39,7 @@ INCLUDES = -I. -I includes
 TOTAL_FILES := $(words $(SRCS))
 COUNT = 0
 
-all: $(LIBFT_LIB) $(NAME)
+all: $(LIBFT_LIB) $(NAME) $(TEMP_DIR)
 
 $(LIBFT_LIB):
 	@echo "\033[1;33mCompiling libft...\033[0m"
@@ -38,6 +47,9 @@ $(LIBFT_LIB):
 
 $(NAME): $(OBJ_FILES) $(LIBFT_LIB)
 	@ $(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)
+
+$(TEMP_DIR):
+	@mkdir -p $(TEMP_DIR)
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
@@ -53,7 +65,7 @@ clean:
 	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1
 
 fclean: clean
-	@rm -rf $(NAME) > /dev/null 2>&1
+	@rm -rf $(NAME) $(TEMP_DIR) > /dev/null 2>&1
 	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1
 
 re: fclean all
