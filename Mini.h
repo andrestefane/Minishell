@@ -58,6 +58,13 @@ typedef struct s_tokenizer
 	int					err;
 }						t_tokenizer;
 
+typedef struct s_redir
+{
+	int					type;
+	char				*filename;
+	struct s_redir		*next;
+}	t_redir;
+
 typedef struct s_command
 {
 	char				**argv;
@@ -67,6 +74,7 @@ typedef struct s_command
 	int					is_heredoc;
 	char				*heredoc_file;
 	struct s_command	*next;
+	t_redir				*redirs;
 }						t_command;
 
 
