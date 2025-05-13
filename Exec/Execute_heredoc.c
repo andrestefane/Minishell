@@ -36,7 +36,7 @@ int	here_doc(char *limiter, const char *filename)
 	return (0);
 }
 
-void	handle_heredoc_in_command(t_command *cmd, char *limiter, int index)
+char	*handle_heredoc_in_command(t_command *cmd, char *limiter, int index)
 {
 	char	*filename;
 
@@ -47,4 +47,5 @@ void	handle_heredoc_in_command(t_command *cmd, char *limiter, int index)
 		free_and_error(filename, "Error reading heredoc\n", 1, 2);
 	cmd->is_heredoc = 1;
 	cmd->heredoc_file = filename;
+	return (filename);
 }

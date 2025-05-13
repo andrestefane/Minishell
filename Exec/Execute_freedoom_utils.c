@@ -14,3 +14,16 @@ void	free_stuct(t_pipex *data)
 		free(data->pid);
 	free(data);
 }
+
+void	free_redirs(t_redir *redir)
+{
+	t_redir	*tmp;
+
+	while (redir)
+	{
+		tmp = redir->next;
+		free(redir->filename);
+		free(redir);
+		redir = tmp;
+	}
+}

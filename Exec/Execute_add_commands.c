@@ -69,12 +69,16 @@ char	**split_command(char *cmd)
 	return (cmd_split);
 }
 
-void	apply_redirections(t_command *cmd)
+int	has_redir_type(t_command *cmd, int type)
 {
-	if (cmd->is_heredoc == 1)
-		apply_heredoc(cmd);
-	else if (cmd->infile != NULL)
-		apply_infile(cmd);
-	if (cmd->outfile != NULL)
-		apply_outfile(cmd);
+	t_redir	*r;
+
+	r = cmd->redirs;
+	while (r)
+	{
+		if (r->type == type)
+			return (1);
+		r = r->next;
+	}
+	return (0);
 }

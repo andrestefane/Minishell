@@ -23,16 +23,16 @@ void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
 
 void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 {
-	if (cmd->is_heredoc || cmd->infile || cmd->outfile)
-		apply_redirections(cmd);
-	else if (data->prev_fd != -1)
+	apply_redirections(cmd);
+	if (!has_redir_type(cmd, T_RED_IN)
+		&& !has_redir_type(cmd, T_HEREDOC) && data->prev_fd != -1)
 	{
 		if (dup2(data->prev_fd, STDIN_FILENO) == -1)
 			exit_with_error("dup2 prev_fd failed\n", 1, 2);
 	}
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
-	if (!cmd->outfile)
+	if (!has_redir_type(cmd, T_RED_OUT) && !has_redir_type(cmd, T_RED_APPEND))
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			exit_with_error("dup2 pipe write failed\n", 1, 2);
@@ -42,6 +42,22 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	if (!cmd->argv || !cmd->argv[0])
 		exit(0);
 	ft_cmd(data, cmd->argv, envir);
+}
+
+
+
+void	print_redirs(t_command *cmd)
+{
+	t_redir			*r;
+	int				i;
+
+	r = cmd->redirs;
+	i = 1;
+	while (r)
+	{
+		printf("  redir[%d] type=%d, file=%s\n", i++, r->type, r->filename);
+		r = r->next;
+	}
 }
 
 void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
@@ -62,6 +78,8 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
 	i = 0;
+	printf("Comando: %s\n", cmds->argv[0]);
+	print_redirs(cmds);
 	while (i++ < data->n_cmds)
 		wait(NULL);
 }

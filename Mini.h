@@ -123,7 +123,9 @@ void					child_process(t_pipex *data, t_command *cmd,
 							int fd[2], char **envir);
 char					*extract_token(t_tokenizer *tok, t_token_type *type,
 							t_token_quote *quote);
-void					handle_heredoc_in_command(t_command *cmd, char
+void					add_redir_to_cmd(t_command *cmd, int type,
+							const char *filename);
+char					*handle_heredoc_in_command(t_command *cmd, char
 							*limiter, int index);
 void					execute_last_command(t_pipex *data, t_command *curr,
 							char **envir, int i);
@@ -163,7 +165,9 @@ void					free_stuct(t_pipex *data);
 char					*get_filename(int index);
 t_command				*init_new_command(void);
 void					ft_freedoom(char **str);
-
+void					print_redirs(t_command *cmd);					//Esta es debugeo
+int						has_redir_type(t_command *cmd, int type);
+void					apply_one_redirection(t_redir *redir);
 // Variables
 void					expand_token(t_token *token, char **env);
 
