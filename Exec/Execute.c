@@ -23,18 +23,21 @@ void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
 
 void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 {
-	if (cmd->is_heredoc || cmd->infile)
+	if (cmd->is_heredoc || cmd->infile || cmd->outfile)
 		apply_redirections(cmd);
-	if (!cmd->is_heredoc && !cmd->infile && data->prev_fd != -1)
+	else if (data->prev_fd != -1)
 	{
 		if (dup2(data->prev_fd, STDIN_FILENO) == -1)
 			exit_with_error("dup2 prev_fd failed\n", 1, 2);
 	}
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
+	if (!cmd->outfile)
+	{
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			exit_with_error("dup2 pipe write failed\n", 1, 2);
+	}
 	close(fd[0]);
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		exit_with_error("dup2 pipe write failed\n", 1, 2);
 	close(fd[1]);
 	if (!cmd->argv || !cmd->argv[0])
 		exit(0);
@@ -78,6 +81,8 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 			close(data->prev_fd);
 		}
 		apply_redirections(curr);
+		if (!curr->argv || !curr->argv[0])
+			exit(0);
 		ft_cmd(data, curr->argv, envir);
 	}
 }
