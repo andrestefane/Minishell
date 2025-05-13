@@ -1,5 +1,25 @@
 #include "../Mini.h"
 
+static char	*token_join(char *result, char *temp)
+{
+	char	*joined;
+
+	if (!temp)
+	{
+		free(result);
+		return (NULL);
+	}
+	joined = ft_strjoin(result, temp);
+	free(result);
+	free(temp);
+	return (joined);
+}
+
+static int	is_token_char(char c)
+{
+	return (c && c != ' ' && c != '\t' && !ft_strchr("|<>", c));
+}
+
 int fill_tokens(t_token **list, char *input)
 {
     t_tokenizer    tok = { input, 0, T_WORD, 0 };
@@ -10,18 +30,22 @@ int fill_tokens(t_token **list, char *input)
     while (!tok.err)
     {
         val = extract_token(&tok, &type, &quote);
-        if (tok.err)                   /* comilla sin cerrar */
+        if (tok.err)
             break;
-        if (!val)                      /* fin de línea */
+        if (!val)
             return (1);
         add_token(list, val, type, quote);
+        
+        // Añade esto temporalmente para diagnóstico inmediato:
+        printf("DEBUG Token generado: [%s]\n", val);
+        
         free(val);
         tok.prev_type = type;
     }
-    /* si tok.err == 1, hubo error */
     free_tokens(*list);
     return (0);
 }
+
 
 char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 		t_token_quote *quote)
@@ -47,4 +71,32 @@ char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 		*quote = Q_DOUBLE;
 	tok->pos = j + 1;
 	return (val);
+}
+
+char	*extract_complex_token(t_tokenizer *tok,
+			t_token_type *type, t_token_quote *quote)
+{
+	char			*result;
+	char			*temp;
+	t_token_quote	current_quote;
+
+	result = ft_strdup("");
+	*quote = Q_NONE;
+	while (is_token_char(tok->input[tok->pos]))
+	{
+		temp = get_next_token_part(tok, type, &current_quote);
+		if (temp && is_empty_token(temp))
+		{
+			free(temp);
+			continue ;
+		}
+		result = token_join(result, temp);
+		if (!result)
+			return (tok->err = 1, NULL);
+		if (*quote == Q_NONE && current_quote != Q_NONE)
+			*quote = current_quote;
+		else if (*quote != current_quote)
+			*quote = Q_NONE;
+	}
+	return (*type = T_WORD, result);
 }

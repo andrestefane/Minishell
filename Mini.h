@@ -73,6 +73,11 @@ int						extract_metachar(t_tokenizer *tok, t_token_type *type,
 							t_token_quote *quote);
 char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 		t_token_quote *quote);
+char	*extract_complex_token(t_tokenizer *tok,
+			t_token_type *type, t_token_quote *quote);
+int	is_empty_token(char *temp);
+char	*get_next_token_part(t_tokenizer *tok,
+				t_token_type *type, t_token_quote *current_quote); 
 
 // Exec
 char					*find_in_path(char *cmd, char **envp);

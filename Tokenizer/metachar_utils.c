@@ -48,3 +48,4 @@ int  extract_metachar(t_tokenizer *tok,
         return (1);
     return (0);
 }
+
