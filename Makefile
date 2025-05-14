@@ -25,6 +25,7 @@ SRCS = \
 	./Exec/Execute_parse_utils.c \
 	./Exec/Execute_parse.c \
 	./Exec/Execute_utils.c \
+	./Exec/Execute_wait_status.c \
 	./Exec/Execute.c \
 	./Parser/parser.c \
 	./Parser/parser_utils.c \
