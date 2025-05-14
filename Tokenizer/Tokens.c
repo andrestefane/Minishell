@@ -6,13 +6,32 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/09 14:22:01 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:31:27 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Mini.h"
 
-void	add_token(t_token **head, char *value, t_token_type type, t_token_quote quote)
+static int	is_word_char(char c)
+{
+	// fin de cadena
+	if (c == '\0')
+		return (0);
+	// espacios y tabulador
+	if (c == ' ' || c == '\t')
+		return (0);
+	// metacaracteres
+	if (c == '|' || c == '<' || c == '>')
+		return (0);
+	// comillas simples o dobles
+	if (c == '\'' || c == '"')
+		return (0);
+	// cualquier otro carácter forma parte de la palabra
+	return (1);
+}
+
+void	add_token(t_token **head, char *value, t_token_type type,
+		t_token_quote quote)
 {
 	t_token	*new_node;
 	t_token	*current;
@@ -55,12 +74,8 @@ char	*extract_word(t_tokenizer *tok, t_token_type *type)
 	int	start;
 
 	start = tok->pos;
-	while (tok->input[tok->pos] && tok->input[tok->pos] != ' '
-		&& tok->input[tok->pos] != '\t' && tok->input[tok->pos] != '|'
-		&& tok->input[tok->pos] != '<' && tok->input[tok->pos] != '>')
-	{
+	while (is_word_char(tok->input[tok->pos]))
 		tok->pos++;
-	}
 	if (tok->pos == start)
 		return (NULL);
 	*type = T_WORD;
@@ -78,5 +93,3 @@ char	*extract_token(t_tokenizer *tok, t_token_type *type,
 		return (ft_strdup(""));
 	return (extract_complex_token(tok, type, quote));
 }
-
-
