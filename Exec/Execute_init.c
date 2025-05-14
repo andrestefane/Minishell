@@ -18,6 +18,7 @@ t_command	*init_new_command(void)
 	if (!cmd)
 		return (NULL);
 	cmd->argv = NULL;
+	cmd->redirs = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->append = 0;

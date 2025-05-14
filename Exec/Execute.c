@@ -44,8 +44,6 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	ft_cmd(data, cmd->argv, envir);
 }
 
-
-
 void	print_redirs(t_command *cmd)
 {
 	t_redir			*r;
@@ -80,8 +78,7 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 	i = 0;
 	printf("Comando: %s\n", cmds->argv[0]);
 	print_redirs(cmds);
-	while (i++ < data->n_cmds)
-		wait(NULL);
+	wait_status(data);
 }
 
 void	execute_last_command(t_pipex *data, t_command *curr,

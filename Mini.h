@@ -15,6 +15,8 @@
 # define ERRO_DOC "Error here doc\n"
 # define ERRO_FEW "Few args\n"
 
+extern int g_exit_status;
+
 typedef enum e_token_type
 {
 	T_WORD,
@@ -168,6 +170,7 @@ void					ft_freedoom(char **str);
 void					print_redirs(t_command *cmd);					//Esta es debugeo
 int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
+void					wait_status(t_pipex *data);
 // Variables
 void					expand_token(t_token *token, char **env);
 
