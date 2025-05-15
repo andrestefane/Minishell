@@ -1,5 +1,26 @@
 #include "../Mini.h"
 
+static char	*strip_quotes(const char *s)
+{
+	size_t	len;
+	char	*dst;
+	size_t	i = 0;
+	size_t j = 0;
+
+	len = strlen(s);
+	dst = malloc(len + 1);
+	if (!dst)
+		return (NULL);
+	while (s[i])
+	{
+		if (s[i] != '"' && s[i] != '\'')
+			dst[j++] = s[i];
+		i++;
+	}
+	dst[j] = '\0';
+	return (dst);
+}
+
 static char	*token_join(char *result, char *temp)
 {
 	char	*joined;
@@ -20,32 +41,33 @@ static int	is_token_char(char c)
 	return (c && c != ' ' && c != '\t' && !ft_strchr("|<>", c));
 }
 
-int fill_tokens(t_token **list, char *input)
+int	fill_tokens(t_token **list, char *input)
 {
-    t_tokenizer    tok = { input, 0, T_WORD, 0 };
-    t_token_type   type;
-    t_token_quote  quote;
-    char          *val;
+	t_tokenizer		tok;
+	t_token_type	type;
+	t_token_quote	quote;
+	char			*val;
 
-    while (!tok.err)
-    {
-        val = extract_token(&tok, &type, &quote);
-        if (tok.err)
-            break;
-        if (!val)
-            return (1);
-        add_token(list, val, type, quote);
-        
-        // Añade esto temporalmente para diagnóstico inmediato:
-        printf("DEBUG Token generado: [%s]\n", val);
-        
-        free(val);
-        tok.prev_type = type;
-    }
-    free_tokens(*list);
-    return (0);
+	tok.input = input;      // usa el parámetro input
+    tok.pos   = 0;
+    tok.prev_type  = T_WORD;
+    tok.err = 0;
+	while (!tok.err)
+	{
+		val = extract_token(&tok, &type, &quote);
+		if (tok.err)
+			break ;
+		if (!val)
+			return (1);
+		add_token(list, val, type, quote);
+		// Añade esto temporalmente para diagnóstico inmediato:
+		printf("DEBUG Token generado: [%s]\n", val);
+		free(val);
+		tok.prev_type = type;
+	}
+	free_tokens(*list);
+	return (0);
 }
-
 
 char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 		t_token_quote *quote)
@@ -73,8 +95,8 @@ char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 	return (val);
 }
 
-char	*extract_complex_token(t_tokenizer *tok,
-			t_token_type *type, t_token_quote *quote)
+char	*extract_complex_token(t_tokenizer *tok, t_token_type *type,
+		t_token_quote *quote)
 {
 	char			*result;
 	char			*temp;
@@ -98,5 +120,15 @@ char	*extract_complex_token(t_tokenizer *tok,
 		else if (*quote != current_quote)
 			*quote = Q_NONE;
 	}
-	return (*type = T_WORD, result);
+	*type = T_WORD;
+    {
+        char *clean = strip_quotes(result);
+        free(result);
+        if (!clean)
+        {
+            tok->err = 1;
+            return NULL;
+        }
+        return clean;
+    }
 }
