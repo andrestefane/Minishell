@@ -1,0 +1,12 @@
+'ls' '-la' > "outfile" '
+
+Pulsando enter solo da segfault
+
+ls | #Esto tecnicamente es parseo
+
+"ls no tiene que cerrar la mini tiene que imprimir mensaje y seguir
+
+necesito que me guardes $ y ? en tokens 
+
+
+

@@ -5,6 +5,8 @@ void	parse_red_in(t_command *cmd, t_token **token)
 {
 	if (!(*token)->next)
 		exit_with_error("syntax error: no infile\n", 1, 2);
+	else if ((*token)->type != T_RED_IN)
+		exit_with_error("syntax error: no infile\n", 1, 2);
 	add_redir_to_cmd(cmd, T_RED_IN, (*token)->next->value);
 	*token = (*token)->next;
 }

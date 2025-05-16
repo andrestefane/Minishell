@@ -14,6 +14,7 @@
 # define ERRO_OUFILE "Error outfile\n"
 # define ERRO_DOC "Error here doc\n"
 # define ERRO_FEW "Few args\n"
+# define SYNTAX_ERROR "bash: syntax error near unexpected token `newline'\n"
 
 extern int g_exit_status;
 
@@ -79,7 +80,6 @@ typedef struct s_command
 	t_redir				*redirs;
 }						t_command;
 
-
 typedef struct s_fd_pipex
 {
 	int			prev_fd;
@@ -88,7 +88,6 @@ typedef struct s_fd_pipex
 	pid_t		*pid;
 	t_command	*commands;
 }	t_pipex;
-
 
 // Parse
 t_command				*parse_single_command(t_token *tokens);
@@ -154,12 +153,8 @@ int						count_commands_list(t_command *cmd);
 void					pipex(t_token *token, char **envir);
 void					apply_redirections(t_command *cmd);
 void					free_command_list(t_command *cmd);
-void					redir_outfile(t_command *cmd);
 void					redir_heredoc(t_command *cmd);
 void					apply_heredoc(t_command *cmd);
-void					apply_outfile(t_command *cmd);
-void					apply_infile(t_command *cmd);
-void					redir_infile(t_command *cmd);
 char					*find_execpath(char **envir);
 void					delete_heredoc_files(int n);
 char					**split_command(char *cmd);
@@ -167,12 +162,12 @@ void					free_stuct(t_pipex *data);
 char					*get_filename(int index);
 t_command				*init_new_command(void);
 void					ft_freedoom(char **str);
-void					print_redirs(t_command *cmd);					//Esta es debugeo
+int						is_redir(t_redir *redir);
 int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
 // Variables
-void					expand_token(t_token *token, char **env);
+void					expand_token(t_token *token);
 
 // void	expand_tilde(t_single_token *token, char **env);
 

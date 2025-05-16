@@ -1,4 +1,3 @@
-
 #include "../Mini.h"
 
 void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
@@ -44,20 +43,6 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	ft_cmd(data, cmd->argv, envir);
 }
 
-void	print_redirs(t_command *cmd)
-{
-	t_redir			*r;
-	int				i;
-
-	r = cmd->redirs;
-	i = 1;
-	while (r)
-	{
-		printf("  redir[%d] type=%d, file=%s\n", i++, r->type, r->filename);
-		r = r->next;
-	}
-}
-
 void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 {
 	t_command	*curr;
@@ -76,8 +61,6 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
 	i = 0;
-	printf("Comando: %s\n", cmds->argv[0]);
-	print_redirs(cmds);
 	wait_status(data);
 }
 
@@ -109,6 +92,7 @@ void	pipex(t_token *token, char **envir)
 
 	data = NULL;
 	cmds = NULL;
+	/* expand_token(token); */
 	init_strucs(&data, &cmds);
 	cmds = parse_commands(token, data);
 	data->n_cmds = count_commands_list(cmds);

@@ -10,11 +10,6 @@ void	free_struct(t_pipex *data, char *message, int exit_code, int std)
 			free(data->pid);
 			data->pid = NULL;
 		}
-		if (data->commands)
-		{
-			free_command_list(data->commands);
-			data->commands = NULL;
-		}
 		free(data);
 	}
 	ft_putstr(message, std);

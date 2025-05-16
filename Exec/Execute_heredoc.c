@@ -19,12 +19,12 @@ int	here_doc(char *limiter, const char *filename)
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 		return (-1);
+	if (!limiter || !*limiter)
+		exit_with_error(SYNTAX_ERROR, 1, 2);
 	while (1)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(0, 0);
-		if (!limiter || !*limiter)
-			exit_with_error("heredoc: empty limiter\n", 1, 2);
 		if (!line || ft_strcmp(line, limiter) == 0 || is_limiter(line, limiter))
 			break ;
 		write(fd, line, ft_strlen(line));

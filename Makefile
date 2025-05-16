@@ -19,11 +19,10 @@ SRCS = \
 	./Exec/Execute_freedoom_utils.c \
 	./Exec/Execute_heredoc_utils.c \
 	./Exec/Execute_heredoc.c \
-	./Exec/Execute_infile.c \
 	./Exec/Execute_init.c \
-	./Exec/Execute_outfile.c \
 	./Exec/Execute_parse_utils.c \
 	./Exec/Execute_parse.c \
+	./Exec/Execute_redirs.c \
 	./Exec/Execute_utils.c \
 	./Exec/Execute_wait_status.c \
 	./Exec/Execute.c \
