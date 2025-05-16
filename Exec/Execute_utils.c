@@ -91,8 +91,8 @@ char **paths, char **envir)
 		free(path);
 		i++;
 	}
-	write(2, "Error execution\n", 17);
 	ft_putstr(args[0], 2);
+	ft_putstr(": Command not found\n", 2);
 	free(data->pid);
 	free(data);
 	free_and_exit(args, paths, 127);

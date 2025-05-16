@@ -12,10 +12,13 @@ void	wait_status(t_pipex *data)
 		pid = waitpid(-1, &status, 0);
 		if (pid == -1)
 			exit_with_error("Waitpid failed\n", 1, 2);
-		if (WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			g_exit_status = 128 + WTERMSIG(status);
+		if (pid == data->pid[data->n_cmds - 1])
+		{
+			if (WIFEXITED(status))
+				g_exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				g_exit_status = 128 + WTERMSIG(status);
+		}
 		count++;
 	}
 }

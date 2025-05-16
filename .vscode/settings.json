@@ -2,7 +2,8 @@
     "files.associations": {
         "*.h": "c",
         "type_traits": "c",
-        "parse_utils": "c"
+        "parse_utils": "c",
+        "compare": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
