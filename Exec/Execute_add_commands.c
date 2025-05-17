@@ -67,17 +67,3 @@ char	**split_command(char *cmd)
 	}
 	return (cmd_split);
 }
-
-int	has_redir_type(t_command *cmd, int type)
-{
-	t_redir	*r;
-
-	r = cmd->redirs;
-	while (r)
-	{
-		if (r->type == type)
-			return (1);
-		r = r->next;
-	}
-	return (0);
-}

@@ -47,6 +47,8 @@ get_next_line.c \
 get_next_line_utils.c \
 ft_strndup.c \
 free_split.c \
+ft_strcpy.c \
+ft_strcat.c \
 
 OBJ_DIR = libft_obj
 OBJS = $(SRCS:.c=.o)

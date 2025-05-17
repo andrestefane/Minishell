@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_split.c                                       :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 10:52:53 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/17 13:20:09 by astefane         ###   ########.fr       */
+/*   Created: 2025/05/17 17:27:46 by astefane          #+#    #+#             */
+/*   Updated: 2025/05/17 17:47:04 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_split(char **str)
+size_t	ft_strcpy(char *dest, const char *src)
 {
-	int	i;
+	size_t	i;
 
+	if (!src)
+		return (0);
 	i = 0;
-	if (*str)
+	while (src[i] != '\0')
 	{
-		while (str[i])
-		{
-			free(str[i]);
-			i++;
-		}
-		free(str);
+		dest[i] = src[i];
+		i++;
 	}
+	dest[i] = '\0';
+	return (i);
 }

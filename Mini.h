@@ -166,8 +166,14 @@ int						is_redir(t_redir *redir);
 int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
-// Variables
+// Var
 void					expand_token(t_token *token);
+
+//env
+char	*get_env_name(char **env, const char *name);
+char	**copy_env(char **env);
+char	**append_env_variable(char **env, const char *name, const char *value);
+void	set_env(char ***env, const char *name, const char *value);
 
 // void	expand_tilde(t_single_token *token, char **env);
 

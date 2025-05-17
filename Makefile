@@ -28,6 +28,8 @@ SRCS = \
 	./Exec/Execute.c \
 	./Parser/parser.c \
 	./Parser/parser_utils.c \
+	./env/get_env.c \
+	./env/set_and_unset_env.c
 
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
