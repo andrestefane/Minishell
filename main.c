@@ -28,22 +28,34 @@ static void	process_input(char *input, char **env)
 	free_tokens(list);
 }
 
-int	main(int argc, char **argv, char **env)
+char	*get_prompt(void)
 {
+	char	*cwd;
+	char	*pront;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		pront = ft_strdup("Minishell> ");
+	else
+	{
+		pront = ft_strjoin(cwd, " Minishell> ");
+		free(cwd);
+	}
+	return (pront);
+}
+
+void	mini_loop(char **my_env)
+{
+	char	*pront;
 	char	*input;
-	char	**my_env;
 	int		saved_input;
 
-	my_env = copy_env(env);
-	for (int i = 0; my_env[i]; i++)
-		printf("%s\n", my_env[i]);
-	(void)argv;
-	if (argc != 1)
-		exit_with_error("Alot of arguments\n", 1, 1);
 	while (1)
 	{
 		saved_input = dup(STDIN_FILENO);
-		input = readline("Minishell> ");
+		pront = get_prompt();
+		input = readline(pront);
+		free(pront);
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
@@ -54,7 +66,21 @@ int	main(int argc, char **argv, char **env)
 		dup2(saved_input, STDIN_FILENO);
 		close(saved_input);
 	}
-	ft_freedoom(my_env);
 	close(saved_input);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	char	**my_env;
+
+	(void)argv;
+	if (argc != 1)
+		exit_with_error("Alot of arguments\n", 1, 1);
+	my_env = copy_env(env);
+	mini_loop(my_env);
+	ft_freedoom(my_env);
 	return (0);
 }
+
+/* 	for (int i = 0; my_env[i]; i++)
+		printf("%s\n", my_env[i]); */
