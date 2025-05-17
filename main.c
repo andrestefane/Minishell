@@ -31,8 +31,12 @@ static void	process_input(char *input, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
+	char	**my_env;
 	int		saved_input;
 
+	my_env = copy_env(env);
+	for (int i = 0; my_env[i]; i++)
+		printf("%s\n", my_env[i]);
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Alot of arguments\n", 1, 1);
@@ -45,11 +49,12 @@ int	main(int argc, char **argv, char **env)
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, env);
+		process_input(input, my_env);
 		free(input);
 		dup2(saved_input, STDIN_FILENO);
 		close(saved_input);
 	}
+	ft_freedoom(my_env);
 	close(saved_input);
 	return (0);
 }

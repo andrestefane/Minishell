@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/10 17:59:43 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:52:33 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char		*ft_strnstr(const char *s1, const char *s2, size_t len);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
 size_t		ft_strlcpy(char *dest, const char *src, size_t size);
+size_t		ft_strcat(char *dst, const char *src);
+size_t		ft_strcpy(char *dest, const char *src);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
 char		*ft_strtrim(const char *s1, const char *set);

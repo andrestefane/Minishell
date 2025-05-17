@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_split.c                                       :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 10:52:53 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/17 13:20:09 by astefane         ###   ########.fr       */
+/*   Created: 2025/05/17 17:50:04 by astefane          #+#    #+#             */
+/*   Updated: 2025/05/17 17:52:23 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_split(char **str)
+size_t	ft_strcat(char *dst, const char *src)
 {
-	int	i;
+	size_t	i;
+	size_t	j;
 
+	if (!dst || !src)
+		return (0);
 	i = 0;
-	if (*str)
+	while (dst[i] != '\0')
+		i++;
+	j = 0;
+	while (src[j] != '\0')
 	{
-		while (str[i])
-		{
-			free(str[i]);
-			i++;
-		}
-		free(str);
+		dst[i + j] = src[j];
+		j++;
 	}
+	dst[i + j] = '\0';
+	return (i + j);
 }

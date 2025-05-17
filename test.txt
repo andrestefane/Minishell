@@ -10,3 +10,5 @@ necesito que me guardes $ y ? en tokens
 
 
 
+"'ls'"  '"ls"' tiene que no ir y en nuestro si lo muestra
+
