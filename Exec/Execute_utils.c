@@ -5,6 +5,11 @@ void	ft_cmd(t_pipex *data, char **argv, char **envir)
 	char	**possible_paths;
 	char	*path_line;
 
+	if (is_builtin_str(argv[0]))
+	{
+		execute_buitin_args(argv, &envir);
+		exit(0);
+	}
 	if (!envir || !*envir)
 		exit_with_error("Missing environment\n", 1, 2);
 	path_line = find_execpath(envir);
@@ -13,7 +18,7 @@ void	ft_cmd(t_pipex *data, char **argv, char **envir)
 	possible_paths = ft_split(path_line, ':');
 	if (!possible_paths)
 		exit_with_error("Error possible path\n", 1, 2);
-	execute_command_bonus(data, argv, possible_paths, envir);
+	execute_command(data, argv, possible_paths, envir);
 }
 
 char	**cmd_managment(t_pipex *data, char *cmd)
@@ -72,7 +77,7 @@ char	*create_path(char *possible_path, char *command)
 	return (path);
 }
 
-void	execute_command_bonus(t_pipex *data, char **args,
+void	execute_command(t_pipex *data, char **args,
 char **paths, char **envir)
 {
 	char	*path;

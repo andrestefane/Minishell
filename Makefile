@@ -8,6 +8,7 @@ LDFLAGS = -lreadline
 OBJ_DIR = obj
 SRCS = \
 	main.c \
+	main_utils.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
 	./Tokenizer/type_of_tokens.c \
@@ -22,6 +23,7 @@ SRCS = \
 	./Exec/Execute_init.c \
 	./Exec/Execute_parse_utils.c \
 	./Exec/Execute_parse.c \
+	./Exec/Execute_redirs_utils.c \
 	./Exec/Execute_redirs.c \
 	./Exec/Execute_utils.c \
 	./Exec/Execute_wait_status.c \
@@ -29,7 +31,9 @@ SRCS = \
 	./Parser/parser.c \
 	./Parser/parser_utils.c \
 	./env/get_env.c \
-	./env/set_and_unset_env.c
+	./env/set_and_unset_env.c \
+	./built-ins/built-ins.c \
+	./built-ins/ft_echo.c
 
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
