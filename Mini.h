@@ -114,7 +114,7 @@ char					*extract_quoted_token(t_tokenizer *tok,
 // Exec
 void					execute_pipeline(t_pipex *data,
 							t_command *cmds, char **envir);
-void					execute_command_bonus(t_pipex *data, char **args,
+void					execute_command(t_pipex *data, char **args,
 							char **paths, char **envir);
 void					parse_heredoc(t_command *cmd, t_token **token,
 							t_pipex *data, int *index);
@@ -150,7 +150,8 @@ void					add_arg_to_command(t_command *cmd, char *arg);
 void					parse_red_in(t_command *cmd, t_token **token);
 char					**cmd_managment(t_pipex *data, char *cmd);
 int						count_commands_list(t_command *cmd);
-void					pipex(t_token *token, char **envir);
+void					ft_execute(t_token *token, char **envir);
+void					check_execute(t_token *token, char **env);
 void					apply_redirections(t_command *cmd);
 void					free_command_list(t_command *cmd);
 void					redir_heredoc(t_command *cmd);
@@ -163,6 +164,7 @@ char					*get_filename(int index);
 t_command				*init_new_command(void);
 void					ft_freedoom(char **str);
 int						is_redir(t_redir *redir);
+int						has_redir(t_command *cmd);
 int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
@@ -170,13 +172,19 @@ void					wait_status(t_pipex *data);
 void					expand_token(t_token *token);
 
 //env
-char	*get_env_name(char **env, const char *name);
-char	**copy_env(char **env);
-char	**append_env_variable(char **env, const char *name, const char *value);
-void	set_env(char ***env, const char *name, const char *value);
+char					*get_env_name(char **env, const char *name);
+char					**copy_env(char **env);
+char					**append_env_variable(char **env, const char *name,
+							const char *value);
+void					set_env(char ***env, const char *name,
+							const char *value);
 
-// void	expand_tilde(t_single_token *token, char **env);
+//Built-ins
 
-/* void	expand_tilde(t_single_token *token, char **env); */
-
+int						is_builtin(t_command *cmd);
+int						is_builtin_str(char *str);
+void					execute_buitin(t_command *cmd, char ***env);
+void					execute_buitin_args(char **argv, char ***env);
+void					ft_echo(t_command *cmd);
+void					ft_echo_arg(char **argv);
 #endif

@@ -67,7 +67,6 @@ void	add_redir_to_cmd(t_command *cmd, int type, const char *filename)
 	}
 }
 
-
 int	has_redir_type(t_command *cmd, int type)
 {
 	t_redir	*r;

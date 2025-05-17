@@ -85,7 +85,7 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 	}
 }
 
-void	pipex(t_token *token, char **envir)
+void	ft_execute(t_token *token, char **envir)
 {
 	t_pipex		*data;
 	t_command	*cmds;
