@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/15 15:17:22 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/18 20:15:36 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,14 @@
 
 static int	is_word_char(char c)
 {
-	// fin de cadena
 	if (c == '\0')
 		return (0);
-	// espacios y tabulador
 	if (c == ' ' || c == '\t')
 		return (0);
-	// metacaracteres
 	if (c == '|' || c == '<' || c == '>')
 		return (0);
-	// comillas simples o dobles
 	if (c == '\'' || c == '"')
 		return (0);
-	// cualquier otro carácter forma parte de la palabra
 	return (1);
 }
 
@@ -67,8 +62,6 @@ void	free_tokens(t_token *head)
 	}
 }
 
-/* tokenizer_utils.c */
-
 char	*extract_word(t_tokenizer *tok, t_token_type *type)
 {
 	int	start;
@@ -90,6 +83,12 @@ char	*extract_token(t_tokenizer *tok, t_token_type *type,
 	if (tok->input[tok->pos] == '\0')
 		return (NULL);
 	if (extract_metachar(tok, type, quote))
-		return (ft_strdup(""));
+	{
+		if (*type == T_DOLLAR)
+			return (ft_strdup("$"));
+		else if (*type == T_QUESTION)
+			return (ft_strdup("?"));
+		return (ft_strdup("")); /* para |, >, <, etc. */
+	}
 	return (extract_complex_token(tok, type, quote));
 }

@@ -1,19 +1,25 @@
 
 #include "Mini.h"
 
-int g_exit_status = 0;
+int			g_exit_status = 0;
 
 static void	process_input(char *input, char **env)
 {
-	t_token		*list;
-	t_token		*current;
+	t_token	*list;
+	t_token	*current;
 
 	list = NULL;
 	add_history(input);
 	if (!fill_tokens(&list, input))
 	{
+		ft_putstr("syntax error: unclosed quote\n", 2);
 		free_tokens(list);
-		exit_with_error("Tokenization failed\n", 1, 1);
+		return ;
+	}
+	if (!check_syntax_pipes(list))
+	{
+		free_tokens(list);
+		return ;
 	}
 	current = list;
 	while (current)

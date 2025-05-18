@@ -31,6 +31,10 @@ static int  extract_single_metachar(t_tokenizer *tok,
         *type = T_RED_OUT;
     else if (c == '<')
         *type = T_RED_IN;
+     else if (c == '$')
+        *type = T_DOLLAR;
+    else if (c == '?')
+        *type = T_QUESTION;
     else
         return (0);
     tok->pos++;
