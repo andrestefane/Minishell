@@ -23,6 +23,7 @@ static t_command	*allocate_command(t_token *tokens)
 	cmd->next = NULL;
 	return (cmd);
 }
+
 t_command	*parse_single_command(t_token *tokens)
 {
 	t_command *cmd = allocate_command(tokens);

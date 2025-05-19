@@ -1,22 +1,2 @@
-bash.supp
-built-ins
-Chuleta_git.md
-env
-Exec
-hola
-infile
-libft
-main.c
-main_utils.c
-Makefile
-Mini
-Mini.h
-minishell_tester
-obj
-outfile
-Parser
-README.md
-test.txt
-Tokenizer
-valgrind_log.txt
-Varibles
+DEBUG: estás usando TU built-in para pwd
+/home/astefane/proyectos/Minishell
