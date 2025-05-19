@@ -93,10 +93,19 @@ typedef struct s_fd_pipex
 }						t_pipex;
 
 
+typedef enum e_builtin_type
+{
+	NO_BUITIN = -1,
+	BUILTIN_CHILD = 0,
+	BUILTIN_PARENT = 1
+}	t_builtin_type;
+
+
 //signals
 int	get_heredoc(char *limiter, char **my_env);
 void	do_signal(void);
 void	sighandler(int signal);
+
 
 // Parse
 t_command				*parse_single_command(t_token *tokens);
@@ -178,6 +187,7 @@ int						has_redir(t_command *cmd);
 int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
+int						token_has_pipe(t_token *token);
 // Var
 void					expand_token(t_token *token);
 
@@ -191,7 +201,7 @@ void					set_env(char ***env, const char *name,
 
 // Built-ins
 
-int						is_builtin(t_command *cmd);
+int						is_builtin(t_token *token);
 int						is_builtin_str(char *str);
 void					execute_buitin(t_command *cmd, char ***env);
 void					execute_buitin_args(char **argv, char ***env);

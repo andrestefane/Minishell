@@ -1,14 +1,19 @@
 #include "../Mini.h"
 
-int	is_builtin(t_command *cmd)
+int	is_builtin(t_token *token)
 {
-	return (!ft_strcmp(cmd->argv[0], "echo")
-		|| !ft_strcmp(cmd->argv[0], "cd")
-		|| !ft_strcmp(cmd->argv[0], "pwd")
-		|| !ft_strcmp(cmd->argv[0], "export")
-		|| !ft_strcmp(cmd->argv[0], "unset")
-		|| !ft_strcmp(cmd->argv[0], "env")
-		|| !ft_strcmp(cmd->argv[0], "exit"));
+	if (!token || !token->value)
+		return (NO_BUITIN);
+	if (!ft_strcmp(token->value, "echo")
+		|| !ft_strcmp(token->value, "pwd")
+		|| !ft_strcmp(token->value, "env")
+		|| !ft_strcmp(token->value, "exit"))
+		return (BUILTIN_CHILD);
+	else if (!ft_strcmp(token->value, "cd")
+		|| !ft_strcmp(token->value, "export")
+		|| !ft_strcmp(token->value, "unset"))
+		return (BUILTIN_PARENT);
+	return (NO_BUITIN);
 }
 
 int	is_builtin_str(char *str)
