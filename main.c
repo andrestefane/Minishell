@@ -7,6 +7,7 @@ static void	process_input(char *input, char **env)
 {
 	t_token	*list;
 	t_token	*current;
+	t_command	*cmd;
 
 	list = NULL;
 	add_history(input);
@@ -27,7 +28,10 @@ static void	process_input(char *input, char **env)
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	check_execute(list, env);
+	cmd = parse_single_command(list);
+	if (!cmd)
+		return ;
+	ft_execute(list, env);
 	free_tokens(list);
 }
 

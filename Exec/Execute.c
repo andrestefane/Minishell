@@ -89,9 +89,11 @@ void	ft_execute(t_token *token, char **envir)
 {
 	t_pipex		*data;
 	t_command	*cmds;
+	int			builtin_type;
 
 	data = NULL;
 	cmds = NULL;
+	builtin_type = is_builtin(token);
 	/* expand_token(token); */
 	init_strucs(&data, &cmds);
 	cmds = parse_commands(token, data);
@@ -99,6 +101,10 @@ void	ft_execute(t_token *token, char **envir)
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
+	/* if (builtin_type == 1 && data->n_cmds == 1
+		&& !has_redir(cmds) && !token_has_pipe(token))
+		builtin_in_parent(cmds, envir); */
+	// aqui irá un else
 	execute_pipeline(data, cmds, envir);
 	delete_heredoc_files(data->count_heredoc);
 	free_command_list(cmds);

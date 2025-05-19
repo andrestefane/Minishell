@@ -41,4 +41,5 @@ void	parse_heredoc(t_command *cmd, t_token **token,
 	data->count_heredoc++;
 	(*index)++;
 	*token = (*token)->next;
+
 }
