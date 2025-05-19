@@ -104,8 +104,8 @@ void	ft_execute(t_token *token, char **envir)
 	/* if (builtin_type == 1 && data->n_cmds == 1
 		&& !has_redir(cmds) && !token_has_pipe(token))
 		builtin_in_parent(cmds, envir); */
-	// aqui irá un else
-	execute_pipeline(data, cmds, envir);
+	if (builtin_type == 0 || data->n_cmds == 1)
+		execute_pipeline(data, cmds, envir);
 	delete_heredoc_files(data->count_heredoc);
 	free_command_list(cmds);
 	free_stuct(data);

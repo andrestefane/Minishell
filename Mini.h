@@ -102,9 +102,9 @@ typedef enum e_builtin_type
 
 
 //signals
-int	get_heredoc(char *limiter, char **my_env);
-void	do_signal(void);
-void	sighandler(int signal);
+int						get_heredoc(char *limiter, char **my_env);
+void					do_signal(void);
+void					sighandler(int signal);
 
 
 // Parse
@@ -188,6 +188,7 @@ int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
 int						token_has_pipe(t_token *token);
+void	free_redirs(t_redir *redir);
 // Var
 void					expand_token(t_token *token);
 

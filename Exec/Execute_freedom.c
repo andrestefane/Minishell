@@ -26,6 +26,9 @@ void	free_command_list(t_command *cmd)
 {
 	t_command	*next;
 
+	if (!cmd)
+		return ;
+	free_redirs(cmd->redirs);
 	while (cmd)
 	{
 		next = cmd->next;
