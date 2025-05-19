@@ -28,13 +28,13 @@ void	process_token(t_command **curr, t_token **token,
 {
 	if ((*token)->type == T_WORD)
 	{
-		/* if ((*token)->expansion_type == EXIT_STATUS_EXPANSION)
+/* 		if ((*token)->type == T_DOLLAR && (*token)->next->type == T_QUESTION
+			|| (*token)->type == T_DOLLAR)
 		{
 			free((*token)->value);
-			(*token)->value = ft_itoa(g_exit_status);
+			(*token)->value = ft_itoa(g_status);
 		} */
 		add_arg_to_command(*curr, (*token)->value);
-
 	}
 	else if ((*token)->type == T_RED_IN && (*token)->next)
 		parse_red_in(*curr, token);
@@ -44,13 +44,6 @@ void	process_token(t_command **curr, t_token **token,
 		parse_red_append(*curr, token);
 	else if ((*token)->type == T_HEREDOC && (*token)->next)
 		parse_heredoc(*curr, token, data, index);
-	/* else if ((*token)->type == T_PIPE && (!(*token)->next
-			|| (*token)->next->type != T_WORD))
-	{
-		free_commands(*curr);
-		free_struct(data, "Syntax error\n", 1, 2);
-		free(data);
-	} */
 	else if ((*token)->type == T_PIPE)
 		*curr = NULL;
 }
