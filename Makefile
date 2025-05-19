@@ -30,6 +30,7 @@ SRCS = \
 	./Exec/Execute.c \
 	./Parser/parser.c \
 	./Parser/parser_utils.c \
+	./Parser/signals.c \
 	./env/get_env.c \
 	./env/set_and_unset_env.c \
 	./built-ins/built-ins.c \
