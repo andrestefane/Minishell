@@ -14,7 +14,7 @@ t_command	*init_new_command(void)
 {
 	t_command	*cmd;
 
-	cmd = malloc(sizeof(t_command));
+	cmd = ft_calloc(1, sizeof(t_command));
 	if (!cmd)
 		return (NULL);
 	cmd->argv = NULL;
