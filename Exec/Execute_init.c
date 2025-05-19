@@ -3,7 +3,7 @@
 
 void	init_strucs(t_pipex **data, t_command **cmds)
 {
-	*cmds = init_new_command();
+	*cmds = NULL;
 	*data = malloc(sizeof(t_pipex));
 	if (!cmds || !data)
 		return ;

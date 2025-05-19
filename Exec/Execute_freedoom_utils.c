@@ -21,9 +21,9 @@ void	free_redirs(t_redir *redir)
 
 	while (redir)
 	{
-		tmp = redir->next;
-		free(redir->filename);
-		free(redir);
-		redir = tmp;
+		tmp = redir;
+		redir = redir->next;
+		free(tmp->filename);
+		free(tmp);
 	}
 }

@@ -29,6 +29,7 @@ int	is_builtin_str(char *str)
 
 void	execute_buitin(t_command *cmd, char ***env)
 {
+		
 	if (!ft_strcmp(cmd->argv[0], "echo"))
 		ft_echo(cmd);
 	(void)env;
@@ -48,6 +49,7 @@ void	execute_buitin(t_command *cmd, char ***env)
 
 void	execute_buitin_args(char **argv, char ***env)
 {
+	printf("DEBUG: estás usando TU built-in para %s\n", argv[0]);
 	if (!ft_strcmp(argv[0], "echo"))
 		ft_echo_arg(argv);
 	(void)env;
