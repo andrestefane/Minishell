@@ -30,6 +30,7 @@ static void	process_input(char *input, char **env)
 	if (!cmd)
 		return ;
 	ft_execute(list, env);
+	free_command_list(cmd);
 	free_tokens(list);
 }
 

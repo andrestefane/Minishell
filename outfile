@@ -1,3 +1,4 @@
+bash.supp
 built-ins
 Chuleta_git.md
 env
@@ -10,6 +11,7 @@ main_utils.c
 Makefile
 Mini
 Mini.h
+minishell_tester
 obj
 outfile
 Parser

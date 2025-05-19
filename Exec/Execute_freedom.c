@@ -28,12 +28,13 @@ void	free_command_list(t_command *cmd)
 
 	if (!cmd)
 		return ;
-	free_redirs(cmd->redirs);
 	while (cmd)
 	{
 		next = cmd->next;
 		if (cmd->argv)
 			ft_freedoom(cmd->argv);
+		if (cmd->redirs)
+			free_redirs(cmd->redirs);
 		if (cmd->infile)
 			free(cmd->infile);
 		if (cmd->outfile)
