@@ -15,9 +15,9 @@ void	wait_status(t_pipex *data)
 		if (pid == data->pid[data->n_cmds - 1])
 		{
 			if (WIFEXITED(status))
-				g_exit_status = WEXITSTATUS(status);
+				g_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				g_exit_status = 128 + WTERMSIG(status);
+				g_status = 128 + WTERMSIG(status);
 		}
 		count++;
 	}
