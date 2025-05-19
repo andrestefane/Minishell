@@ -1,8 +1,6 @@
 
 #include "Mini.h"
 
-int			g_exit_status = 0;
-
 static void	process_input(char *input, char **env)
 {
 	t_token	*list;
@@ -47,29 +45,36 @@ char	*get_prompt(void)
 	return (pront);
 }
 
-void	mini_loop(char **my_env)
+void	mini_loop(char **env)
 {
-	char	*pront;
+	char	*prompt;
 	char	*input;
-	int		saved_input;
+	int		saved_stdin;
 
 	while (1)
 	{
-		saved_input = dup(STDIN_FILENO);
-		pront = get_prompt();
-		input = readline(pront);
-		free(pront);
+		saved_stdin = dup(STDIN_FILENO);
+		prompt = get_prompt();
+		input = readline(prompt);
+		free(prompt);
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			break ;
 		}
-		process_input(input, my_env);
+		if (g_status == SIGINT)
+		{
+			g_status = 0;
+			free(input);
+			dup2(saved_stdin, STDIN_FILENO);
+			close(saved_stdin);
+			continue ;
+		}
+		process_input(input, env);
 		free(input);
-		dup2(saved_input, STDIN_FILENO);
-		close(saved_input);
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
 	}
-	close(saved_input);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -78,12 +83,10 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv;
 	if (argc != 1)
-		exit_with_error("Alot of arguments\n", 1, 1);
+		exit_with_error("Too many arguments\n", 1, 1);
 	my_env = copy_env(env);
+	do_signal();
 	mini_loop(my_env);
 	ft_freedoom(my_env);
 	return (0);
 }
-
-/* 	for (int i = 0; my_env[i]; i++)
-		printf("%s\n", my_env[i]); */

@@ -5,6 +5,7 @@
 # include "libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # define ERR_FLASH "Error\n"
 # define ERR_ARG "Error Arg or Pipe\n"
 # define ERR_PIPE "Error Pipe\n"
@@ -16,7 +17,7 @@
 # define ERRO_FEW "Few args\n"
 # define SYNTAX_ERROR "bash: syntax error near unexpected token `newline'\n"
 
-extern int				g_exit_status;
+extern volatile sig_atomic_t g_status;
 
 typedef enum e_token_type
 {
@@ -90,6 +91,12 @@ typedef struct s_fd_pipex
 	pid_t				*pid;
 	t_command			*commands;
 }						t_pipex;
+
+
+//signals
+int	get_heredoc(char *limiter, char **my_env);
+void	do_signal(void);
+void	sighandler(int signal);
 
 // Parse
 t_command				*parse_single_command(t_token *tokens);
