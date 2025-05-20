@@ -65,6 +65,7 @@ void	mini_loop(char **env)
 		if (!input)
 		{
 			ft_putstr("\nLeaving...\n", 1);
+			close(saved_stdin);
 			break ;
 		}
 		if (g_status == SIGINT)
