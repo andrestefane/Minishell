@@ -94,6 +94,7 @@ typedef struct s_fd_pipex
 	int							prev_fd;
 	int							count_heredoc;
 	int							n_cmds;
+	int							builtins;
 	pid_t						*pid;
 	t_command					*commands;
 }								t_pipex;
@@ -217,16 +218,16 @@ void							set_env(char ***env, const char *name,
 // Built-ins
 
 
-int						is_builtin(t_token *token);
-int						is_builtin_str(char *str);
-void					execute_buitin(t_command *cmd, char ***env);
-void					execute_buitin_args(char **argv, char ***env);
-void					ft_echo(t_command *cmd);
-void					ft_pwd(char **argv, char **env);
-void					ft_echo_arg(char **argv);
-void					ft_env(char **argv, char **env);
-int						ft_exit(char **argv);
-int						is_numeric(const char *str);
+int								is_builtin(t_token *token);
+int								is_builtin_str(char *str);
+void							execute_buitin(t_command *cmd, char ***env);
+void							execute_buitin_args(char **argv, char ***env);
+void							ft_echo(t_command *cmd);
+void							ft_pwd(char **argv, char **env);
+void							ft_echo_arg(char **argv);
+void							ft_env(char **argv, char **env);
+int								ft_exit(t_command *cmd);
+int								is_numeric(const char *str);
 
 
 
