@@ -1,6 +1,6 @@
 #include "../Mini.h"
 
-static	int	env_len(char **env)
+static int	env_len(char **env)
 {
 	int	i;
 
@@ -45,4 +45,3 @@ char	*get_env_name(char **env, const char *name)
 	}
 	return (NULL);
 }
-
