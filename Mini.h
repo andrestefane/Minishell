@@ -99,6 +99,14 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
+typedef struct s_minishell
+{
+	t_env						*env_list;
+	t_token						*token_list;
+	t_command					*command_list;
+	t_pipex						*pipex_data;
+}	t_minishell;
+
 typedef enum e_builtin_type
 {
 	NO_BUITIN = -1,
