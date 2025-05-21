@@ -238,6 +238,7 @@ void							ft_env(char **argv, char **env);
 
 int								ft_exit(t_command *cmd);
 int								is_numeric(const char *str);
+
 void							ft_export(char **argv, t_env **env_list);
 void							add_env_node(t_env **env_list, char *name,
 									char *value, int exported);
@@ -249,5 +250,13 @@ void	print_env_array(t_env **arr, int count);
 void	sort_env_array(t_env **arr, int count);
 void	add_or_update_env(char *arg, t_env **env_list);
 
+
+// Freedom
+void							free_pipex_data(t_pipex *data);
+void							free_command_list(t_command *cmd);
+void							free_redir_list(t_redir *redir);
+void							free_token_list(t_token *token);
+void							free_env_list(t_env	*env);
+void							free_minishell(t_minishell *minishell);
 
 #endif
