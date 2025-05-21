@@ -237,6 +237,13 @@ void							ft_env(char **argv, char **env);
 int								ft_exit(t_command *cmd);
 int								is_numeric(const char *str);
 
+// Freedom
 
+void							free_pipex_data(t_pipex *data);
+void							free_command_list(t_command *cmd);
+void							free_redir_list(t_redir *redir);
+void							free_token_list(t_token *token);
+void							free_env_list(t_env	*env);
+void							free_minishell(t_minishell *minishell);
 
 #endif

@@ -1,14 +1,14 @@
 #include "Mini.h"
 
-void	free_env_list(t_env	*env)
+void	free_minishell(t_minishell *minishell)
 {
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env->next;
-		free(env->name);
-		free(env->value);
-		free(env)
-	}
+	if (!minishell)
+		return ;
+	free_env_list(minishell->env_list);
+	free_token_list(minishell->token_list);
+	if (minishell->command_list
+		&& minishell->command_list != minishell->pipex_data->commands)
+		free_command_list(minishell->command_list);
+	free_pipex_data(minishell->pipex_data);
+	free(minishell);
 }

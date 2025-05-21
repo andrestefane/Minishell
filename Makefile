@@ -8,6 +8,8 @@ LDFLAGS = -lreadline
 OBJ_DIR = obj
 SRCS = \
 	main.c \
+	freedoom_mini.c \
+	freedoom_mini_utils.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
 	./Tokenizer/metachar_utils.c \
