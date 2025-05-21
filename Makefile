@@ -36,7 +36,9 @@ SRCS = \
 	./built-ins/ft_echo.c \
 	./built-ins/ft_pwd.c \
 	./built-ins/ft_env.c \
-	./built-ins/ft_exit.c
+	./built-ins/ft_exit.c \
+	./built-ins/ft_export.c \
+	./built-ins/ft_export_utils.c
 
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))

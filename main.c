@@ -1,10 +1,10 @@
 
 #include "Mini.h"
 
-static void	process_input(char *input, char **env)
+static void	process_input(char *input, char **env, t_env **env_list)
 {
-	t_token	*list;
-	t_token	*current;
+	t_token		*list;
+	t_token		*current;
 	t_command	*cmd;
 
 	list = NULL;
@@ -29,7 +29,7 @@ static void	process_input(char *input, char **env)
 	cmd = parse_single_command(list);
 	if (!cmd)
 		return ;
-	ft_execute(list, env);
+	ft_execute(list, env, env_list);
 	free_command_list(cmd);
 	free_tokens(list);
 }
@@ -50,7 +50,7 @@ char	*get_prompt(void)
 	return (pront);
 }
 
-void	mini_loop(char **env)
+void	mini_loop(char **env, t_env **env_list)
 {
 	char	*prompt;
 	char	*input;
@@ -76,7 +76,7 @@ void	mini_loop(char **env)
 			close(saved_stdin);
 			continue ;
 		}
-		process_input(input, env);
+		process_input(input, env, env_list);
 		free(input);
 		dup2(saved_stdin, STDIN_FILENO);
 		close(saved_stdin);
@@ -86,13 +86,15 @@ void	mini_loop(char **env)
 int	main(int argc, char **argv, char **env)
 {
 	char	**my_env;
+	t_env	*env_list;
 
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Too many arguments\n", 1, 1);
 	my_env = copy_env(env);
+	env_list = create_env_list(my_env);
 	do_signal();
-	mini_loop(my_env);
+	mini_loop(my_env, &env_list);
 	ft_freedoom(my_env);
 	return (0);
 }
