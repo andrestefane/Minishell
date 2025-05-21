@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/18 20:15:36 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:27:15 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	is_word_char(char c)
 	return (1);
 }
 
-void	add_token(t_token **head, char *value, t_token_type type,
+t_token	*add_token(t_token **head, char *value, t_token_type type,
 		t_token_quote quote)
 {
 	t_token	*new_node;
@@ -33,10 +33,11 @@ void	add_token(t_token **head, char *value, t_token_type type,
 
 	new_node = malloc(sizeof(t_token));
 	if (!new_node)
-		return ;
+		return (NULL);
 	new_node->value = ft_strdup(value);
 	new_node->type = type;
 	new_node->quote = quote;
+	new_node->expansion_type = NO_EXPANSION;
 	new_node->next = NULL;
 	if (*head == NULL)
 		*head = new_node;
@@ -47,6 +48,7 @@ void	add_token(t_token **head, char *value, t_token_type type,
 			current = current->next;
 		current->next = new_node;
 	}
+	return (new_node);
 }
 
 void	free_tokens(t_token *head)
@@ -83,12 +85,6 @@ char	*extract_token(t_tokenizer *tok, t_token_type *type,
 	if (tok->input[tok->pos] == '\0')
 		return (NULL);
 	if (extract_metachar(tok, type, quote))
-	{
-		if (*type == T_DOLLAR)
-			return (ft_strdup("$"));
-		else if (*type == T_QUESTION)
-			return (ft_strdup("?"));
-		return (ft_strdup("")); /* para |, >, <, etc. */
-	}
+		return (ft_strdup(""));
 	return (extract_complex_token(tok, type, quote));
 }

@@ -23,8 +23,8 @@ int	fill_tokens(t_token **list, char *input)
 			break ;
 		if (!val)
 			return (1);
-		add_token(list, val, type, quote);
-		printf("DEBUG Token generado: [%s]\n", val);
+		t_token *tok_debug = create_token_and_detect_expansion(list, val, type, quote);
+		printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type);
 		free(val);
 		tok.prev_type = type;
 	}

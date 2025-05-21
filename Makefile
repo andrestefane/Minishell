@@ -11,9 +11,9 @@ SRCS = \
 	main_utils.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
-	./Tokenizer/type_of_tokens.c \
 	./Tokenizer/metachar_utils.c \
 	./Tokenizer/quoted_utils.c \
+	./Tokenizer/expansion_utils.c \
 	./Varibles/variables.c \
 	./Exec/Execute_add_commands.c \
 	./Exec/Execute_freedom.c \
