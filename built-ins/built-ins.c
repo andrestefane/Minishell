@@ -29,7 +29,6 @@ int	is_builtin_str(char *str)
 
 void	execute_buitin(t_command *cmd, char ***env)
 {
-
 	if (!ft_strcmp(cmd->argv[0], "echo"))
 		ft_echo(cmd);
 	(void)env;
@@ -56,12 +55,12 @@ void	execute_buitin_args(char **argv, char ***env)
 		ft_pwd(argv, *env);
 	else if (!ft_strcmp(argv[0], "env"))
 		ft_env(argv, *env);
+	else if (!ft_strcmp(argv[0], "exit"))
+		ft_exit(argv);
 /* 	else if (!ft_strcmp(argv, "cd"))
 		ft_cd(cmd->argv, env);
 	else if (!ft_strcmp(argv, "export"))
 		ft_export(cmd->argv, env);
 	else if (!ft_strcmp(argv, "unset"))
-		ft_unset(cmd->argv, env);
-	else if (!ft_strcmp(argv, "exit"))
-		ft_exit(cmd->argv, env); */
+		ft_unset(cmd->argv, env);*/
 }

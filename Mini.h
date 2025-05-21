@@ -210,5 +210,7 @@ void					ft_echo(t_command *cmd);
 void					ft_pwd(char **argv, char **env);
 void					ft_echo_arg(char **argv);
 void					ft_env(char **argv, char **env);
+int						ft_exit(char **argv);
+int						is_numeric(const char *str);
 
 #endif
