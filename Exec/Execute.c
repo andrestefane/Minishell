@@ -101,10 +101,10 @@ void	ft_execute(t_token *token, char **envir)
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
-	/* if (builtin_type == 1 && data->n_cmds == 1
+	if (builtin_type == 1 && data->n_cmds == 1
 		&& !has_redir(cmds) && !token_has_pipe(token))
-		builtin_in_parent(cmds, envir); */
-	if (builtin_type == 0 || data->n_cmds == 1)
+		execute_buitin(cmds, &envir);
+	else
 		execute_pipeline(data, cmds, envir);
 	delete_heredoc_files(data->count_heredoc);
 	free_command_list(cmds);
