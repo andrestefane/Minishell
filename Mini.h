@@ -196,7 +196,7 @@ int						has_redir_type(t_command *cmd, int type);
 void					apply_one_redirection(t_redir *redir);
 void					wait_status(t_pipex *data);
 int						token_has_pipe(t_token *token);
-void	free_redirs(t_redir *redir);
+void					free_redirs(t_redir *redir);
 // Var
 void					expand_token(t_token *token);
 
@@ -217,4 +217,6 @@ void					execute_buitin_args(char **argv, char ***env);
 void					ft_echo(t_command *cmd);
 void					ft_pwd(char **argv, char **env);
 void					ft_echo_arg(char **argv);
+void					ft_env(char **argv, char **env);
+
 #endif
