@@ -54,12 +54,12 @@ void	execute_buitin_args(char **argv, char ***env)
 		ft_echo_arg(argv);
 	else if (!ft_strcmp(argv[0], "pwd"))
 		ft_pwd(argv, *env);
+	// else if (!ft_strcmp(argv[0], "export"))
+	// 	ft_export(cmd->argv, env);
 	else if (!ft_strcmp(argv[0], "env"))
 		ft_env(argv, *env);
 /* 	else if (!ft_strcmp(argv, "cd"))
 		ft_cd(cmd->argv, env);
-	else if (!ft_strcmp(argv, "export"))
-		ft_export(cmd->argv, env);
 	else if (!ft_strcmp(argv, "unset"))
 		ft_unset(cmd->argv, env);
 	else if (!ft_strcmp(argv, "exit"))

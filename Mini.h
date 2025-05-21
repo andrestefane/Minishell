@@ -19,6 +19,14 @@
 
 extern volatile sig_atomic_t g_status;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	int				exported;
+	struct s_env	*next;
+}	t_env;
+
 typedef enum e_token_type
 {
 	T_WORD,
