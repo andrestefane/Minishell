@@ -8,7 +8,6 @@ LDFLAGS = -lreadline
 OBJ_DIR = obj
 SRCS = \
 	main.c \
-	main_utils.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
 	./Tokenizer/metachar_utils.c \

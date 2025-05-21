@@ -64,7 +64,7 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir)
 }
 
 void	execute_last_command(t_pipex *data, t_command *curr,
-	char **envir, int i)
+		char **envir, int i)
 {
 	if (data->builtins == 1)
 	{
@@ -100,7 +100,11 @@ void	ft_execute(t_token *token, char **envir)
 	t_command	*cmds;
 
 	data = NULL;
-	cmds = NULL;), data);
+	cmds = NULL;
+	/* expand_token(token); */
+	init_strucs(&data, &cmds);
+	data->builtins = is_builtin(token);
+	cmds = parse_commands(token, data);
 	data->n_cmds = count_commands_list(cmds);
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
