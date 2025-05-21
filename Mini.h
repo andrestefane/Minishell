@@ -99,6 +99,14 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
+typedef struct s_minishell
+{
+	t_env						*env_list;
+	t_token						*token_list;
+	t_command					*command_list;
+	t_pipex						*pipex_data;
+}	t_minishell;
+
 typedef enum e_builtin_type
 {
 	NO_BUITIN = -1,
@@ -216,15 +224,19 @@ t_env	*create_env_list(char **envp);
 
 // Built-ins
 
+
 int								is_builtin(t_token *token);
 int								is_builtin_str(char *str);
 void							execute_buitin(t_command *cmd, char ***env, t_env **env_list);
+
+
 void							execute_buitin_args(char **argv, char ***env);
 void							ft_echo(t_command *cmd);
 void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
 void							ft_env(char **argv, char **env);
-int								ft_exit(char **argv);
+
+int								ft_exit(t_command *cmd);
 int								is_numeric(const char *str);
 void							ft_export(char **argv, t_env **env_list);
 void							add_env_node(t_env **env_list, char *name,
@@ -236,5 +248,6 @@ void	print_sorted_env(t_env *env);
 void	print_env_array(t_env **arr, int count);
 void	sort_env_array(t_env **arr, int count);
 void	add_or_update_env(char *arg, t_env **env_list);
+
 
 #endif

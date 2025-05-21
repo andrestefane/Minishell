@@ -60,17 +60,19 @@ void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir, t_env **env_
 	execute_last_command(data, curr, envir, i, env_list);
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
-	i = 0;
 	wait_status(data);
 }
 
 void	execute_last_command(t_pipex *data, t_command *curr,
+
 		char **envir, int i, t_env **env_list)
+
 {
 	if (data->builtins == 1)
 	{
 		apply_redirections(curr);
 		execute_buitin(curr, &envir, env_list);
+
 		if (data->prev_fd != -1)
 			close(data->prev_fd);
 	}
@@ -111,7 +113,9 @@ void	ft_execute(t_token *token, char **envir, t_env **env_list)
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
+
 	execute_pipeline(data, cmds, envir, env_list);
+
 	delete_heredoc_files(data->count_heredoc);
 	free_command_list(cmds);
 	free_stuct(data);
