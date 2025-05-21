@@ -18,25 +18,25 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-int	ft_exit(char **argv)
+int	ft_exit(t_command *cmd)
 {
 	int	code;
 
 	ft_putstr("exit\n", 2);
-	if (!argv[1])
+	if (!cmd->argv[1])
 		exit(g_status);
-	if (argv[2])
+	if (cmd->argv[2])
 	{
 		ft_putstr("exit; too many arguments\n", 2);
 		return (1);
 	}
-	if (!is_numeric(argv[1]))
+	if (!is_numeric(cmd->argv[1]))
 	{
 		ft_putstr("exit: ", 2);
-		ft_putstr(argv[1], 2);
+		ft_putstr(cmd->argv[1], 2);
 		ft_putstr(": numeric argument required\n", 2);
 		exit (255);
 	}
-	code = ft_atoi(argv[1]);
+	code = ft_atoi(cmd->argv[1]);
 	exit(code % 256);
 }
