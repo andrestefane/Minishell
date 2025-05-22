@@ -232,7 +232,7 @@ int								is_builtin_str(char *str);
 void							execute_buitin(t_command *cmd, char ***env,
 									t_env **env_list);
 
-void							ft_cd(char **argv);
+void	ft_cd(char **argv, t_env **env_list);
 void							execute_buitin_args(char **argv, char ***env);
 void							ft_echo(t_command *cmd);
 void							ft_pwd(char **argv, char **env);
