@@ -113,7 +113,8 @@ void	ft_execute(t_token *token, char **envir, t_env **env_list)
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
 	if (!data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
-
+	for (int i = 0; i < data->n_cmds; i++)
+	data->pid[i] = -1;
 	execute_pipeline(data, cmds, envir, env_list);
 
 	delete_heredoc_files(data->count_heredoc);

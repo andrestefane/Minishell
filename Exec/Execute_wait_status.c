@@ -9,7 +9,12 @@ void	wait_status(t_pipex *data)
 	count = 0;
 	while (count < data->n_cmds)
 	{
-		pid = waitpid(-1, &status, 0);
+		if (data->pid[count] > 0)
+		{	
+			pid = waitpid(data->pid[count], &status, 0);
+			if (pid == -1)
+			perror("waitpid");
+		}
 		if (pid == -1)
 			exit_with_error("Waitpid failed\n", 1, 2);
 		if (pid == data->pid[data->n_cmds - 1])
