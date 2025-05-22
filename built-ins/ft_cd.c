@@ -1,14 +1,33 @@
 #include "../Mini.h"
 
-void	ft_cd(char **argv)
+static char	*get_env_value(char *name, t_env *env)
 {
+	while (env)
+	{
+		if (!ft_strcmp(env->name, name))
+			return (env->value ? ft_strdup(env->value) : NULL);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+void	ft_cd(char **argv, t_env **env_list)
+{
+	char	*path;
+
 	if (!argv[1])
 	{
-		ft_putstr("cd: missing argument\n", 2);
-		return ;
+		path = get_env_value("HOME", *env_list);
+		if (!path)
+		{
+			ft_putstr("cd: HOME not set\n", 2);
+			return ;
+		}
 	}
-	if (chdir(argv[1]) == -1)
-	{
+	else
+		path = argv[1];
+	if (chdir(path) == -1)
 		perror("cd");
-	}
+	if (!argv[1])
+		free(path);
 }
