@@ -105,7 +105,7 @@ typedef struct s_minishell
 	t_token						*token_list;
 	t_command					*command_list;
 	t_pipex						*pipex_data;
-}	t_minishell;
+}								t_minishell;
 
 typedef enum e_builtin_type
 {
@@ -148,7 +148,8 @@ char							*extract_quoted_token(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 
 // Exec
-void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir, t_env **env_list);
+void							execute_pipeline(t_pipex *data, t_command *cmds,
+									char **envir, t_env **env_list);
 void							execute_command(t_pipex *data, char **args,
 									char **paths, char **envir);
 void							parse_heredoc(t_command *cmd, t_token **token,
@@ -163,8 +164,9 @@ void							add_redir_to_cmd(t_command *cmd, int type,
 									const char *filename);
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
-void	execute_last_command(t_pipex *data, t_command *curr,
-		char **envir, int i, t_env **env_list);
+void							execute_last_command(t_pipex *data,
+									t_command *curr, char **envir, int i,
+									t_env **env_list);
 void							process_and_exec(t_pipex *data, t_command *cmd,
 									int i, char **envir);
 void							add_command_to_list(t_command **head,
@@ -191,7 +193,8 @@ void							add_arg_to_command(t_command *cmd, char *arg);
 void							parse_red_in(t_command *cmd, t_token **token);
 char							**cmd_managment(t_pipex *data, char *cmd);
 int								count_commands_list(t_command *cmd);
-void	ft_execute(t_token *token, char **envir, t_env **env_list);
+void							ft_execute(t_token *token, char **envir,
+									t_env **env_list);
 void							apply_redirections(t_command *cmd);
 void							free_command_list(t_command *cmd);
 void							redir_heredoc(t_command *cmd);
@@ -220,16 +223,16 @@ char							**append_env_variable(char **env,
 									const char *name, const char *value);
 void							set_env(char ***env, const char *name,
 									const char *value);
-t_env	*create_env_list(char **envp);
+t_env							*create_env_list(char **envp);
 
 // Built-ins
 
-
 int								is_builtin(t_token *token);
 int								is_builtin_str(char *str);
-void							execute_buitin(t_command *cmd, char ***env, t_env **env_list);
+void							execute_buitin(t_command *cmd, char ***env,
+									t_env **env_list);
 
-
+void							ft_cd(char **argv);
 void							execute_buitin_args(char **argv, char ***env);
 void							ft_echo(t_command *cmd);
 void							ft_pwd(char **argv, char **env);
@@ -243,20 +246,19 @@ void							ft_export(char **argv, t_env **env_list);
 void							add_env_node(t_env **env_list, char *name,
 									char *value, int exported);
 t_env							*find_env(t_env *env_list, const char *name);
-t_env	*create_env_list(char **envp);
-int	count_exported(t_env *env);
-void	print_sorted_env(t_env *env);
-void	print_env_array(t_env **arr, int count);
-void	sort_env_array(t_env **arr, int count);
-void	add_or_update_env(char *arg, t_env **env_list);
-
+t_env							*create_env_list(char **envp);
+int								count_exported(t_env *env);
+void							print_sorted_env(t_env *env);
+void							print_env_array(t_env **arr, int count);
+void							sort_env_array(t_env **arr, int count);
+void							add_or_update_env(char *arg, t_env **env_list);
 
 // Freedom
 void							free_pipex_data(t_pipex *data);
 void							free_command_list(t_command *cmd);
 void							free_redir_list(t_redir *redir);
 void							free_token_list(t_token *token);
-void							free_env_list(t_env	*env);
+void							free_env_list(t_env *env);
 void							free_minishell(t_minishell *minishell);
 
 #endif
