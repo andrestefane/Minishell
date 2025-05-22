@@ -41,6 +41,7 @@ SRCS = \
 	./built-ins/ft_exit.c \
 	./built-ins/ft_export.c \
 	./built-ins/ft_cd.c \
+	./built-ins/ft_unset.c\
 	./built-ins/ft_export_utils.c
 
 OBJS = $(SRCS:.c=.o)

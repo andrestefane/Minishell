@@ -41,10 +41,10 @@ void	execute_buitin(t_command *cmd, char ***env, t_env **env_list)
 		ft_exit(cmd);
  	else if (!ft_strcmp(cmd->argv[0], "cd"))
 		ft_cd(cmd->argv, env_list);
+	else if (!ft_strcmp(cmd->argv[0], "unset"))
+		ft_unset(cmd->argv, env_list);
 	/*else if (!ft_strcmp(cmd->argv[0], "pwd"))
 		ft_pwd(cmd->argv, env);
-	else if (!ft_strcmp(cmd->argv[0], "unset"))
-		ft_unset(cmd->argv, env);
 	else if (!ft_strcmp(cmd->argv[0], "env"))
 		ft_env(cmd->argv, env);
 	*/
