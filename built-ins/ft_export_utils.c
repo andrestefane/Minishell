@@ -35,7 +35,10 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 	if (!new)
 		return ;
 	new->name = ft_strdup(name);
-	new->value = ft_strdup(value);
+	if (value)
+		new->value = ft_strdup(value);
+	else
+		new->value = NULL;
 	new->exported = exported;
 	new->next = NULL;
 	if (!*env_list)
