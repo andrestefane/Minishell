@@ -43,7 +43,8 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	ft_cmd(data, cmd->argv, envir);
 }
 
-void	execute_pipeline(t_pipex *data, t_command *cmds, char **envir, t_env **env_list)
+void	execute_pipeline(t_pipex *data, t_command *cmds,
+	char **envir, t_env **env_list)
 {
 	t_command	*curr;
 	int			i;
@@ -96,7 +97,6 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 		}
 	}
 }
-
 
 void	ft_execute(t_token *token, char **envir, t_env **env_list)
 {
