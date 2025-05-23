@@ -261,4 +261,14 @@ void							free_token_list(t_token *token);
 void							free_env_list(t_env *env);
 void							free_minishell(t_minishell *minishell);
 
+t_pipex							*init_pipex(void);
+t_command						*init_command(void);
+t_redir							*init_redir(int type, char *filename);
+t_token							*init_token(char *value, t_token_type type,
+									t_token_quote quote, t_expansion_type exp);
+t_env							*init_env_list(char *name, char *value,
+									int exported);
+t_minishell						*init_minishell(void);
+
+
 #endif
