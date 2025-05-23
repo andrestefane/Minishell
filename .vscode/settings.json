@@ -3,7 +3,8 @@
         "*.h": "c",
         "type_traits": "c",
         "parse_utils": "c",
-        "compare": "c"
+        "compare": "c",
+        "typeinfo": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
