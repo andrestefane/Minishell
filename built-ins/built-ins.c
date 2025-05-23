@@ -1,7 +1,10 @@
 #include "../Mini.h"
 
-int	is_builtin(t_token *token)
+int	is_builtin(t_minishell *mini)
 {
+	t_token	*token;
+
+	token = mini->token_list;
 	if (!token || !token->value)
 		return (NO_BUITIN);
 	if (!ft_strcmp(token->value, "echo")
@@ -9,7 +12,6 @@ int	is_builtin(t_token *token)
 		|| !ft_strcmp(token->value, "env"))
 		return (BUILTIN_CHILD);
 	else if (!ft_strcmp(token->value, "cd")
-		|| !ft_strcmp(token->value, "exit")
 		|| !ft_strcmp(token->value, "exit")
 		|| !ft_strcmp(token->value, "export")
 		|| !ft_strcmp(token->value, "unset"))

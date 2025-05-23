@@ -42,11 +42,13 @@ void	add_arg_to_command(t_command *cmd, char *arg)
 	cmd->argv = new_argv;
 }
 
-int	count_commands_list(t_command *cmd)
+int	count_commands_list(t_minishell *mini)
 {
-	int	count;
+	t_command	*cmd;
+	int			count;
 
 	count = 0;
+	cmd = mini->command_list;
 	while (cmd)
 	{
 		count++;
