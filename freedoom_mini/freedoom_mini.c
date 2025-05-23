@@ -1,4 +1,4 @@
-#include "Mini.h"
+#include "../Mini.h"
 
 void	free_minishell(t_minishell *minishell)
 {

@@ -1,4 +1,5 @@
-#include "Mini.h"
+#include "../Mini.h"
+
 
 void	free_env_list(t_env	*env)
 {
