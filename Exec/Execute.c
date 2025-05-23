@@ -98,16 +98,11 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 	}
 }
 
-void	ft_execute(t_token *token, char **envir, t_env **env_list)
+void	ft_execute(t_minishell *minishell, char **envir)
 {
-	t_pipex		*data;
-	t_command	*cmds;
-
-	data = NULL;
-	cmds = NULL;
-	/* expand_token(token); */
-	init_strucs(&data, &cmds);
-	data->builtins = is_builtin(token);
+	minishell->command_list = init_command();
+	minishell->pipex_data = init_pipex();
+	minishell->data->builtins = is_builtin(minishell->token);
 	cmds = parse_commands(token, data);
 	data->n_cmds = count_commands_list(cmds);
 	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
@@ -116,7 +111,6 @@ void	ft_execute(t_token *token, char **envir, t_env **env_list)
 	for (int i = 0; i < data->n_cmds; i++)
 	data->pid[i] = -1;
 	execute_pipeline(data, cmds, envir, env_list);
-
 	delete_heredoc_files(data->count_heredoc);
 	free_command_list(cmds);
 	free_stuct(data);
