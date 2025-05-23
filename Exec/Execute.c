@@ -43,14 +43,17 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	ft_cmd(data, cmd->argv, envir);
 }
 
-void	execute_pipeline(t_pipex *data, t_command *cmds,
-	char **envir, t_env **env_list)
+void	execute_pipeline(t_minishell *mini, char **envir)
 {
 	t_command	*curr;
+	t_pipex		*data;
+	t_env		*env_list;
 	int			i;
 
-	curr = cmds;
+	curr = mini->command_list;
 	i = 0;
+	data = mini->pipex_data;
+	env_list = mini->env_list;
 	data->prev_fd = -1;
 	while (curr && i < data->n_cmds - 1)
 	{
@@ -98,20 +101,21 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 	}
 }
 
-void	ft_execute(t_minishell *minishell, char **envir)
+void	ft_execute(t_minishell *mini, char **envir)
 {
-	minishell->command_list = init_command();
-	minishell->pipex_data = init_pipex();
-	minishell->data->builtins = is_builtin(minishell->token);
-	cmds = parse_commands(token, data);
-	data->n_cmds = count_commands_list(cmds);
-	data->pid = malloc(sizeof(pid_t) * data->n_cmds);
-	if (!data->pid)
+	mini->pipex_data = init_pipex();
+	if (!mini->pipex_data)
+		exit_with_error("Error init_pipex\n", 1, 2);
+	mini->pipex_data->builtins = is_builtin(mini);
+	mini->command_list = parse_commands(mini);
+	if (!mini->command_list)
+		exit_with_error("Error parsing commands\n", 1, 2);
+	mini->pipex_data->n_cmds = count_commands_list(mini);
+	mini->pipex_data->pid = malloc(sizeof(pid_t) * mini->pipex_data->n_cmds);
+	if (!mini->pipex_data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
-	for (int i = 0; i < data->n_cmds; i++)
-	data->pid[i] = -1;
-	execute_pipeline(data, cmds, envir, env_list);
-	delete_heredoc_files(data->count_heredoc);
-	free_command_list(cmds);
-	free_stuct(data);
+	for (int i = 0; i < mini->pipex_data->n_cmds; i++)
+		mini->pipex_data->pid[i] = -1;
+	execute_pipeline(mini, envir);
+	delete_heredoc_files(mini->pipex_data->count_heredoc);
 }
