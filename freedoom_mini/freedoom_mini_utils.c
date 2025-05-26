@@ -1,4 +1,5 @@
-#include "Mini.h"
+#include "../Mini.h"
+
 
 void	free_env_list(t_env	*env)
 {
@@ -20,8 +21,9 @@ void	free_token_list(t_token *token)
 
 	while (token)
 	{
-		tmp = tmp->next;
-		free(token->value);
+		tmp = token->next;
+		if (token->value)
+			free(token->value);
 		free(token);
 		token = tmp;
 	}

@@ -51,6 +51,7 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 		tmp = tmp->next;
 	tmp->next = new;
 }
+
 int	count_exported(t_env *env)
 {
 	int	count;

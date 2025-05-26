@@ -1,15 +1,17 @@
 
 #include "../Mini.h"
 
-t_command	*parse_commands(t_token *token, t_pipex *data)
+t_command	*parse_commands(t_minishell *mini)
 {
 	t_command	*head;
 	t_command	*curr;
+	t_token		*token;
 	int			heredoc_index;
 
 	heredoc_index = 0;
 	head = NULL;
 	curr = NULL;
+	token = mini->token_list;
 	while (token)
 	{
 		if (!curr)
@@ -17,15 +19,18 @@ t_command	*parse_commands(t_token *token, t_pipex *data)
 			curr = init_new_command();
 			add_command_to_list(&head, curr);
 		}
-		process_token(&curr, &token, data, &heredoc_index);
+		process_token(&curr, &token, mini, &heredoc_index);
 		token = token->next;
 	}
 	return (head);
 }
 
 void	process_token(t_command **curr, t_token **token,
-	t_pipex *data, int *index)
+	t_minishell *mini, int *index)
 {
+	t_pipex	*data;
+
+	data = mini->pipex_data;
 	if ((*token)->type == T_WORD)
 	{
 /* 		if ((*token)->type == T_DOLLAR && (*token)->next->type == T_QUESTION

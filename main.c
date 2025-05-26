@@ -1,37 +1,33 @@
 
 #include "Mini.h"
 
-static void	process_input(char *input, char **env, t_env **env_list)
+static void	process_input(char *input, t_minishell *minishell)
 {
-	t_token		*list;
-	t_token		*current;
-	t_command	*cmd;
+	t_token	*current;
 
-	list = NULL;
 	add_history(input);
-	if (!fill_tokens(&list, input))
+	if (!fill_tokens(minishell, input))
 	{
 		ft_putstr("syntax error: unclosed quote\n", 2);
-		free_tokens(list);
+		free_tokens(minishell->token_list);
 		return ;
 	}
-	if (!check_syntax_pipes(list))
+	if (!check_syntax_pipes(minishell->token_list))
 	{
-		free_tokens(list);
+		free_tokens(minishell->token_list);
 		return ;
 	}
-	current = list;
+	current = minishell->token_list;
 	while (current)
 	{
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	cmd = parse_single_command(list);
-	if (!cmd)
+	minishell->command_list = parse_single_command(minishell);
+	if (!minishell->command_list)
 		return ;
-	ft_execute(list, env, env_list);
-	free_command_list(cmd);
-	free_tokens(list);
+	ft_execute(minishell);
+	free_minishell(minishell);
 }
 
 char	*get_prompt(void)
@@ -50,7 +46,7 @@ char	*get_prompt(void)
 	return (pront);
 }
 
-void	mini_loop(char **env, t_env **env_list)
+void	mini_loop(t_minishell *minishell)
 {
 	char	*prompt;
 	char	*input;
@@ -66,6 +62,9 @@ void	mini_loop(char **env, t_env **env_list)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			close(saved_stdin);
+			free_env_list(minishell->env_list);
+			minishell->env_list = NULL;
+			free_minishell(minishell);
 			break ;
 		}
 		if (g_status == SIGINT)
@@ -76,7 +75,7 @@ void	mini_loop(char **env, t_env **env_list)
 			close(saved_stdin);
 			continue ;
 		}
-		process_input(input, env, env_list);
+		process_input(input, minishell);
 		free(input);
 		dup2(saved_stdin, STDIN_FILENO);
 		close(saved_stdin);
@@ -85,16 +84,19 @@ void	mini_loop(char **env, t_env **env_list)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	**my_env;
-	t_env	*env_list;
+	char		**my_env;
+	t_minishell	*minishell;
 
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Too many arguments\n", 1, 1);
+	minishell = init_minishell();
+	if (!minishell)
+		return (1);
 	my_env = copy_env(env);
-	env_list = create_env_list(my_env);
+	minishell->env_list = create_env_list(my_env);
 	do_signal();
-	mini_loop(my_env, &env_list);
+	mini_loop(minishell);
 	ft_freedoom(my_env);
 	return (0);
 }

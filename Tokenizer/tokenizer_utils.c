@@ -5,7 +5,7 @@ static int	is_token_char(char c)
 	return (c && c != ' ' && c != '\t' && !ft_strchr("|<>", c));
 }
 
-int	fill_tokens(t_token **list, char *input)
+int	fill_tokens(t_minishell *minishell, char *input)
 {
 	t_tokenizer		tok;
 	t_token_type	type;
@@ -16,6 +16,11 @@ int	fill_tokens(t_token **list, char *input)
 	tok.pos = 0;
 	tok.prev_type = T_WORD;
 	tok.err = 0;
+	if (minishell->token_list)
+	{
+		free_token_list(minishell->token_list);
+		minishell->token_list = NULL;
+	}
 	while (!tok.err)
 	{
 		val = extract_token(&tok, &type, &quote);
@@ -23,12 +28,11 @@ int	fill_tokens(t_token **list, char *input)
 			break ;
 		if (!val)
 			return (1);
-		t_token *tok_debug = create_token_and_detect_expansion(list, val, type, quote);
+		t_token *tok_debug = create_token_and_detect_expansion(minishell, val, type, quote);
 		printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type);
 		free(val);
 		tok.prev_type = type;
 	}
-	free_tokens(*list);
 	return (0);
 }
 
