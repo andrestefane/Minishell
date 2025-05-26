@@ -1,13 +1,14 @@
 bash.supp
 built-ins
 Chuleta_git.md
+cosas_que_hacer
 env
 Exec
-hola
+freedoom_mini
 infile
+init_struct
 libft
 main.c
-main_utils.c
 Makefile
 Mini
 Mini.h
@@ -16,5 +17,4 @@ outfile
 Parser
 README.md
 Tokenizer
-valgrind_log.txt
 Varibles

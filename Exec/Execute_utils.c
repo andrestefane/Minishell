@@ -1,10 +1,13 @@
 #include "../Mini.h"
 
-void	ft_cmd(t_pipex *data, char **argv, char **envir)
+// Puede ser que haya que liberar el env si falla
+void	ft_cmd(t_pipex *data, char **argv, t_env *env_list)
 {
 	char	**possible_paths;
 	char	*path_line;
+	char	**envir;
 
+	envir = env_to_array(env_list);
 	if (is_builtin_str(argv[0]))
 	{
 		execute_buitin_args(argv, &envir);

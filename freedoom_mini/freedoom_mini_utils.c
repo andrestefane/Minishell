@@ -21,7 +21,7 @@ void	free_token_list(t_token *token)
 
 	while (token)
 	{
-		tmp = tmp->next;
+		tmp = token->next;
 		free(token->value);
 		free(token);
 		token = tmp;
