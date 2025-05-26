@@ -125,7 +125,7 @@ void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
 // Tokens
-t_token							*create_token_and_detect_expansion(t_token **list,
+t_token							*create_token_and_detect_expansion(t_minishell minishell,
 									char *val, t_token_type type,
 									t_token_quote quote);
 t_token							*add_token(t_token **head, char *value,
@@ -133,7 +133,8 @@ t_token							*add_token(t_token **head, char *value,
 char							*extract_word(t_tokenizer *tok,
 									t_token_type *type);
 void							free_tokens(t_token *head);
-int								fill_tokens(t_token **token_list, char *input);
+int								fill_tokens(t_minishell *minishell,
+									char *input);
 int								extract_metachar(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 char							*extract_quoted_token(t_tokenizer *tok,
@@ -193,6 +194,7 @@ void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
 void							parse_red_in(t_command *cmd, t_token **token);
 char							**cmd_managment(t_pipex *data, char *cmd);
+
 int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
 void							apply_redirections(t_command *cmd);
@@ -272,6 +274,5 @@ t_token							*init_token(char *value, t_token_type type,
 t_env							*init_env_list(char *name, char *value,
 									int exported);
 t_minishell						*init_minishell(void);
-
 
 #endif

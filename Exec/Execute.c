@@ -100,7 +100,6 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 	}
 }
 
-
 void	ft_execute(t_minishell *mini)
 {
 	int	i;

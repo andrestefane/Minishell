@@ -6,7 +6,7 @@ static void	process_input(char *input, t_minishell *minishell)
 	t_token	*current;
 
 	add_history(input);
-	if (!fill_tokens(&minishell->token_list, input))
+	if (!fill_tokens(minishell, input))
 	{
 		ft_putstr("syntax error: unclosed quote\n", 2);
 		free_tokens(minishell->token_list);
