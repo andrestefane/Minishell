@@ -19,7 +19,7 @@ SRCS = \
 	./Tokenizer/expansion_utils.c \
 	./Varibles/variables.c \
 	./Exec/Execute_add_commands.c \
-	./Exec/Execute_freedom_mini.c \
+	./Exec/Execute_freedom.c \
 	./Exec/Execute_freedoom_utils.c \
 	./Exec/Execute_heredoc_utils.c \
 	./Exec/Execute_heredoc.c \

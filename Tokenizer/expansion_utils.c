@@ -1,6 +1,6 @@
 #include "../Mini.h"
 
-t_token	*create_token_and_detect_expansion(t_minishell minishell, char *val, t_token_type type, t_token_quote quote)
+t_token	*create_token_and_detect_expansion(t_minishell *minishell, char *val, t_token_type type, t_token_quote quote)
 {
 	t_token *new_token;
 
