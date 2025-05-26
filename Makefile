@@ -8,8 +8,10 @@ LDFLAGS = -lreadline
 OBJ_DIR = obj
 SRCS = \
 	main.c \
-	freedoom_mini.c \
-	freedoom_mini_utils.c \
+	./freedoom_mini/freedoom_mini.c \
+	./freedoom_mini/freedoom_mini_utils.c \
+	./init_struct/init_struct_utils.c \
+	./init_struct/init_struct.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
 	./Tokenizer/metachar_utils.c \
@@ -22,6 +24,7 @@ SRCS = \
 	./Exec/Execute_heredoc_utils.c \
 	./Exec/Execute_heredoc.c \
 	./Exec/Execute_init.c \
+	./Exec/Execute_list_to_array.c \
 	./Exec/Execute_parse_utils.c \
 	./Exec/Execute_parse.c \
 	./Exec/Execute_redirs_utils.c \

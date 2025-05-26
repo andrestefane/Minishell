@@ -1,6 +1,7 @@
 #include "../Mini.h"
 
-void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
+void	process_and_exec(t_pipex *data, t_command *cmd,
+		int i, t_env *envir_list)
 {
 	int	fd[2];
 
@@ -10,7 +11,7 @@ void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
 	if (data->pid[i] == -1)
 		free_struct(data, ERR_FORK, 1, 2);
 	if (data->pid[i] == 0)
-		child_process(data, cmd, fd, envir);
+		child_process(data, cmd, fd, envir_list);
 	else
 	{
 		if (data->prev_fd != -1)
@@ -20,7 +21,8 @@ void	process_and_exec(t_pipex *data, t_command *cmd, int i, char **envir)
 	}
 }
 
-void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
+void	child_process(t_pipex *data, t_command *cmd,
+		int fd[2], t_env *envir_list)
 {
 	apply_redirections(cmd);
 	if (!has_redir_type(cmd, T_RED_IN)
@@ -40,10 +42,10 @@ void	child_process(t_pipex *data, t_command *cmd, int fd[2], char **envir)
 	close(fd[1]);
 	if (!cmd->argv || !cmd->argv[0])
 		exit(0);
-	ft_cmd(data, cmd->argv, envir);
+	ft_cmd(data, cmd->argv, envir_list);
 }
 
-void	execute_pipeline(t_minishell *mini, char **envir)
+void	execute_pipeline(t_minishell *mini)
 {
 	t_command	*curr;
 	t_pipex		*data;
@@ -57,26 +59,23 @@ void	execute_pipeline(t_minishell *mini, char **envir)
 	data->prev_fd = -1;
 	while (curr && i < data->n_cmds - 1)
 	{
-		process_and_exec(data, curr, i, envir);
+		process_and_exec(data, curr, i, env_list);
 		curr = curr->next;
 		i++;
 	}
-	execute_last_command(data, curr, envir, i, env_list);
+	execute_last_command(data, curr, i, env_list);
 	if (data->prev_fd != -1)
 		close(data->prev_fd);
 	wait_status(data);
 }
 
 void	execute_last_command(t_pipex *data, t_command *curr,
-
-		char **envir, int i, t_env **env_list)
-
+			int i, t_env *env_list)
 {
 	if (data->builtins == 1)
 	{
 		apply_redirections(curr);
-		execute_buitin(curr, &envir, env_list);
-
+		execute_buitin(curr, env_list);
 		if (data->prev_fd != -1)
 			close(data->prev_fd);
 	}
@@ -96,13 +95,16 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 			apply_redirections(curr);
 			if (!curr->argv || !curr->argv[0])
 				exit(0);
-			ft_cmd(data, curr->argv, envir);
+			ft_cmd(data, curr->argv, env_list);
 		}
 	}
 }
 
 void	ft_execute(t_minishell *mini)
 {
+	int	i;
+
+	i = 0;
 	mini->pipex_data = init_pipex();
 	if (!mini->pipex_data)
 		exit_with_error("Error init_pipex\n", 1, 2);
@@ -114,8 +116,11 @@ void	ft_execute(t_minishell *mini)
 	mini->pipex_data->pid = malloc(sizeof(pid_t) * mini->pipex_data->n_cmds);
 	if (!mini->pipex_data->pid)
 		exit_with_error("Error malloc pid failed\n", 1, 2);
-	for (int i = 0; i < mini->pipex_data->n_cmds; i++)
+	while (i < mini->pipex_data->n_cmds)
+	{
 		mini->pipex_data->pid[i] = -1;
-	execute_pipeline(mini, envir);
+		i++;
+	}
+	execute_pipeline(mini);
 	delete_heredoc_files(mini->pipex_data->count_heredoc);
 }

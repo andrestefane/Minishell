@@ -148,17 +148,20 @@ char							*get_next_token_part(t_tokenizer *tok,
 char							*extract_quoted_token(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 
+
+
 // Exec
-void							execute_pipeline(t_pipex *data, t_command *cmds,
-									char **envir, t_env **env_list);
+
+
+void							execute_pipeline(t_minishell *mini);
 void							execute_command(t_pipex *data, char **args,
 									char **paths, char **envir);
 void							parse_heredoc(t_command *cmd, t_token **token,
 									t_pipex *data, int *index);
 void							process_token(t_command **curr, t_token **token,
-									t_pipex *data, int *index);
+									t_minishell *mini, int *index);
 void							child_process(t_pipex *data, t_command *cmd,
-									int fd[2], char **envir);
+									int fd[2], t_env *envir_list);
 char							*extract_token(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 void							add_redir_to_cmd(t_command *cmd, int type,
@@ -166,10 +169,9 @@ void							add_redir_to_cmd(t_command *cmd, int type,
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
 void							execute_last_command(t_pipex *data,
-									t_command *curr, char **envir, int i,
-									t_env **env_list);
+									t_command *curr, int i, t_env *env_list);
 void							process_and_exec(t_pipex *data, t_command *cmd,
-									int i, char **envir);
+									int i, t_env *envir_list);
 void							add_command_to_list(t_command **head,
 									t_command *new_cmd);
 void							free_struct(t_pipex *data, char *message, int i,
@@ -182,18 +184,18 @@ int								get_heredoc_index(t_token *token,
 									t_token *target);
 void							parse_red_append(t_command *cmd,
 									t_token **token);
-void							ft_cmd(t_pipex *data, char **argv,
-									char **envir);
+void							ft_cmd(t_pipex *data, char **argv, t_env *env_list);
 char							*create_path(char *possible_path,
 									char *command);
 void							parse_red_out(t_command *cmd, t_token **token);
-t_command						*parse_commands(t_token *token, t_pipex *data);
+t_command						*parse_commands(t_minishell *mini);
 int								here_doc(char *limiter, const char *filename);
 void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
 void							parse_red_in(t_command *cmd, t_token **token);
 char							**cmd_managment(t_pipex *data, char *cmd);
-int								count_commands_list(t_command *cmd);
+
+int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
 void							apply_redirections(t_command *cmd);
 void							free_command_list(t_command *cmd);
@@ -213,6 +215,10 @@ void							apply_one_redirection(t_redir *redir);
 void							wait_status(t_pipex *data);
 int								token_has_pipe(t_token *token);
 void							free_redirs(t_redir *redir);
+char							**env_to_array(t_env *env_list);
+char							*env_entry(t_env *node);
+int								env_list_size(t_env	*env);
+
 // Var
 void							expand_token(t_token *token);
 
@@ -227,10 +233,9 @@ t_env							*create_env_list(char **envp);
 
 // Built-ins
 
-int								is_builtin(t_token *token);
+int								is_builtin(t_minishell *mini);
 int								is_builtin_str(char *str);
-void							execute_buitin(t_command *cmd, char ***env,
-									t_env **env_list);
+void							execute_buitin(t_command *cmd, t_env *env_list);
 void							ft_unset(char **argv, t_env **env_list);
 void							ft_cd(char **argv, t_env **env_list);
 void							execute_buitin_args(char **argv, char ***env);
