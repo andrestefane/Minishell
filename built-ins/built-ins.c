@@ -30,21 +30,20 @@ int	is_builtin_str(char *str)
 		|| !ft_strcmp(str, "exit"));
 }
 
-void	execute_buitin(t_command *cmd, char ***env, t_env **env_list)
+void	execute_buitin(t_command *cmd, t_env *env_list)
 {
-	(void)env;
 	printf("DEBUG: estás usando TU built-in para %s en el padre\n", cmd->argv[0]);
 
 	if (!ft_strcmp(cmd->argv[0], "echo"))
 		ft_echo(cmd);
 	else if(!ft_strcmp(cmd->argv[0], "export"))
-		ft_export(cmd->argv, env_list);
+		ft_export(cmd->argv, &env_list);
 	if (!ft_strcmp(cmd->argv[0], "exit"))
 		ft_exit(cmd);
  	else if (!ft_strcmp(cmd->argv[0], "cd"))
-		ft_cd(cmd->argv, env_list);
+		ft_cd(cmd->argv, &env_list);
 	else if (!ft_strcmp(cmd->argv[0], "unset"))
-		ft_unset(cmd->argv, env_list);
+		ft_unset(cmd->argv, &env_list);
 	/*else if (!ft_strcmp(cmd->argv[0], "pwd"))
 		ft_pwd(cmd->argv, env);
 	else if (!ft_strcmp(cmd->argv[0], "env"))
