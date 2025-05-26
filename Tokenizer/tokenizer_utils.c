@@ -16,6 +16,11 @@ int	fill_tokens(t_minishell *minishell, char *input)
 	tok.pos = 0;
 	tok.prev_type = T_WORD;
 	tok.err = 0;
+	if (minishell->token_list)
+	{
+		free_token_list(minishell->token_list);
+		minishell->token_list = NULL;
+	}
 	while (!tok.err)
 	{
 		val = extract_token(&tok, &type, &quote);

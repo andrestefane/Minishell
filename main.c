@@ -23,7 +23,7 @@ static void	process_input(char *input, t_minishell *minishell)
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
 	}
-	minishell->command_list = parse_single_command(minishell->token_list);
+	minishell->command_list = parse_single_command(minishell);
 	if (!minishell->command_list)
 		return ;
 	ft_execute(minishell);
@@ -62,6 +62,9 @@ void	mini_loop(t_minishell *minishell)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			close(saved_stdin);
+			free_env_list(minishell->env_list);
+			minishell->env_list = NULL;
+			free_minishell(minishell);
 			break ;
 		}
 		if (g_status == SIGINT)

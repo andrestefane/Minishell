@@ -120,7 +120,7 @@ void							do_signal(void);
 void							sighandler(int signal);
 
 // Parse
-t_command						*parse_single_command(t_token *tokens);
+t_command						*parse_single_command(t_minishell *minishell);
 void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
