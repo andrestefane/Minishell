@@ -1,12 +1,12 @@
 
 #include "Mini.h"
 
-static void	process_input(char *input, char **env, t_minishell *minishell)
+static void	process_input(char *input, t_minishell *minishell)
 {
 	t_token	*current;
 
 	add_history(input);
-	if (!fill_tokens(&minishell->token_list, input))
+	if (!fill_tokens(minishell, input))
 	{
 		ft_putstr("syntax error: unclosed quote\n", 2);
 		free_tokens(minishell->token_list);
@@ -26,7 +26,7 @@ static void	process_input(char *input, char **env, t_minishell *minishell)
 	minishell->command_list = parse_single_command(minishell->token_list);
 	if (!minishell->command_list)
 		return ;
-	ft_execute(minishell, env);
+	ft_execute(minishell);
 	free_minishell(minishell);
 }
 
@@ -46,7 +46,7 @@ char	*get_prompt(void)
 	return (pront);
 }
 
-void	mini_loop(char **env, t_minishell *minishell)
+void	mini_loop(t_minishell *minishell)
 {
 	char	*prompt;
 	char	*input;
@@ -72,7 +72,7 @@ void	mini_loop(char **env, t_minishell *minishell)
 			close(saved_stdin);
 			continue ;
 		}
-		process_input(input, env, minishell);
+		process_input(input, minishell);
 		free(input);
 		dup2(saved_stdin, STDIN_FILENO);
 		close(saved_stdin);
@@ -93,7 +93,7 @@ int	main(int argc, char **argv, char **env)
 	my_env = copy_env(env);
 	minishell->env_list = create_env_list(my_env);
 	do_signal();
-	mini_loop(my_env, minishell);
+	mini_loop(minishell);
 	ft_freedoom(my_env);
 	return (0);
 }

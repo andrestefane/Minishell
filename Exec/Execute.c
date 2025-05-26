@@ -101,7 +101,7 @@ void	execute_last_command(t_pipex *data, t_command *curr,
 	}
 }
 
-void	ft_execute(t_minishell *mini, char **envir)
+void	ft_execute(t_minishell *mini)
 {
 	mini->pipex_data = init_pipex();
 	if (!mini->pipex_data)
