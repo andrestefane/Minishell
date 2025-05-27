@@ -107,6 +107,7 @@ void	ft_execute(t_minishell *mini)
 	mini->pipex_data = init_pipex();
 	if (!mini->pipex_data)
 		exit_with_error("Error init_pipex\n", 1, 2);
+	expand_all_tokens(mini->token_list, mini);
 	mini->pipex_data->builtins = is_builtin(mini);
 	mini->command_list = parse_commands(mini);
 	mini->pipex_data->commands = mini->command_list;
