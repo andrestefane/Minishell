@@ -36,7 +36,7 @@ void	execute_buitin(t_command *cmd, t_env *env_list)
 
 	if (!ft_strcmp(cmd->argv[0], "echo"))
 		ft_echo(cmd);
-	else if(!ft_strcmp(cmd->argv[0], "export"))
+	else if (!ft_strcmp(cmd->argv[0], "export"))
 		ft_export(cmd->argv, &env_list);
 	if (!ft_strcmp(cmd->argv[0], "exit"))
 		ft_exit(cmd);
@@ -44,11 +44,7 @@ void	execute_buitin(t_command *cmd, t_env *env_list)
 		ft_cd(cmd->argv, &env_list);
 	else if (!ft_strcmp(cmd->argv[0], "unset"))
 		ft_unset(cmd->argv, &env_list);
-	/*else if (!ft_strcmp(cmd->argv[0], "pwd"))
-		ft_pwd(cmd->argv, env);
-	else if (!ft_strcmp(cmd->argv[0], "env"))
-		ft_env(cmd->argv, env);
-	*/
+
 }
 
 void	execute_buitin_args(char **argv, char ***env)
@@ -60,10 +56,4 @@ void	execute_buitin_args(char **argv, char ***env)
 		ft_pwd(argv, *env);
 	else if (!ft_strcmp(argv[0], "env"))
 		ft_env(argv, *env);
-	// else if (!ft_strcmp(argv[0], "export"))
-	// 	ft_export(cmd->argv, env);
-/* 	else if (!ft_strcmp(argv, "cd"))
-		ft_cd(cmd->argv, env);
-	else if (!ft_strcmp(argv, "unset"))
-		ft_unset(cmd->argv, env);*/
 }
