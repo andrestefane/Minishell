@@ -33,12 +33,8 @@ void	process_token(t_command **curr, t_token **token,
 	data = mini->pipex_data;
 	if ((*token)->type == T_WORD)
 	{
-/* 		if ((*token)->type == T_DOLLAR && (*token)->next->type == T_QUESTION
-			|| (*token)->type == T_DOLLAR)
-		{
-			free((*token)->value);
-			(*token)->value = ft_itoa(g_status);
-		} */
+		if ((*token)->type != NO_EXPANSION)
+			expand_token(*token, mini);
 		add_arg_to_command(*curr, (*token)->value);
 	}
 	else if ((*token)->type == T_RED_IN && (*token)->next)

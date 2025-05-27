@@ -220,7 +220,8 @@ char							*env_entry(t_env *node);
 int								env_list_size(t_env	*env);
 
 // Var
-void							expand_token(t_token *token);
+void							expand_token(t_token *token, t_minishell *mini);
+char							*env_value(const char *name, t_env *env);
 
 // env
 char							*get_env_name(char **env, const char *name);

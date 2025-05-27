@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:05:07 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/17 17:52:33 by astefane         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:57:01 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # include <errno.h>
 # include <sys/wait.h>
 
-struct					s_token;
-typedef struct s_token t_token;
 
 typedef struct s_list
 {
