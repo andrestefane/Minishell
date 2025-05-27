@@ -148,10 +148,7 @@ char							*get_next_token_part(t_tokenizer *tok,
 char							*extract_quoted_token(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 
-
-
 // Exec
-
 
 void							execute_pipeline(t_minishell *mini);
 void							execute_command(t_pipex *data, char **args,
@@ -168,8 +165,9 @@ void							add_redir_to_cmd(t_command *cmd, int type,
 									const char *filename);
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
-void							execute_last_command(t_pipex *data,
-									t_command *curr, int i, t_env *env_list);
+void							execute_last_command(t_minishell *mini,
+									t_command *curr, int i);
+
 void							process_and_exec(t_pipex *data, t_command *cmd,
 									int i, t_env *envir_list);
 void							add_command_to_list(t_command **head,
@@ -184,7 +182,8 @@ int								get_heredoc_index(t_token *token,
 									t_token *target);
 void							parse_red_append(t_command *cmd,
 									t_token **token);
-void							ft_cmd(t_pipex *data, char **argv, t_env *env_list);
+void							ft_cmd(t_pipex *data, char **argv,
+									t_env *env_list);
 char							*create_path(char *possible_path,
 									char *command);
 void							parse_red_out(t_command *cmd, t_token **token);
@@ -217,7 +216,7 @@ int								token_has_pipe(t_token *token);
 void							free_redirs(t_redir *redir);
 char							**env_to_array(t_env *env_list);
 char							*env_entry(t_env *node);
-int								env_list_size(t_env	*env);
+int								env_list_size(t_env *env);
 
 // Var
 void							expand_token(t_token *token);
@@ -235,7 +234,8 @@ t_env							*create_env_list(char **envp);
 
 int								is_builtin(t_minishell *mini);
 int								is_builtin_str(char *str);
-void							execute_buitin(t_command *cmd, t_env *env_list);
+void							execute_buitin(t_command *cmd, t_env *env_list,
+									t_minishell *minishell);
 void							ft_unset(char **argv, t_env **env_list);
 void							ft_cd(char **argv, t_env **env_list);
 void							execute_buitin_args(char **argv, char ***env);
@@ -244,7 +244,8 @@ void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
 void							ft_env(char **argv, char **env);
 
-int								ft_exit(t_command *cmd);
+int								ft_exit(t_command *cmd, t_minishell *minishell);
+
 int								is_numeric(const char *str);
 
 void							ft_export(char **argv, t_env **env_list);
