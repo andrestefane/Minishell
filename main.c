@@ -27,7 +27,7 @@ static void	process_input(char *input, t_minishell *minishell)
 	if (!minishell->command_list)
 		return ;
 	ft_execute(minishell);
-	free_minishell(minishell);
+	// free_minishell(minishell);
 }
 
 char	*get_prompt(void)
@@ -62,8 +62,6 @@ void	mini_loop(t_minishell *minishell)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			close(saved_stdin);
-			free_env_list(minishell->env_list);
-			minishell->env_list = NULL;
 			free_minishell(minishell);
 			break ;
 		}
@@ -92,11 +90,15 @@ int	main(int argc, char **argv, char **env)
 		exit_with_error("Too many arguments\n", 1, 1);
 	minishell = init_minishell();
 	if (!minishell)
-		return (1);
+	{
+		free_minishell(minishell);
+		return(1);
+	}
 	my_env = copy_env(env);
 	minishell->env_list = create_env_list(my_env);
 	do_signal();
 	mini_loop(minishell);
+	free(minishell);
 	ft_freedoom(my_env);
 	return (0);
 }

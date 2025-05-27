@@ -30,7 +30,7 @@ int	is_builtin_str(char *str)
 		|| !ft_strcmp(str, "exit"));
 }
 
-void	execute_buitin(t_command *cmd, t_env *env_list)
+void	execute_buitin(t_command *cmd, t_env *env_list, t_minishell *minishell)
 {
 	printf("DEBUG: estás usando TU built-in para %s en el padre\n", cmd->argv[0]);
 
@@ -39,7 +39,7 @@ void	execute_buitin(t_command *cmd, t_env *env_list)
 	else if (!ft_strcmp(cmd->argv[0], "export"))
 		ft_export(cmd->argv, &env_list);
 	if (!ft_strcmp(cmd->argv[0], "exit"))
-		ft_exit(cmd);
+		ft_exit(cmd, minishell);
  	else if (!ft_strcmp(cmd->argv[0], "cd"))
 		ft_cd(cmd->argv, &env_list);
 	else if (!ft_strcmp(cmd->argv[0], "unset"))
