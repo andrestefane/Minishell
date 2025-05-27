@@ -1,2 +1,39 @@
 Da leaks / still reachable hacer enter en mini 
 da error al hacer ctrl + D
+
+
+
+
+
+// Esto tiene que llevar a home en nuestra mini, y lo que hace actualmente suelta un error 
+// sin hacer nada mas
+astefane@c2r18s6:~/proyectos/Minishell$ unset PWD
+astefane@c2r18s6:~/proyectos/Minishell$ cd $PWD
+astefane@c2r18s6:~$ 
+
+// Imitar este funcionamiento 
+
+astefane@c2r18s6:~/proyectos/Minishell$ mkdir hola
+astefane@c2r18s6:~/proyectos/Minishell$ cd hola/
+astefane@c2r18s6:~/proyectos/Minishell/hola$ rm -rf ../hola/
+astefane@c2r18s6:~/proyectos/Minishell/hola$ pwd
+/home/astefane/proyectos/Minishell/hola
+astefane@c2r18s6:~/proyectos/Minishell/hola$ cd ..
+astefane@c2r18s6:~/proyectos/Minishell$ 
+
+//Nuestro caso
+/home/astefane/proyectos/Minishell Minishell> mkdir hola
+
+/home/astefane/proyectos/Minishell Minishell> cd hola
+
+DEBUG: estás usando TU built-in para cd en el padre
+/home/astefane/proyectos/Minishell/hola Minishell> pwd
+
+DEBUG: estás usando TU built-in para pwd
+/home/astefane/proyectos/Minishell/hola
+/home/astefane/proyectos/Minishell/hola Minishell> rm -rf ../hola/
+
+Minishell> pwd
+DEBUG Token generado: [pwd] | Expansion Type: 0
+DEBUG: estás usando TU built-in para pwd
+Error pwd
