@@ -37,3 +37,13 @@ Minishell> pwd
 DEBUG Token generado: [pwd] | Expansion Type: 0
 DEBUG: estás usando TU built-in para pwd
 Error pwd
+
+
+
+
+//DA leaks
+cat < Makefile > outfile | echo hola
+
+
+<< a 
+ctrl+ c no va

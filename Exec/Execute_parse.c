@@ -33,7 +33,7 @@ void	process_token(t_command **curr, t_token **token,
 	data = mini->pipex_data;
 	if ((*token)->type == T_WORD)
 	{
-		if ((*token)->type != NO_EXPANSION)
+		if ((*token)->expansion_type != NO_EXPANSION)
 			expand_token(*token, mini);
 		add_arg_to_command(*curr, (*token)->value);
 	}

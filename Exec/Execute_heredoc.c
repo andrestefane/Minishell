@@ -24,6 +24,8 @@ int	here_doc(char *limiter, const char *filename)
 	while (1)
 	{
 		write(1, "> ", 2);
+		if (g_status == 130)
+			exit (130);
 		line = get_next_line(0, 0);
 		if (!line || ft_strcmp(line, limiter) == 0 || is_limiter(line, limiter))
 			break ;
