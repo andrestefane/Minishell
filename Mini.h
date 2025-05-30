@@ -99,7 +99,7 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
-typedef struct s_minishell
+typedef struct s_minishell //uwu
 {
 	t_env						*env_list;
 	t_token						*token_list;
