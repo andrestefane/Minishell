@@ -10,7 +10,7 @@ char	*get_filename(int index)
 	number = ft_itoa(index);
 	if (!number)
 		return (NULL);
-	temp = ft_strjoin(".temp/here_doc_", number);
+	temp = ft_strjoin("/home/astefane/proyectos/Minishell/.temp", number);
 	free(number);
 	if (!temp)
 		return (NULL);

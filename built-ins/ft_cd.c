@@ -1,6 +1,6 @@
 #include "../Mini.h"
 
-static char	*get_env_value(char *name, t_env *env)
+char	*get_env_value(char *name, t_env *env)
 {
 	while (env)
 	{

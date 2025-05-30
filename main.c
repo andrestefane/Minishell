@@ -6,6 +6,7 @@ static void	process_input(char *input, t_minishell *minishell)
 	t_token	*current;
 
 	add_history(input);
+	g_status = 0;
 	if (!fill_tokens(minishell, input))
 	{
 		ft_putstr("syntax error: unclosed quote\n", 2);
@@ -27,6 +28,7 @@ static void	process_input(char *input, t_minishell *minishell)
 	if (!minishell->command_list)
 		return ;
 	ft_execute(minishell);
+	add_env_node(&minishell->env_list, "?", ft_itoa(g_status), 1);
 	// free_minishell(minishell);
 }
 

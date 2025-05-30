@@ -36,6 +36,13 @@ void	parse_heredoc(t_command *cmd, t_token **token,
 	if (!(*token)->next || !(*token)->next->value)
 		exit_with_error("heredoc: missing limiter\n", 1, 2);
 	filename = handle_heredoc_in_command(cmd, (*token)->next->value, *index);
+	if (!filename)
+	{
+		g_status = 130;
+		cmd->is_heredoc = 0;
+
+		return ;
+	}
 	add_redir_to_cmd(cmd, T_HEREDOC, filename);
 	cmd->is_heredoc = 1;
 	data->count_heredoc++;
