@@ -64,7 +64,6 @@ void	mini_loop(t_minishell *minishell)
 		{
 			ft_putstr("\nLeaving...\n", 1);
 			close(saved_stdin);
-			free_minishell(minishell);
 			break ;
 		}
 		if (g_status == SIGINT)
@@ -100,7 +99,7 @@ int	main(int argc, char **argv, char **env)
 	minishell->env_list = create_env_list(my_env);
 	do_signal();
 	mini_loop(minishell);
-	free(minishell);
+	free_minishell(minishell);
 	ft_freedoom(my_env);
 	return (0);
 }
