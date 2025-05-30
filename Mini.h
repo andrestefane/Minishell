@@ -21,6 +21,7 @@ extern volatile sig_atomic_t	g_status;
 
 typedef struct s_env
 {
+	int							signal;
 	char						*name;
 	char						*value;
 	int							exported;
@@ -193,7 +194,7 @@ void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
 void							parse_red_in(t_command *cmd, t_token **token);
 char							**cmd_managment(t_pipex *data, char *cmd);
-
+void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
 void							apply_redirections(t_command *cmd);
@@ -224,6 +225,7 @@ char							*env_value(const char *name, t_env *env);
 
 // env
 char							*get_env_name(char **env, const char *name);
+char							*get_env_value(char *name, t_env *env);
 char							**copy_env(char **env);
 char							**append_env_variable(char **env,
 									const char *name, const char *value);

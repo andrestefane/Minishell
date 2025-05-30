@@ -107,9 +107,15 @@ void	ft_execute(t_minishell *mini)
 	mini->pipex_data = init_pipex();
 	if (!mini->pipex_data)
 		exit_with_error("Error init_pipex\n", 1, 2);
-	/* expand_all_tokens(mini->token_list, mini); */
 	mini->pipex_data->builtins = is_builtin(mini);
 	mini->command_list = parse_commands(mini);
+	if (!mini->command_list || g_status == 130)
+	{
+		ft_putnbr(g_status);
+		ft_putstr(": ", 2);
+		ft_putstr("Sabessssssss\n", 2);
+		return ;
+	}
 	mini->pipex_data->commands = mini->command_list;
 	if (!mini->command_list)
 		exit_with_error("Error parsing commands\n", 1, 2);
