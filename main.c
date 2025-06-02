@@ -22,11 +22,11 @@ static void	process_input(char *input, t_minishell *minishell)
 		return ;
 	}
 	current = minishell->token_list;
-	while (current)
+/* 	while (current)
 	{
 		printf("Token: %s, Type: %d\n", current->value, current->type);
 		current = current->next;
-	}
+	} */
 	// minishell->command_list = parse_single_command(minishell);
 	// free_token_list(minishell->token_list);
 	// minishell->token_list = NULL;
@@ -82,7 +82,6 @@ void	mini_loop(t_minishell *minishell)
 		free(prompt);
 		if (!input)
 		{
-			ft_putstr("\nLeaving...\n", 1);
 			close(saved_stdin);
 			break ;
 		}

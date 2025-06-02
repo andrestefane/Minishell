@@ -52,7 +52,7 @@ OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
 TEMP_DIR = .temp
 
-NAME = Mini
+NAME = minishell
 INCLUDES = -I. -I includes
 
 TOTAL_FILES := $(words $(SRCS))

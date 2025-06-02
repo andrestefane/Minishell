@@ -29,7 +29,8 @@ int	fill_tokens(t_minishell *minishell, char *input)
 		if (!val)
 			return (1);
 		t_token *tok_debug = create_token_and_detect_expansion(minishell, val, type, quote);
-		printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type);
+		/* printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type); */
+		(void) tok_debug;
 		free(val);
 		tok.prev_type = type;
 	}
