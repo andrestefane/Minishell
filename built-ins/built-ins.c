@@ -32,8 +32,8 @@ int	is_builtin_str(char *str)
 
 void	execute_buitin(t_command *cmd, t_env *env_list, t_minishell *minishell)
 {
-	printf("DEBUG: estás usando TU built-in para %s en el padre\n", cmd->argv[0]);
-
+	/* printf("DEBUG: estás usando TU built-in para %s en el padre\n", cmd->argv[0]);
+ */
 	if (!ft_strcmp(cmd->argv[0], "echo"))
 		ft_echo(cmd);
 	else if (!ft_strcmp(cmd->argv[0], "export"))
@@ -49,7 +49,7 @@ void	execute_buitin(t_command *cmd, t_env *env_list, t_minishell *minishell)
 
 void	execute_buitin_args(char **argv, char ***env)
 {
-	printf("DEBUG: estás usando TU built-in para %s\n", argv[0]);
+	/* printf("DEBUG: estás usando TU built-in para %s\n", argv[0]); */
 	if (!ft_strcmp(argv[0], "echo"))
 		ft_echo_arg(argv);
 	else if (!ft_strcmp(argv[0], "pwd"))
