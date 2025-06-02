@@ -28,13 +28,31 @@ t_env	*find_env(t_env *env_list, const char *name)
 
 void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 {
-	t_env	*new;
 	t_env	*tmp;
+	t_env	*new;
 
+	tmp = *env_list;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->name, name))
+		{
+			if (value)
+			{
+				tmp->value = ft_strdup(value);
+				return ;
+			}
+			else
+				tmp->value = NULL;
+			tmp->exported = exported;
+		}
+		tmp = tmp->next;
+	}
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return ;
 	new->name = ft_strdup(name);
+	if (!new->name)
+		return ;
 	if (value)
 		new->value = ft_strdup(value);
 	else
@@ -42,14 +60,14 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 	new->exported = exported;
 	new->next = NULL;
 	if (!*env_list)
-	{
 		*env_list = new;
-		return ;
+	else
+	{
+		tmp = *env_list;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
 	}
-	tmp = *env_list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
 }
 
 int	count_exported(t_env *env)
@@ -65,6 +83,7 @@ int	count_exported(t_env *env)
 	}
 	return (count);
 }
+
 void	print_sorted_env(t_env *env)
 {
 	int		count;
@@ -86,6 +105,7 @@ void	print_sorted_env(t_env *env)
 	print_env_array(arr, count);
 	free(arr);
 }
+
 void	add_or_update_env(char *arg, t_env **env_list)
 {
 	t_env	*var;
