@@ -33,7 +33,6 @@ static void	process_input(char *input, t_minishell *minishell)
 	// if (!minishell->command_list)
 	// 	return ;
 	ft_execute(minishell);
-
 	free_token_list(minishell->token_list);
 	minishell->token_list = NULL;
 
@@ -85,7 +84,7 @@ void	mini_loop(t_minishell *minishell)
 			close(saved_stdin);
 			break ;
 		}
-		if (g_status == SIGINT)
+		if (g_status == 128 + SIGINT)
 		{
 			g_status = 0;
 			free(input);

@@ -218,6 +218,7 @@ void							free_redirs(t_redir *redir);
 char							**env_to_array(t_env *env_list);
 char							*env_entry(t_env *node);
 int								env_list_size(t_env *env);
+void							check_errno(int err, char **args);
 
 // Var
 void							expand_token(t_token *token, t_minishell *mini);
@@ -241,7 +242,7 @@ void							execute_buitin(t_command *cmd, t_env *env_list,
 									t_minishell *minishell);
 void							ft_unset(char **argv, t_env **env_list);
 void							ft_cd(char **argv, t_env **env_list);
-void							execute_buitin_args(char **argv, char ***env);
+void							execute_buitin_args(char **argv, char ***env, t_env *env_list);
 void							ft_echo(t_command *cmd);
 void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
