@@ -23,13 +23,14 @@ static void	process_input(char *input, t_minishell *minishell)
 	}
 	current = minishell->token_list;
 	ft_execute(minishell);
-	free_token_list(minishell->token_list);
-	minishell->token_list = NULL;
 	if (minishell->pipex_data)
 	{
 		free_pipex_data(minishell->pipex_data);
 		minishell->pipex_data = NULL;
+		minishell->command_list = NULL;
 	}
+	free_token_list(minishell->token_list);
+	minishell->token_list = NULL;
 	status_str = ft_itoa(g_status);
 	add_env_node(&minishell->env_list, "?", status_str, 1);
 	free(status_str);
@@ -105,7 +106,6 @@ int	main(int argc, char **argv, char **env)
 	minishell->env_list = create_env_list(my_env);
 	do_signal();
 	mini_loop(minishell);
-	free_minishell(minishell);
 	ft_freedoom(my_env);
 	return (0);
 }

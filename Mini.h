@@ -182,17 +182,19 @@ void							exit_with_error(char *message, int exit_code,
 int								get_heredoc_index(t_token *token,
 									t_token *target);
 void							parse_red_append(t_command *cmd,
-									t_token **token);
+									t_token **token, t_pipex *data);
 void							ft_cmd(t_pipex *data, char **argv,
 									t_env *env_list);
 char							*create_path(char *possible_path,
 									char *command);
-void							parse_red_out(t_command *cmd, t_token **token);
+void							parse_red_out(t_command *cmd, t_token **token,
+									t_pipex *data);
 t_command						*parse_commands(t_minishell *mini);
 int								here_doc(char *limiter, const char *filename);
 void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
-void							parse_red_in(t_command *cmd, t_token **token);
+void							parse_red_in(t_command *cmd, t_token **token,
+									t_pipex *data);
 char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);

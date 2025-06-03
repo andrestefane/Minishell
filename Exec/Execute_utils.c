@@ -96,6 +96,11 @@ char **paths, char **envir)
 			free_and_exit(args, paths, 0);
 		if (access(path, F_OK) != -1)
 		{
+			if (data)
+			{
+				free_pipex_data(data);
+				data = NULL;
+			}
 			execve(path, args, envir);
 			free(path);
 			check_errno(errno, args);

@@ -16,4 +16,3 @@ void	free_minishell(t_minishell *minishell)
 		free_pipex_data(minishell->pipex_data);
 	free(minishell);
 }
-
