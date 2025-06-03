@@ -74,6 +74,7 @@ void	execute_command(t_minishell *mini, char **paths, char **envir)
 			free_and_exit(mini->command_list->argv, paths, 0);
 		if (access(path, F_OK) != -1)
 		{
+
 			execve(path, mini->command_list->argv, envir);
 			free_pipex_data(mini->pipex_data);
 			ft_freedoom(paths);
