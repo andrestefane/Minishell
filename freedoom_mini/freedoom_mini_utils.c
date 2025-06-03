@@ -35,8 +35,9 @@ void	free_redir_list(t_redir *redir)
 
 	while (redir)
 	{
-		printf("HOLA REDIR: liberando filename = \"%s\", ptr = %p\n",
-				redir->filename, (void *)redir->filename);		tmp = redir->next;
+/* 		printf("HOLA REDIR: liberando filename = \"%s\", ptr = %p\n",
+				redir->filename, (void *)redir->filename); */
+		tmp = redir->next;
 		free(redir->filename);
 		free(redir);
 		redir = tmp;
@@ -56,9 +57,7 @@ void	free_command_list(t_command *cmd)
 		if (cmd->argv)
 		{
 			i = 0;
-			while (cmd->argv[i])
-				free(cmd->argv[i++]);
-			free(cmd->argv);
+			ft_freedoom(cmd->argv);
 		}
 		free(cmd->infile);
 		free(cmd->outfile);
