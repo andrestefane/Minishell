@@ -58,8 +58,10 @@ void	ft_export(char **argv, t_env **env_list)
 	int		i;
 	char	*equal;
 	char	*name;
+	int		error;
 
 	i = 1;
+	error = 0;
 	if (!argv[1])
 	{
 		print_sorted_env(*env_list);
@@ -72,19 +74,22 @@ void	ft_export(char **argv, t_env **env_list)
 			name = ft_substr(argv[i], 0, equal - argv[i]);
 		else
 			name = ft_strdup(argv[i]);
-
 		if (!is_valid_identifier(name))
-			printf("export: `%s`: not a valid identifier\n", argv[i]);
+		{
+			ft_putstr("export: `", 2);
+			ft_putstr(argv[i], 2);
+			ft_putstr("': not a valid identifier\n", 2);
+			error = 1;
+		}
 		else if (equal)
-			add_or_update_env(argv[i], env_list);  // caso export VAR=value
+			add_or_update_env(argv[i], env_list);
 		else
-			mark_as_exported(name, env_list);     // caso export VAR
-
+			mark_as_exported(name, env_list);
 		free(name);
 		i++;
 	}
+	g_status = error;
 }
-
 
 void	sort_env_array(t_env **arr, int count)
 {

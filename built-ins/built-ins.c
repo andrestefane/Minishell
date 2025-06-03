@@ -42,6 +42,8 @@ void	execute_buitin(t_command *cmd, t_env *env_list, t_minishell *minishell)
 		ft_cd(cmd->argv, &env_list);
 	else if (!ft_strcmp(cmd->argv[0], "unset"))
 		ft_unset(cmd->argv, &env_list);
+	else if (!ft_strcmp(cmd->argv[0], "export"))
+		ft_export(cmd->argv, &env_list);
 
 }
 
