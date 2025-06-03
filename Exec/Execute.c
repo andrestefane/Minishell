@@ -1,72 +1,65 @@
 #include "../Mini.h"
 
-void	process_and_exec(t_pipex *data, t_command *cmd, int i,
-		t_env *envir_list)
+void	process_and_exec(t_minishell *mini, int i)
 {
 	int	fd[2];
 
 	if (pipe(fd) == -1)
-		free_struct(data, ERR_PIPE, 1, 2);
-	data->pid[i] = fork();
-	if (data->pid[i] == -1)
-		free_struct(data, ERR_FORK, 1, 2);
-	if (data->pid[i] == 0)
-		child_process(data, cmd, fd, envir_list);
+		free_struct(mini->pipex_data, ERR_PIPE, 1, 2);
+	mini->pipex_data->pid[i] = fork();
+	if (mini->pipex_data->pid[i] == -1)
+		free_struct(mini->pipex_data, ERR_FORK, 1, 2);
+	if (mini->pipex_data->pid[i] == 0)
+		child_process(mini, fd);
 	else
 	{
-		if (data->prev_fd != -1)
-			close(data->prev_fd);
-		data->prev_fd = fd[0];
+		if (mini->pipex_data->prev_fd != -1)
+			close(mini->pipex_data->prev_fd);
+		mini->pipex_data->prev_fd = fd[0];
 		close(fd[1]);
 	}
 }
 
-void	child_process(t_pipex *data, t_command *cmd, int fd[2],
-		t_env *envir_list)
+void	child_process(t_minishell *mini, int fd[2])
 {
-	apply_redirections(cmd);
-	if (!has_redir_type(cmd, T_RED_IN) && !has_redir_type(cmd, T_HEREDOC)
-		&& data->prev_fd != -1)
+	apply_redirections(mini->command_list);
+	if (!has_redir_type(mini->command_list, T_RED_IN)
+		&& !has_redir_type(mini->command_list, T_HEREDOC)
+		&& mini->pipex_data->prev_fd != -1)
 	{
-		if (dup2(data->prev_fd, STDIN_FILENO) == -1)
+		if (dup2(mini->pipex_data->prev_fd, STDIN_FILENO) == -1)
 			exit_with_error("dup2 prev_fd failed\n", 1, 2);
 	}
-	if (data->prev_fd != -1)
-		close(data->prev_fd);
-	if (!has_redir_type(cmd, T_RED_OUT) && !has_redir_type(cmd, T_RED_APPEND))
+	if (mini->pipex_data->prev_fd != -1)
+		close(mini->pipex_data->prev_fd);
+	if (!has_redir_type(mini->command_list, T_RED_OUT)
+		&& !has_redir_type(mini->command_list, T_RED_APPEND))
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			exit_with_error("dup2 pipe write failed\n", 1, 2);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	if (!cmd->argv || !cmd->argv[0])
+	if (!mini->command_list->argv || !mini->command_list->argv[0])
 		exit(0);
-	ft_cmd(data, cmd->argv, envir_list);
+	ft_cmd(mini);
 }
 
 void	execute_pipeline(t_minishell *mini)
 {
-	t_command	*curr;
-	t_pipex		*data;
-	t_env		*env_list;
 	int			i;
 
-	curr = mini->command_list;
 	i = 0;
-	data = mini->pipex_data;
-	env_list = mini->env_list;
-	data->prev_fd = -1;
-	while (curr && i < data->n_cmds - 1)
+	while (mini->command_list && i < mini->pipex_data->n_cmds - 1)
 	{
-		process_and_exec(data, curr, i, env_list);
-		curr = curr->next;
+		process_and_exec(mini, i);
+		mini->command_list = mini->command_list->next;
 		i++;
 	}
-	execute_last_command(mini, curr, i);
-	if (data->prev_fd != -1)
-		close(data->prev_fd);
-	wait_status(data);
+	execute_last_command(mini, mini->command_list, i);
+	if (mini->pipex_data->prev_fd != -1)
+		close(mini->pipex_data->prev_fd);
+	wait_status(mini->pipex_data);
 }
 
 void	execute_last_command(t_minishell *mini, t_command *curr, int i)
@@ -94,7 +87,7 @@ void	execute_last_command(t_minishell *mini, t_command *curr, int i)
 			apply_redirections(curr);
 			if (!curr->argv || !curr->argv[0])
 				exit(0);
-			ft_cmd(mini->pipex_data, curr->argv, mini->env_list);
+			ft_cmd(mini);
 		}
 	}
 }
