@@ -10,7 +10,7 @@ void	ft_cmd(t_pipex *data, char **argv, t_env *env_list)
 	envir = env_to_array(env_list);
 	if (is_builtin_str(argv[0]))
 	{
-		execute_buitin_args(argv, &envir);
+		execute_buitin_args(argv, &envir, env_list);
 		exit(0);
 	}
 	if (!envir || !*envir)
@@ -94,8 +94,12 @@ char **paths, char **envir)
 		path = create_path(paths[i], args[0]);
 		if (!path)
 			free_and_exit(args, paths, 0);
-		if (access(path, X_OK) != -1)
+		if (access(path, F_OK) != -1)
+		{
 			execve(path, args, envir);
+			free(path);
+			check_errno(errno, args);
+		}
 		free(path);
 		i++;
 	}
@@ -104,4 +108,33 @@ char **paths, char **envir)
 	free(data->pid);
 	free(data);
 	free_and_exit(args, paths, 127);
+}
+
+void	check_errno(int err, char **args)
+{
+	if (err == EISDIR)
+	{
+		ft_putstr(": Is a directory\n", 2);
+		(ft_freedoom(args), exit(126));
+	}
+	else if (err == EACCES || !access(args[0], X_OK))
+	{
+		if (!ft_strchr(args[0], '/'))
+		{
+			ft_putstr(": command not found\n", 2);
+			(ft_freedoom(args), exit(127));
+		}
+		ft_putstr(": Permission denied\n", 2);
+		(ft_freedoom(args), exit(126));
+	}
+	else if (err == ENOENT)
+	{
+		ft_putstr(": command not found\n", 2);
+		(ft_freedoom(args), exit(127));
+	}
+	else
+	{
+		(ft_putstr(": ", 2), ft_putstr(strerror(err), 2));
+		(ft_putstr("\n", 2), ft_freedoom(args), exit(1));
+	}
 }

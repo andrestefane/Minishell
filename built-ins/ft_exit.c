@@ -31,7 +31,7 @@ int	ft_exit(t_command *cmd, t_minishell *minishell)
 	}
 	if (cmd->argv[2])
 	{
-		ft_putstr("exit: too many arguments\n", 2);
+		ft_putstr(" too many arguments\n", 2);
 		return (1);
 	}
 	if (!is_numeric(cmd->argv[1]))
@@ -39,12 +39,12 @@ int	ft_exit(t_command *cmd, t_minishell *minishell)
 		ft_putstr("exit: ", 2);
 		ft_putstr(cmd->argv[1], 2);
 		ft_putstr(": numeric argument required\n", 2);
-		free_minishell(minishell);
-		free(minishell);
+	/* 	free_minishell(minishell);
+		free(minishell); */
 		exit(255);
 	}
 	code = ft_atoi(cmd->argv[1]);
-	free_minishell(minishell);
-	free(minishell);
+/* 	free_minishell(minishell);
+	free(minishell); */
 	exit(code % 256);
 }
