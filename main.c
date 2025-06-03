@@ -22,30 +22,14 @@ static void	process_input(char *input, t_minishell *minishell)
 		return ;
 	}
 	current = minishell->token_list;
-/* 	while (current)
-	{
-		printf("Token: %s, Type: %d\n", current->value, current->type);
-		current = current->next;
-	} */
-	// minishell->command_list = parse_single_command(minishell);
-	// free_token_list(minishell->token_list);
-	// minishell->token_list = NULL;
-	// if (!minishell->command_list)
-	// 	return ;
 	ft_execute(minishell);
 	free_token_list(minishell->token_list);
 	minishell->token_list = NULL;
-
-	free_command_list(minishell->command_list);
-	minishell->command_list = NULL;
-
 	if (minishell->pipex_data)
 	{
-		free(minishell->pipex_data->pid);
 		free_pipex_data(minishell->pipex_data);
 		minishell->pipex_data = NULL;
 	}
-
 	status_str = ft_itoa(g_status);
 	add_env_node(&minishell->env_list, "?", status_str, 1);
 	free(status_str);
@@ -83,6 +67,13 @@ void	mini_loop(t_minishell *minishell)
 		{
 			close(saved_stdin);
 			break ;
+		}
+		if (input[0] == '\0') // Enter vacío
+		{
+			free(input);
+			dup2(saved_stdin, STDIN_FILENO);
+			close(saved_stdin);
+			continue;
 		}
 		if (g_status == 128 + SIGINT)
 		{
