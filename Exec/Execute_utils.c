@@ -1,16 +1,19 @@
 #include "../Mini.h"
 
 // Puede ser que haya que liberar el env si falla
-void	ft_cmd(t_pipex *data, char **argv, t_env *env_list)
+void	ft_cmd(t_minishell *mini)
 {
 	char	**possible_paths;
 	char	*path_line;
 	char	**envir;
 
-	envir = env_to_array(env_list);
-	if (is_builtin_str(argv[0]))
+	envir = env_to_array(mini->env_list);
+	if (is_builtin_str(mini->command_list->argv[0]))
 	{
-		execute_buitin_args(argv, &envir, env_list);
+		execute_buitin_args(mini->command_list->argv, &envir, mini->env_list);
+		free_env_list(mini->env_list);
+		free_pipex_data(mini->pipex_data);
+		ft_freedoom(envir);
 		exit(0);
 	}
 	if (!envir || !*envir)
@@ -21,32 +24,8 @@ void	ft_cmd(t_pipex *data, char **argv, t_env *env_list)
 	possible_paths = ft_split(path_line, ':');
 	if (!possible_paths)
 		exit_with_error("Error possible path\n", 1, 2);
-	execute_command(data, argv, possible_paths, envir);
-}
-
-char	**cmd_managment(t_pipex *data, char *cmd)
-{
-	char	**cmd_split;
-	char	*cmd_only;
-	char	*arg_only;
-
-	if (!cmd || !*cmd)
-		free_struct(data, "Error cmd_managment\n", 1, 2);
-	cmd_split = ft_split(cmd, ' ');
-	if (!cmd_split || !cmd_split[0])
-		return (ft_freedoom(cmd_split), NULL);
-	cmd_only = ft_strdup(cmd_split[0]);
-	ft_freedoom(cmd_split);
-	arg_only = ft_strchr(cmd, 39);
-	if (!arg_only)
-		return (free(cmd_only), split_command(cmd));
-	cmd_split = malloc(sizeof(char *) * 3);
-	if (!cmd_split)
-		free_struct(data, "Error cmd_split\n", 1, 2);
-	cmd_split[0] = cmd_only;
-	cmd_split[1] = ft_strtrim(arg_only, "'");
-	cmd_split[2] = NULL;
-	return (cmd_split);
+	free_env_list(mini->env_list);
+	execute_command(mini, possible_paths, envir);
 }
 
 char	*find_execpath(char **envir)
@@ -80,34 +59,37 @@ char	*create_path(char *possible_path, char *command)
 	return (path);
 }
 
-void	execute_command(t_pipex *data, char **args,
-char **paths, char **envir)
+void	execute_command(t_minishell *mini, char **paths, char **envir)
 {
 	char	*path;
 	int		i;
 
 	if (!envir || !*envir)
-		free_struct(data, "Missing environment\n", 1, 2);
+		free_struct(mini->pipex_data, "Missing environment\n", 1, 2);
 	i = 0;
 	while (paths[i] != NULL)
 	{
-		path = create_path(paths[i], args[0]);
+		path = create_path(paths[i], mini->command_list->argv[0]);
 		if (!path)
-			free_and_exit(args, paths, 0);
+			free_and_exit(mini->command_list->argv, paths, 0);
 		if (access(path, F_OK) != -1)
 		{
-			execve(path, args, envir);
+
+			execve(path, mini->command_list->argv, envir);
+			free_pipex_data(mini->pipex_data);
+			ft_freedoom(paths);
+			ft_freedoom(envir);
 			free(path);
-			check_errno(errno, args);
+			check_errno(errno, mini->command_list->argv);
 		}
 		free(path);
 		i++;
 	}
-	ft_putstr(args[0], 2);
+	ft_putstr(mini->command_list->argv[0], 2);
 	ft_putstr(": Command not found\n", 2);
-	free(data->pid);
-	free(data);
-	free_and_exit(args, paths, 127);
+	free_pipex_data(mini->pipex_data);
+	ft_freedoom(envir);
+	(ft_freedoom(paths), exit(127));
 }
 
 void	check_errno(int err, char **args)
