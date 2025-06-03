@@ -43,7 +43,7 @@ static void	process_input(char *input, t_minishell *minishell)
 	if (minishell->pipex_data)
 	{
 		free(minishell->pipex_data->pid);
-		free(minishell->pipex_data);
+		free_pipex_data(minishell->pipex_data);
 		minishell->pipex_data = NULL;
 	}
 

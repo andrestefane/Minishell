@@ -33,7 +33,7 @@ void	add_arg_to_command(t_command *cmd, char *arg)
 		exit_with_error("Error malloc argv\n", 1, 2);
 	while (i < count)
 	{
-		new_argv[i] = ft_strdup(cmd->argv[i]);
+		new_argv[i] = cmd->argv[i];
 		i++;
 	}
 	new_argv[count] = ft_strdup(arg);
