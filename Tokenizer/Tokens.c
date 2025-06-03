@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/26 17:35:45 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:14:14 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ char	*extract_token(t_tokenizer *tok, t_token_type *type,
 		return (NULL);
 	if (extract_metachar(tok, type, quote))
 		return (ft_strdup(""));
-	return (extract_complex_token(tok, type, quote));
+	char *val = extract_complex_token(tok, type, quote);
+	// printf("DEBUG: extract_complex_token devuelve quote=%d\n", *quote);
+	return (val);
+
 }

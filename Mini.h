@@ -223,6 +223,9 @@ void							check_errno(int err, char **args);
 // Var
 void							expand_token(t_token *token, t_minishell *mini);
 char							*env_value(const char *name, t_env *env);
+void	append_literal(char **res, char *src, int len);
+void	append_var(char **res, char *src, int *i, t_minishell *mini);
+char	*expand_env_in_str(char *src, t_minishell *mini);
 
 // env
 char							*get_env_name(char **env, const char *name);
