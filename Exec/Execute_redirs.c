@@ -55,6 +55,8 @@ void	add_redir_to_cmd(t_command *cmd, int type, const char *filename)
 		exit_with_error("malloc failed in redir\n", 1, 2);
 	new->type = type;
 	new->filename = ft_strdup(filename);
+	printf("ADD_REDIR: acabo de hacer ft_strdup con \"%s\" → puntero %p\n",
+           filename, (void *)new->filename);
 	new->next = NULL;
 	if (!cmd->redirs)
 		cmd->redirs = new;
