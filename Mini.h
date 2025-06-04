@@ -279,6 +279,6 @@ t_token							*init_token(char *value, t_token_type type,
 									t_token_quote quote, t_expansion_type exp);
 t_env							*init_env_list(char *name, char *value,
 									int exported);
-t_minishell						*init_minishell(void);
+t_minishell						init_minishell(void);
 
 #endif

@@ -97,19 +97,16 @@ void	mini_loop(t_minishell *minishell)
 int	main(int argc, char **argv, char **env)
 {
 	char		**my_env;
-	t_minishell	*minishell;
+	t_minishell	minishell;
 
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Too many arguments\n", 1, 1);
 	minishell = init_minishell();
-	if (!minishell)
-		return (1);
 	my_env = copy_env(env);
-	minishell->env_list = create_env_list(my_env);
+	minishell.env_list = create_env_list(my_env);
 	ft_freedoom(my_env);
 	do_signal();
-	mini_loop(minishell);
-	free_minishell(minishell);
+	mini_loop(&minishell);
 	return (0);
 }
