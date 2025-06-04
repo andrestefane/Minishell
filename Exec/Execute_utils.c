@@ -72,24 +72,20 @@ void	execute_command(t_minishell *mini, char **paths, char **envir)
 		path = create_path(paths[i], mini->command_list->argv[0]);
 		if (!path)
 			free_and_exit(mini->command_list->argv, paths, 0);
-		if (access(path, F_OK) != -1)
+		if (access(path, F_OK) != -1 && access(path, X_OK) == 0)
 		{
-
 			execve(path, mini->command_list->argv, envir);
 			free_pipex_data(mini->pipex_data);
 			ft_freedoom(paths);
-			ft_freedoom(envir);
 			free(path);
 			check_errno(errno, mini->command_list->argv);
 		}
 		free(path);
 		i++;
 	}
-	ft_putstr(mini->command_list->argv[0], 2);
-	ft_putstr(": Command not found\n", 2);
-	free_pipex_data(mini->pipex_data);
-	ft_freedoom(envir);
-	(ft_freedoom(paths), exit(127));
+	(check_errno(errno, mini->command_list->argv),
+		free_pipex_data(mini->pipex_data), ft_freedoom(envir),
+		ft_freedoom(paths), exit(127));
 }
 
 void	check_errno(int err, char **args)
@@ -99,14 +95,12 @@ void	check_errno(int err, char **args)
 		ft_putstr(": Is a directory\n", 2);
 		(ft_freedoom(args), exit(126));
 	}
-	else if (err == EACCES || !access(args[0], X_OK))
+	else if (err == EACCES)
 	{
-		if (!ft_strchr(args[0], '/'))
-		{
+		if (args[0] && !ft_strchr(args[0], '/'))
 			ft_putstr(": command not found\n", 2);
-			(ft_freedoom(args), exit(127));
-		}
-		ft_putstr(": Permission denied\n", 2);
+		else
+			ft_putstr(": Permission denied\n", 2);
 		(ft_freedoom(args), exit(126));
 	}
 	else if (err == ENOENT)
@@ -116,7 +110,7 @@ void	check_errno(int err, char **args)
 	}
 	else
 	{
-		(ft_putstr(": ", 2), ft_putstr(strerror(err), 2));
-		(ft_putstr("\n", 2), ft_freedoom(args), exit(1));
+		(ft_putstr(": ", 2), ft_putstr(strerror(err), 2),
+			ft_putstr("\n", 2), ft_freedoom(args), exit(1));
 	}
 }
