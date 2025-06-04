@@ -72,12 +72,12 @@ void	mini_loop(t_minishell *minishell)
 			close(saved_stdin);
 			break ;
 		}
-		if (input[0] == '\0') // Enter vacío
+		if (input[0] == '\0')
 		{
 			free(input);
 			dup2(saved_stdin, STDIN_FILENO);
 			close(saved_stdin);
-			continue;
+			continue ;
 		}
 		if (g_status == 128 + SIGINT)
 		{
@@ -98,6 +98,7 @@ int	main(int argc, char **argv, char **env)
 {
 	char		**my_env;
 	t_minishell	minishell;
+	char	*status_str;
 
 	(void)argv;
 	if (argc != 1)
@@ -105,6 +106,8 @@ int	main(int argc, char **argv, char **env)
 	minishell = init_minishell();
 	my_env = copy_env(env);
 	minishell.env_list = create_env_list(my_env);
+	status_str = ft_itoa(g_status);
+	add_env_node(&minishell.env_list, "?", status_str, 1);
 	ft_freedoom(my_env);
 	do_signal();
 	mini_loop(&minishell);
