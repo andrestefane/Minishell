@@ -1,12 +1,16 @@
 
 #include "Mini.h"
 
-static void	process_input(char *input, t_minishell *minishell)
+static void	process_input(char *input, t_minishell *minishell, char **env)
 {
 	t_token	*current;
 	char	*status_str;
+	char	**my_env;
 
 	add_history(input);
+	my_env = copy_env(env);
+	minishell->env_list = create_env_list(my_env);
+	ft_freedoom(my_env);
 	g_status = 0;
 	if (!fill_tokens(minishell, input))
 	{
@@ -55,7 +59,7 @@ char	*get_prompt(void)
 	return (pront);
 }
 
-void	mini_loop(t_minishell *minishell)
+void	mini_loop(t_minishell *minishell, char **env)
 {
 	char	*prompt;
 	char	*input;
@@ -77,7 +81,7 @@ void	mini_loop(t_minishell *minishell)
 			free(input);
 			dup2(saved_stdin, STDIN_FILENO);
 			close(saved_stdin);
-			continue;
+			continue ;
 		}
 		if (g_status == 128 + SIGINT)
 		{
@@ -87,7 +91,7 @@ void	mini_loop(t_minishell *minishell)
 			close(saved_stdin);
 			continue ;
 		}
-		process_input(input, minishell);
+		process_input(input, minishell, env);
 		free(input);
 		dup2(saved_stdin, STDIN_FILENO);
 		close(saved_stdin);
@@ -96,20 +100,13 @@ void	mini_loop(t_minishell *minishell)
 
 int	main(int argc, char **argv, char **env)
 {
-	char		**my_env;
-	t_minishell	*minishell;
+	t_minishell	minishell;
 
 	(void)argv;
 	if (argc != 1)
 		exit_with_error("Too many arguments\n", 1, 1);
-	minishell = init_minishell();
-	if (!minishell)
-		return (1);
-	my_env = copy_env(env);
-	minishell->env_list = create_env_list(my_env);
-	ft_freedoom(my_env);
+	ft_bzero(&minishell, sizeof(t_minishell));
 	do_signal();
-	mini_loop(minishell);
-	free_minishell(minishell);
+	mini_loop(&minishell, env);
 	return (0);
 }

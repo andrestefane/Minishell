@@ -1,92 +1,65 @@
-CC = cc
-CFLAGS = -g3 -Wall -Wextra -Werror 
-LIBFT = libft
-LIBFT_DIR = libft/
-LIBFT_LIB = $(LIBFT_DIR)libft.a
-LDFLAGS = -lreadline
-
-OBJ_DIR = obj
-SRCS = \
-	main.c \
-	./freedoom_mini/freedoom_mini.c \
-	./freedoom_mini/freedoom_mini_utils.c \
-	./init_struct/init_struct_utils.c \
-	./init_struct/init_struct.c \
-	./Tokenizer/Tokens.c \
-	./Tokenizer/tokenizer_utils.c \
-	./Tokenizer/metachar_utils.c \
-	./Tokenizer/quoted_utils.c \
-	./Tokenizer/expansion_utils.c \
-	./Varibles/variables.c \
-	./Varibles/variables_utils.c \
-	./Exec/Execute_add_commands.c \
-	./Exec/Execute_freedom.c \
-	./Exec/Execute_freedoom_utils.c \
-	./Exec/Execute_heredoc_utils.c \
-	./Exec/Execute_heredoc.c \
-	./Exec/Execute_init.c \
-	./Exec/Execute_list_to_array.c \
-	./Exec/Execute_parse_utils.c \
-	./Exec/Execute_parse.c \
-	./Exec/Execute_redirs_utils.c \
-	./Exec/Execute_redirs.c \
-	./Exec/Execute_utils.c \
-	./Exec/Execute_wait_status.c \
-	./Exec/Execute.c \
-	./Parser/parser.c \
-	./Parser/parser_utils.c \
-	./Parser/signals.c \
-	./env/get_env.c \
-	./env/set_and_unset_env.c \
-	./built-ins/built-ins.c \
-	./built-ins/ft_echo.c \
-	./built-ins/ft_pwd.c \
-	./built-ins/ft_env.c \
-	./built-ins/ft_exit.c \
-	./built-ins/ft_export.c \
-	./built-ins/ft_cd.c \
-	./built-ins/ft_unset.c\
-	./built-ins/ft_export_utils.c \
-
-OBJS = $(SRCS:.c=.o)
-OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))
-TEMP_DIR = .temp
-
-NAME = minishell
-INCLUDES = -I. -I includes
-
-TOTAL_FILES := $(words $(SRCS))
-COUNT = 0
-
-all: $(LIBFT_LIB) $(NAME) $(TEMP_DIR)
-
-$(LIBFT_LIB):
-	@echo "\033[1;33mCompiling libft...\033[0m"
-	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
-
-$(NAME): $(OBJ_FILES) $(LIBFT_LIB)
-	@ $(CC) $(CFLAGS) $(OBJ_FILES) -o $(NAME) $(LIBFT_LIB) $(LDFLAGS)
-
-$(TEMP_DIR):
-	@mkdir -p $(TEMP_DIR)
-
-$(OBJ_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
-	@if [ "$(COUNT)" -eq "0" ]; then echo "\033[1;33mCompiling Mini...\033[0m"; fi
-	$(eval COUNT=$(shell echo $$(( $(COUNT) + 1 ))))
-	$(eval PERCENT=$(shell echo $$(( $(COUNT) * 100 / $(TOTAL_FILES) ))))
-	@echo "\033[1;32m[ $(PERCENT)%] Building C object $@\033[0m"
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-clean:
-	@echo "\033[1;33mCleaning all .o files...\033[0m"
-	@rm -rf $(OBJ_DIR) > /dev/null 2>&1
-	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1
-
-fclean: clean
-	@rm -rf $(NAME) $(TEMP_DIR) > /dev/null 2>&1
-	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1
-
-re: fclean all
-
-.PHONY: all clean fclean re
+.
+..
+bash.supp
+built-ins
+Chuleta_git.md
+cosas_que_hacer
+env
+Exec
+freedoom_mini
+.git
+hola2
+infile
+init_struct
+libft
+main.c
+Makefile
+Mini.h
+minishell
+minishell_tester
+obj
+oddfile
+outfile
+Parser
+prueba
+README.md
+.temp
+.temp0.temp
+.temp1.temp
+Tokenizer
+valgrind_log.txt
+Varibles
+.vscode
+total 216
+drwxr-xr-x 16 astefane 2019   4096 Jun  4 19:43 .
+drwxr-xr-x  7 astefane 2019    148 Jun  3 21:45 ..
+-rw-r--r--  1 astefane 2019    626 Jun  3 16:10 bash.supp
+drwxr-xr-x  2 astefane 2019    168 Jun  3 21:13 built-ins
+-rw-r--r--  1 astefane 2019   1393 Jun  3 16:10 Chuleta_git.md
+-rw-r--r--  1 astefane 2019   2196 Jun  3 16:10 cosas_que_hacer
+drwxr-xr-x  2 astefane 2019     50 Jun  3 16:10 env
+drwxr-xr-x  2 astefane 2019   4096 Jun  3 21:13 Exec
+drwxr-xr-x  2 astefane 2019     58 Jun  3 16:10 freedoom_mini
+drwxr-xr-x  8 astefane 2019    220 Jun  3 21:22 .git
+-rw-r--r--  1 astefane 2019      0 Jun  4 19:43 hola2
+-rw-r--r--  1 astefane 2019  11662 Jun  3 17:48 infile
+drwxr-xr-x  2 astefane 2019     54 Jun  3 16:10 init_struct
+drwxr-xr-x  3 astefane 2019   4096 Jun  4 17:23 libft
+-rw-r--r--  1 astefane 2019   2160 Jun  4 19:40 main.c
+-rw-r--r--  1 astefane 2019   2382 Jun  3 18:37 Makefile
+-rw-r--r--  1 astefane 2019   8758 Jun  3 20:41 Mini.h
+-rwxr-xr-x  1 astefane 2019 131168 Jun  4 19:40 minishell
+drwxr-xr-x  6 astefane 2019    295 Jun  4 19:04 minishell_tester
+drwxr-xr-x 10 astefane 2019    147 Jun  4 19:40 obj
+-rw-r--r--  1 astefane 2019      0 Jun  4 17:25 oddfile
+-rw-r--r--  1 astefane 2019    283 Jun  4 19:43 outfile
+drwxr-xr-x  2 astefane 2019     61 Jun  3 16:10 Parser
+----------  1 astefane 2019      0 Jun  3 21:31 prueba
+-rw-r--r--  1 astefane 2019     46 Jun  3 16:10 README.md
+drwxr-xr-x  2 astefane 2019      6 Jun  4 17:23 .temp
+-rw-r--r--  1 astefane 2019      0 Jun  4 19:43 .temp0.temp
+-rw-r--r--  1 astefane 2019      0 Jun  4 19:43 .temp1.temp
+drwxr-xr-x  2 astefane 2019    118 Jun  3 18:39 Tokenizer
+-rw-r--r--  1 astefane 2019  18867 Jun  4 19:43 valgrind_log.txt
+drwxr-xr-x  2 astefane 2019     50 Jun  3 18:39 Varibles
+drwxr-xr-x  2 astefane 2019     46 Jun  3 16:10 .vscode

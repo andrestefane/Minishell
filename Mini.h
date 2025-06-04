@@ -100,12 +100,13 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
-typedef struct s_minishell //uwu
+typedef struct s_minishell
 {
 	t_env						*env_list;
 	t_token						*token_list;
 	t_command					*command_list;
 	t_pipex						*pipex_data;
+	int							signal;
 }								t_minishell;
 
 typedef enum e_builtin_type
@@ -191,7 +192,6 @@ void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
 void							parse_red_in(t_command *cmd, t_token **token,
 									t_pipex *data);
-char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
