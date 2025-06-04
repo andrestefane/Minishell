@@ -28,9 +28,8 @@ int	fill_tokens(t_minishell *minishell, char *input)
 			break ;
 		if (!val)
 			return (1);
-		t_token *tok_debug = create_token_and_detect_expansion(minishell, val, type, quote);
-		/* printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type); */
-		(void) tok_debug;
+		create_token_and_detect_expansion(minishell, val, type, quote);
+		// printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type);
 		free(val);
 		tok.prev_type = type;
 	}
@@ -56,9 +55,15 @@ char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 	val = ft_substr(tok->input, tok->pos + 1, j - tok->pos - 1);
 	*type = T_WORD;
 	if (quote_char == '\'')
+	{
 		*quote = Q_SINGLE;
+		// printf("DEBUG: extracted Q_SINGLE\n");
+	}
 	else
+	{
 		*quote = Q_DOUBLE;
+		// printf("DEBUG: extracted Q_DOUBLE\n");
+	}
 	tok->pos = j + 1;
 	return (val);
 }
@@ -109,6 +114,9 @@ char	*extract_complex_token(t_tokenizer *tok, t_token_type *type,
 	char	*res;
 	size_t	idx;
 
+	if (tok->input[tok->pos] == '\'' || tok->input[tok->pos] == '"')
+		return (extract_quoted_token(tok, type, quote)); // <<-- LLAMA AQUÍ
+	// el resto igual...
 	res = malloc(ft_strlen(tok->input) + 1);
 	if (!res)
 	{

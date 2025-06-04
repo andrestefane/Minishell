@@ -38,11 +38,11 @@ void	process_token(t_command **curr, t_token **token,
 		add_arg_to_command(*curr, (*token)->value);
 	}
 	else if ((*token)->type == T_RED_IN && (*token)->next)
-		parse_red_in(*curr, token);
+		parse_red_in(*curr, token, data);
 	else if ((*token)->type == T_RED_OUT && (*token)->next)
-		parse_red_out(*curr, token);
+		parse_red_out(*curr, token, data);
 	else if ((*token)->type == T_RED_APPEND && (*token)->next)
-		parse_red_append(*curr, token);
+		parse_red_append(*curr, token, data);
 	else if ((*token)->type == T_HEREDOC && (*token)->next)
 		parse_heredoc(*curr, token, data, index);
 	else if ((*token)->type == T_PIPE)

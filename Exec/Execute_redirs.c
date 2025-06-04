@@ -14,7 +14,10 @@ void	apply_redirections(t_command *cmd)
 	while (redir)
 	{
 		if (is_redir(redir) && ft_strchr("|'\"", redir->filename[0]))
+		{
+			free_redir_list(redir);
 			exit_with_error(SYNTAX_ERROR, 1, 2);
+		}
 		apply_one_redirection(redir);
 		redir = redir->next;
 	}
@@ -31,16 +34,28 @@ void	apply_one_redirection(t_redir *redir)
 	else
 		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
+	{
+		free_redir_list(redir);
+		close(fd);
 		exit_with_error("Error opening file\n", 1, 2);
+	}
 	if (redir->type == T_RED_IN || redir->type == T_HEREDOC)
 	{
 		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			free_redir_list(redir);
+			close(fd);
 			exit_with_error("dup2 infile failed\n", 1, 2);
+		}
 	}
 	else
 	{
 		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			free_redir_list(redir);
+			close(fd);
 			exit_with_error("dup2 outfile failed\n", 1, 2);
+		}
 	}
 	close(fd);
 }
@@ -55,6 +70,8 @@ void	add_redir_to_cmd(t_command *cmd, int type, const char *filename)
 		exit_with_error("malloc failed in redir\n", 1, 2);
 	new->type = type;
 	new->filename = ft_strdup(filename);
+/* 	printf("ADD_REDIR: acabo de hacer ft_strdup con \"%s\" → puntero %p\n",
+           	filename, (void *)new->filename); */
 	new->next = NULL;
 	if (!cmd->redirs)
 		cmd->redirs = new;

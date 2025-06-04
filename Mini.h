@@ -152,14 +152,12 @@ char							*extract_quoted_token(t_tokenizer *tok,
 // Exec
 
 void							execute_pipeline(t_minishell *mini);
-void							execute_command(t_pipex *data, char **args,
-									char **paths, char **envir);
+void							execute_command(t_minishell *mini, char **paths, char **envir);
 void							parse_heredoc(t_command *cmd, t_token **token,
 									t_pipex *data, int *index);
 void							process_token(t_command **curr, t_token **token,
 									t_minishell *mini, int *index);
-void							child_process(t_pipex *data, t_command *cmd,
-									int fd[2], t_env *envir_list);
+void							child_process(t_minishell *mini, int fd[2]);
 char							*extract_token(t_tokenizer *tok,
 									t_token_type *type, t_token_quote *quote);
 void							add_redir_to_cmd(t_command *cmd, int type,
@@ -169,8 +167,7 @@ char							*handle_heredoc_in_command(t_command *cmd,
 void							execute_last_command(t_minishell *mini,
 									t_command *curr, int i);
 
-void							process_and_exec(t_pipex *data, t_command *cmd,
-									int i, t_env *envir_list);
+void							process_and_exec(t_minishell *mini, int i);
 void							add_command_to_list(t_command **head,
 									t_command *new_cmd);
 void							free_struct(t_pipex *data, char *message, int i,
@@ -182,17 +179,18 @@ void							exit_with_error(char *message, int exit_code,
 int								get_heredoc_index(t_token *token,
 									t_token *target);
 void							parse_red_append(t_command *cmd,
-									t_token **token);
-void							ft_cmd(t_pipex *data, char **argv,
-									t_env *env_list);
+									t_token **token, t_pipex *data);
+void							ft_cmd(t_minishell *mini);
 char							*create_path(char *possible_path,
 									char *command);
-void							parse_red_out(t_command *cmd, t_token **token);
+void							parse_red_out(t_command *cmd, t_token **token,
+									t_pipex *data);
 t_command						*parse_commands(t_minishell *mini);
 int								here_doc(char *limiter, const char *filename);
 void							init_strucs(t_pipex **data, t_command **cmds);
 void							add_arg_to_command(t_command *cmd, char *arg);
-void							parse_red_in(t_command *cmd, t_token **token);
+void							parse_red_in(t_command *cmd, t_token **token,
+									t_pipex *data);
 char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
@@ -223,6 +221,9 @@ void							check_errno(int err, char **args);
 // Var
 void							expand_token(t_token *token, t_minishell *mini);
 char							*env_value(const char *name, t_env *env);
+void	append_literal(char **res, char *src, int len);
+void	append_var(char **res, char *src, int *i, t_minishell *mini);
+char	*expand_env_in_str(char *src, t_minishell *mini);
 
 // env
 char							*get_env_name(char **env, const char *name);
