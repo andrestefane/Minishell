@@ -1,6 +1,25 @@
 
 #include "Mini.h"
 
+void	print_token_list(t_token *head)
+{
+	int i = 0;
+
+	while (head)
+	{
+		printf("Token %d:\n", i);
+		printf("  value: %s\n", head->value);
+		printf("  type: %d\n", head->type);
+		printf("  quote: %d\n", head->quote);
+		printf("  expansion: %d\n", head->expansion_type);
+		head = head->next;
+		i++;
+	}
+}
+
+
+
+
 static void	process_input(char *input, t_minishell *minishell)
 {
 	char	*status_str;
@@ -14,6 +33,7 @@ static void	process_input(char *input, t_minishell *minishell)
 		minishell->t_list = NULL;
 		return ;
 	}
+	print_token_list(minishell->t_list);
 	if (!check_syntax_pipes(minishell->t_list))
 	{
 		free_t_list(minishell->t_list);

@@ -54,6 +54,14 @@ typedef enum e_expansion_type
 	EXIT_STATUS_EXPANSION
 }								t_expansion_type;
 
+typedef struct s_tokenizer
+{
+	char *input; // String completo
+	int pos;     // Posición actual
+	t_token_type				prev_type;
+	int							err;
+}								t_tokenizer;
+
 typedef struct s_token
 {
 	char						*value;
@@ -64,13 +72,7 @@ typedef struct s_token
 	struct s_token				*next;
 }								t_token;
 
-typedef struct s_tokenizer
-{
-	char *input; // String completo
-	int pos;     // Posición actual
-	t_token_type				prev_type;
-	int							err;
-}								t_tokenizer;
+
 
 typedef struct s_redir
 {
@@ -101,7 +103,7 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
-typedef struct s_minishell //uwu
+typedef struct s_minishell 
 {
 	t_env						*env_list;
 	t_token						*t_list;
@@ -127,27 +129,19 @@ void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
 // Tokens
-t_token							*create_token_and_detect_expansion(t_minishell *minishell,
-									char *val, t_token_type type,
-									t_token_quote quote);
-t_token							*add_token(t_token **head, char *value,
-									t_token_type type, t_token_quote quote);
+t_token	*create_token_and_detect_expansion(t_minishell *minishell, char *val);
+
+t_token	*add_token(t_minishell *minishell, char *value);
 char							*extract_word(t_minishell *mini);
 void							free_tokens(t_token *head);
 int								fill_tokens(t_minishell *minishell,
 									char *input);
-int								extract_metachar(t_tokenizer *tok,
-									t_token_type *type, t_token_quote *quote);
-char							*extract_quoted_token(t_tokenizer *tok,
-									t_token_type *type, t_token_quote *quote);
-char							*extract_complex_token(t_tokenizer *tok,
-									t_token_type *type, t_token_quote *quote);
+char	*extract_metachar(t_minishell *mini);
+char							*extract_quoted_token(t_minishell *mini);
+char							*extract_complex_token(t_minishell *mini);
 int								is_empty_token(char *temp);
-char							*get_next_token_part(t_tokenizer *tok,
-									t_token_type *type,
-									t_token_quote *current_quote);
-char							*extract_quoted_token(t_tokenizer *tok,
-									t_token_type *type, t_token_quote *quote);
+char	*get_next_token_part(t_minishell *m);
+char	*extract_quoted_token(t_minishell *m);
 
 // Exec
 
