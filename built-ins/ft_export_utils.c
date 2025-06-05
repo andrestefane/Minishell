@@ -36,14 +36,14 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 	{
 		if (!ft_strcmp(tmp->name, name))
 		{
+			if (tmp->value)
+				free(tmp->value);
 			if (value)
-			{
 				tmp->value = ft_strdup(value);
-				return ;
-			}
 			else
 				tmp->value = NULL;
 			tmp->exported = exported;
+			return;
 		}
 		tmp = tmp->next;
 	}
@@ -52,12 +52,16 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 		return ;
 	new->name = ft_strdup(name);
 	if (!new->name)
+	{
+		free(new);
 		return ;
+	}
 	if (value)
 		new->value = ft_strdup(value);
 	else
 		new->value = NULL;
 	new->exported = exported;
+	new->signal = 0;
 	new->next = NULL;
 	if (!*env_list)
 		*env_list = new;
@@ -69,6 +73,7 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 		tmp->next = new;
 	}
 }
+
 
 int	count_exported(t_env *env)
 {
