@@ -15,7 +15,7 @@ void	free_env_list(t_env	*env)
 	}
 }
 
-void	free_token_list(t_token *token)
+void	free_t_list(t_token *token)
 {
 	t_token	*tmp;
 

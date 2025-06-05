@@ -1,11 +1,11 @@
 #include "../Mini.h"
 
-void	expand_tokens(t_token *token_list)
+void	expand_tokens(t_token *t_list)
 {
 	t_token	*curr;
 	char	*expanded;
 
-	cur = token_list;
+	cur = t_list;
 	while (curr)
 	{
 		if (curr->quote != Q_SINGLE

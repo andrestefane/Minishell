@@ -7,45 +7,40 @@ static int	is_token_char(char c)
 
 int	fill_tokens(t_minishell *minishell, char *input)
 {
-	t_tokenizer		tok;
-	t_token_type	type;
-	t_token_quote	quote;
-	char			*val;
+	char	*val;
 
-	tok.input = input;
-	tok.pos = 0;
-	tok.prev_type = T_WORD;
-	tok.err = 0;
-	if (minishell->token_list)
+	minishell->t_list->tok->input = input;
+	minishell->t_list->tok->pos = 0;
+	minishell->t_list->tok->prev_type = T_WORD;
+	minishell->t_list->tok->err = 0;
+	if (minishell->t_list)
 	{
-		free_token_list(minishell->token_list);
-		minishell->token_list = NULL;
+		free_t_list(minishell->t_list);
+		minishell->t_list = NULL;
 	}
-	while (!tok.err)
+	while (!minishell->t_list->tok->err)
 	{
-		val = extract_token(&tok, &type, &quote);
+		val = extract_token(minishell);
 		if (tok.err)
 			break ;
 		if (!val)
 			return (1);
 		create_token_and_detect_expansion(minishell, val, type, quote);
-		// printf("DEBUG Token generado: [%s] | Expansion Type: %d\n", tok_debug->value, tok_debug->expansion_type);
+		// printf("DEBUG Token generado: [%s] | Expansion Type: %d\n",
+			tok_debug->value, tok_debug->expansion_type);
 		free(val);
 		tok.prev_type = type;
 	}
 	return (0);
 }
 
-char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
-		t_token_quote *quote)
+char	*extract_quoted_token(t_minishell *m)
 {
-	char	quote_char;
 	int		j;
 	char	*val;
 
-	quote_char = tok->input[tok->pos];
-	j = tok->pos + 1;
-	while (tok->input[j] && tok->input[j] != quote_char)
+	j = m->t_list->tok->pos + 1;
+	while (m->t_list->tok->input[j] && m->t_list->tok->input[j] != quote_char)
 		j++;
 	if (tok->input[j] == '\0')
 	{
@@ -54,7 +49,7 @@ char	*extract_quoted_token(t_tokenizer *tok, t_token_type *type,
 	}
 	val = ft_substr(tok->input, tok->pos + 1, j - tok->pos - 1);
 	*type = T_WORD;
-	if (quote_char == '\'')
+	if (tok->input[tok->pos] == '\'')
 	{
 		*quote = Q_SINGLE;
 		// printf("DEBUG: extracted Q_SINGLE\n");
@@ -108,29 +103,29 @@ static int	fill_complex_res(t_tokenizer *tok, char *res, size_t *idx)
 	return (1);
 }
 
-char	*extract_complex_token(t_tokenizer *tok, t_token_type *type,
-		t_token_quote *quote)
+char	*extract_complex_token(t_minishell *m)
 {
 	char	*res;
 	size_t	idx;
 
-	if (tok->input[tok->pos] == '\'' || tok->input[tok->pos] == '"')
-		return (extract_quoted_token(tok, type, quote)); // <<-- LLAMA AQUÍ
+	if (m->t_list->tok->input[m->t_list->tok->pos] == '\''
+		|| m->t_list->tok->input[m->t_list->tok->pos] == '"')
+		return (extract_quoted_token(m)); // <<-- LLAMA AQUÍ
 	// el resto igual...
-	res = malloc(ft_strlen(tok->input) + 1);
+	res = malloc(ft_strlen(m->t_list->tok->input) + 1);
 	if (!res)
 	{
-		tok->err = 1;
+		m->t_list->tok->err = 1;
 		return (NULL);
 	}
-	*quote = Q_NONE;
+	m->t_list->quote = Q_NONE;
 	idx = 0;
 	if (!fill_complex_res(tok, res, &idx))
 	{
-		tok->err = 1;
+		m->t_list->tok->err = 1;
 		free(res);
 		return (NULL);
 	}
-	*type = T_WORD;
+	m->t_list->type = T_WORD;
 	return (res);
 }

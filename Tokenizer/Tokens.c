@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/03 18:14:14 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:48:49 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,18 @@ char	*extract_word(t_tokenizer *tok, t_token_type *type)
 	return (ft_substr(tok->input, start, tok->pos - start));
 }
 
-char	*extract_token(t_tokenizer *tok, t_token_type *type,
-		t_token_quote *quote)
+char	*extract_token(t_minishell *mini)
 {
-	while (tok->input[tok->pos] == ' ' || tok->input[tok->pos] == '\t')
-		tok->pos++;
-	if (tok->input[tok->pos] == '\0')
+	char	*val;
+
+	while (mini->t_list->tok->input[mini->t_list->tok->pos] == ' '
+		|| mini->t_list->tok->input[mini->t_list->tok->pos] == '\t')
+		mini->t_list->tok->pos++;
+	if (mini->t_list->tok->input[mini->t_list->tok->pos] == '\0')
 		return (NULL);
-	if (extract_metachar(tok, type, quote))
+	if (extract_metachar(mini))
 		return (ft_strdup(""));
-	char *val = extract_complex_token(tok, type, quote);
+	val = extract_complex_token(mini);
 	// printf("DEBUG: extract_complex_token devuelve quote=%d\n", *quote);
 	return (val);
-
 }
