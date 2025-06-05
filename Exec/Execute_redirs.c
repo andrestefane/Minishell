@@ -60,7 +60,7 @@ void	apply_one_redirection(t_redir *redir)
 	close(fd);
 }
 
-void	add_redir_to_cmd(t_command *cmd, int type, const char *filename)
+void	add_redir_to_cmd(t_minishell *mini, int type, const char *filename)
 {
 	t_redir	*new;
 	t_redir	*last;

@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "mini.h": "c"
+        "mini.h": "c",
+        "type_traits": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
