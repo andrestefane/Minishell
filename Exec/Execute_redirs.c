@@ -59,28 +59,24 @@ void	apply_one_redirection(t_redir *redir)
 	}
 	close(fd);
 }
-
 void	add_redir_to_cmd(t_minishell *mini, int type, const char *filename)
 {
 	t_redir	*new;
-	t_redir	*last;
 
-	new = malloc(sizeof(t_redir));
+	if (!mini || !mini->curr)
+		exit_with_error("mini or current command is NULL\n", 1, 2);
+	new = init_redir(type, filename);
 	if (!new)
-		exit_with_error("malloc failed in redir\n", 1, 2);
-	new->type = type;
-	new->filename = ft_strdup(filename);
-/* 	printf("ADD_REDIR: acabo de hacer ft_strdup con \"%s\" → puntero %p\n",
-           	filename, (void *)new->filename); */
-	new->next = NULL;
-	if (!cmd->redirs)
-		cmd->redirs = new;
+		exit_with_error("init_redir failed\n", 1, 2);
+	if (!mini->curr->redirs)
+	{
+		mini->curr->redirs = new;
+		mini->curr->last_redir = new;
+	}
 	else
 	{
-		last = cmd->redirs;
-		while (last->next)
-			last = last->next;
-		last->next = new;
+		mini->curr->last_redir->next = new;
+		mini->curr->last_redir = new;
 	}
 }
 

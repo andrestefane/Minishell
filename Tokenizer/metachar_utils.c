@@ -4,51 +4,49 @@ static int	extract_double_metachar(t_minishell *m)
 {
 	char	c;
 
-	c = m->t_list->tok->input[m->t_list->tok->pos];
-	if ((c == '>' && m->t_list->tok->input[m->t_list->tok->pos + 1] == '>')
-		|| (c == '<' && m->t_list->tok->input[m->t_list->tok->pos + 1] == '<'))
+	c = m->tokenizer->input[m->tokenizer->pos];
+	if ((c == '>'
+			&& m->tokenizer->input[m->tokenizer->pos + 1] == '>')
+		|| (c == '<' && m->tokenizer->input[m->tokenizer->pos + 1] == '<'))
 	{
 		if (c == '>')
-			m->t_list->type = T_RED_APPEND;
+			m->tokenizer->prev_type = T_RED_APPEND;
 		else
-			m->t_list->type = T_HEREDOC;
-		m->t_list->tok->pos += 2;
+			m->tokenizer->prev_type = T_HEREDOC;
+		m->tokenizer->pos += 2;
 		return (1);
 	}
 	return (0);
 }
 
-static int	extract_single_metachar(t_minishell *shell)
+static int	extract_single_metachar(t_minishell *m)
 {
 	char	c;
 
-	c = shell->t_list->tok->input[shell->t_list->tok->pos];
+	c = m->tokenizer->input[m->tokenizer->pos];
 	if (c == '|')
-		shell->t_list->type = T_PIPE;
+		m->tokenizer->prev_type = T_PIPE;
 	else if (c == '>')
-		shell->t_list->type = T_RED_OUT;
+		m->tokenizer->prev_type = T_RED_OUT;
 	else if (c == '<')
-		shell->t_list->type = T_RED_IN;
+		m->tokenizer->prev_type = T_RED_IN;
 	else
 		return (0);
-	shell->t_list->tok->pos++;
+	m->tokenizer->pos++;
 	return (1);
 }
 
-
-char	*extract_metachar(t_minishell *mini)
+char	*extract_metachar(t_minishell *m)
 {
 	char	*symbol = NULL;
 
-	mini->t_list->quote = Q_NONE;
+	// No hay comillas en metachars
+	m->tokenizer->err = 0;
 
-	if (extract_double_metachar(mini))
-		symbol = ft_substr(mini->t_list->tok->input,
-				mini->t_list->tok->pos - 2, 2);
-	else if (extract_single_metachar(mini))
-		symbol = ft_substr(mini->t_list->tok->input,
-				mini->t_list->tok->pos - 1, 1);
+	if (extract_double_metachar(m))
+		symbol = ft_substr(m->tokenizer->input, m->tokenizer->pos - 2, 2);
+	else if (extract_single_metachar(m))
+		symbol = ft_substr(m->tokenizer->input, m->tokenizer->pos - 1, 1);
 
 	return (symbol);
 }
-

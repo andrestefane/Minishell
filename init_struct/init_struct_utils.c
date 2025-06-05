@@ -30,7 +30,7 @@ t_token	*init_token(char *value, t_token_type type,
 	return (token);
 }
 
-t_redir	*init_redir(int type, char *filename)
+t_redir	*init_redir(int type, const char *filename)
 {
 	t_redir	*redir;
 
@@ -38,7 +38,9 @@ t_redir	*init_redir(int type, char *filename)
 	if (!redir)
 		return (NULL);
 	redir->type = type;
-	redir->filename = filename;
+	redir->filename = ft_strdup(filename);
+	if (!redir->filename)
+		return (free(redir), NULL);
 	redir->next = NULL;
 	return (redir);
 }

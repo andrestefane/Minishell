@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andres <andres@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:28:37 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/05 19:24:55 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/06/06 00:58:36 by andres           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ t_token	*add_token(t_minishell *minishell, char *value)
 	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
+
 	new_node->value = ft_strdup(value);
-	new_node->type = minishell->t_list->type;
-	new_node->quote = minishell->t_list->quote;
+	new_node->type = minishell->tokenizer->prev_type;  // ✅ usa tokenizer real
+	new_node->quote = Q_NONE; // o usa minishell->tokenizer->quote si lo implementás
 	new_node->expansion_type = NO_EXPANSION;
-	new_node->tok = minishell->t_list->tok; // ← ¡COPIA el tokenizer!
 	new_node->next = NULL;
+
 	if (minishell->t_list == NULL)
 	{
 		minishell->t_list = new_node;
@@ -66,18 +67,25 @@ void	free_tokens(t_token *head)
 	}
 }
 
-char	*extract_word(t_minishell *shell)
+char	*extract_word(t_minishell *m)
 {
-	int	start;
+	int		start;
+	char	*word;
 
-	start = shell->t_list->tok->pos;
-	while (is_word_char(shell->t_list->tok->input[shell->t_list->tok->pos]))
-		shell->t_list->tok->pos++;
-	if (shell->t_list->tok->pos == start)
-		return (NULL);
-	shell->t_list->type = T_WORD;
-	return (ft_substr(shell->t_list->tok->input, start, shell->t_list->tok->pos
-			- start));
+	// ✅ Usar tokenizer directamente
+	start = m->tokenizer->pos;
+
+	// ✅ Avanzar mientras sea carácter válido
+	while (is_word_char(m->tokenizer->input[m->tokenizer->pos]))
+		m->tokenizer->pos++;
+
+	if (m->tokenizer->pos == start)
+		return (NULL);  // nada extraído
+
+	// ✅ Extraer la subcadena
+	word = ft_substr(m->tokenizer->input, start, m->tokenizer->pos - start);
+
+	return (word);
 }
 
 char	*extract_token(t_minishell *m)
@@ -85,16 +93,19 @@ char	*extract_token(t_minishell *m)
 	char	*val;
 
 	// Saltar espacios
-	while (m->t_list->tok->input[m->t_list->tok->pos] == ' '
-		|| m->t_list->tok->input[m->t_list->tok->pos] == '\t')
-		m->t_list->tok->pos++;
+	while (m->tokenizer->input[m->tokenizer->pos] == ' ' ||
+		   m->tokenizer->input[m->tokenizer->pos] == '\t')
+		m->tokenizer->pos++;
+
 	// Fin de input
-	if (m->t_list->tok->input[m->t_list->tok->pos] == '\0')
+	if (m->tokenizer->input[m->tokenizer->pos] == '\0')
 		return (NULL);
+
 	// Intentar extraer metacharacter (|, >, <, etc.)
 	val = extract_metachar(m);
 	if (val)
 		return (val);
+
 	// Si no, extraer token complejo o palabra
 	return (extract_complex_token(m));
 }

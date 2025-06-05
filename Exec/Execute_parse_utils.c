@@ -29,7 +29,7 @@ void	parse_red_out(t_minishell *mini, t_token **token)
 		mini->curr->redirs = NULL;
 		exit_with_error("syntax error: no outfile\n", 1, 2);
 	}
-	add_redir_to_cmd(mini->curr, T_RED_OUT, (*token)->next->value);
+	add_redir_to_cmd(mini, T_RED_OUT, (*token)->next->value);
 	*token = (*token)->next;
 }
 
@@ -45,7 +45,7 @@ void	parse_red_append(t_minishell *mini, t_token **token)
 		mini->curr->redirs = NULL;
 		exit_with_error("syntax error: no outfile\n", 1, 2);
 	}
-	add_redir_to_cmd(mini->curr, T_RED_APPEND, (*token)->next->value);
+	add_redir_to_cmd(mini, T_RED_APPEND, (*token)->next->value);
 	mini->curr->append = 1;
 	*token = (*token)->next;
 }
@@ -72,7 +72,7 @@ void	parse_heredoc(t_minishell *mini, t_token **token, int *index)
 		mini->curr->is_heredoc = 0;
 		return ;
 	}
-	add_redir_to_cmd(mini->curr, T_HEREDOC, filename);
+	add_redir_to_cmd(mini, T_HEREDOC, filename);
 	mini->curr->is_heredoc = 1;
 	mini->pipex_data->count_heredoc++;
 	(*index)++;

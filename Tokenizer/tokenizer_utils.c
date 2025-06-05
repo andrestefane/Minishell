@@ -9,38 +9,41 @@ int	fill_tokens(t_minishell *minishell, char *input)
 {
 	char	*val;
 
-	// Limpiar tokens anteriores
+	// limpiar tokens previos
 	if (minishell->t_list)
 	{
 		free_t_list(minishell->t_list);
 		minishell->t_list = NULL;
 	}
-	// Inicializar primer token + tokenizer
-	minishell->t_list = malloc(sizeof(t_token));
-	if (!minishell->t_list)
+	// inicializar tokenizer
+	if (minishell->tokenizer)
+		free(minishell->tokenizer);
+	minishell->tokenizer = malloc(sizeof(t_tokenizer));
+	if (!minishell->tokenizer)
 		return (0);
-	minishell->t_list->tok = malloc(sizeof(t_tokenizer));
-	if (!minishell->t_list->tok)
-	{
-		free(minishell->t_list);
-		minishell->t_list = NULL;
-		return (0);
-	}
-	minishell->t_list->tok->input = input;
-	minishell->t_list->tok->pos = 0;
-	minishell->t_list->tok->prev_type = T_WORD;
-	minishell->t_list->tok->err = 0;
-	minishell->t_list->next = NULL;
-	while (!minishell->t_list->tok->err)
+	minishell->tokenizer->input = input;
+	minishell->tokenizer->pos = 0;
+	minishell->tokenizer->prev_type = T_WORD;
+	minishell->tokenizer->err = 0;
+	while (!minishell->tokenizer->err)
 	{
 		val = extract_token(minishell);
-		if (minishell->t_list->tok->err)
+		if (minishell->tokenizer->err)
 			break ;
-		if (!val )
-			return(1);
-		create_token_and_detect_expansion(minishell, val);
+		if (!val)
+			return (1);
+
+		create_token_and_detect_expansion(minishell, val); // ← ahora solo trabaja con t_list
 		free(val);
-		minishell->t_list->tok->prev_type = minishell->t_list->type;
+	}
+	free(minishell->tokenizer);
+	minishell->tokenizer = NULL;
+
+	if (minishell->tokenizer->err)
+	{
+		free_t_list(minishell->t_list);
+		minishell->t_list = NULL;
+		return (0);
 	}
 	return (0);
 }
@@ -51,20 +54,35 @@ char	*extract_quoted_token(t_minishell *m)
 	char	*val;
 	char	quote_char;
 
-	quote_char = m->t_list->tok->input[m->t_list->tok->pos];
-	j = m->t_list->tok->pos + 1;
-	while (m->t_list->tok->input[j] && m->t_list->tok->input[j] != quote_char)
+	// Leer comilla inicial
+	quote_char = m->tokenizer->input[m->tokenizer->pos];
+
+	// Buscar final de la comilla
+	j = m->tokenizer->pos + 1;
+	while (m->tokenizer->input[j] && m->tokenizer->input[j] != quote_char)
 		j++;
-	if (m->t_list->tok->input[j] == '\0')
+
+	// Si no se cerró la comilla
+	if (m->tokenizer->input[j] == '\0')
 	{
-		m->t_list->tok->err = 1;
+		m->tokenizer->err = 1;
 		return (NULL);
 	}
-	val = ft_substr(m->t_list->tok->input, m->t_list->tok->pos + 1, j
-			- m->t_list->tok->pos - 1);
-	m->t_list->type = T_WORD;
-	m->t_list->quote = (quote_char == '\'') ? Q_SINGLE : Q_DOUBLE;
-	m->t_list->tok->pos = j + 1;
+
+	// Extraer el contenido entre comillas
+	val = ft_substr(m->tokenizer->input,
+					m->tokenizer->pos + 1,
+					j - m->tokenizer->pos - 1);
+
+	// Guardar tipo y quote en el tokenizer (temporal, para usar luego al crear token)
+	m->tokenizer->prev_type = T_WORD;
+
+	// ⚠ Si quieres guardar el tipo de quote, podrías agregar:
+	// m->tokenizer->quote = (quote_char == '\'') ? Q_SINGLE : Q_DOUBLE;
+
+	// Avanzar posición más allá de la comilla de cierre
+	m->tokenizer->pos = j + 1;
+
 	return (val);
 }
 
@@ -113,23 +131,29 @@ char	*extract_complex_token(t_minishell *m)
 	char	*res;
 	size_t	idx;
 
-	if (m->t_list->tok->input[m->t_list->tok->pos] == '\''
-		|| m->t_list->tok->input[m->t_list->tok->pos] == '"')
+	if (m->tokenizer->input[m->tokenizer->pos] == '\'' ||
+		m->tokenizer->input[m->tokenizer->pos] == '"')
 		return (extract_quoted_token(m));
-	res = malloc(ft_strlen(m->t_list->tok->input) + 1);
+
+	res = malloc(ft_strlen(m->tokenizer->input) + 1);
 	if (!res)
 	{
-		m->t_list->tok->err = 1;
+		m->tokenizer->err = 1;
 		return (NULL);
 	}
-	m->t_list->quote = Q_NONE;
+
+	m->tokenizer->quote = Q_NONE; // si querés resetear aquí
+
 	idx = 0;
-	if (!fill_complex_res(m->t_list->tok, res, &idx))
+
+	if (!fill_complex_res(m->tokenizer, res, &idx))  // ✅ pasás el tokenizer
 	{
-		m->t_list->tok->err = 1;
+		m->tokenizer->err = 1;
 		free(res);
 		return (NULL);
 	}
-	m->t_list->type = T_WORD;
+
+	m->tokenizer->prev_type = T_WORD;
+
 	return (res);
 }

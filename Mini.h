@@ -59,6 +59,7 @@ typedef struct s_tokenizer
 	char *input; // String completo
 	int pos;     // Posición actual
 	t_token_type				prev_type;
+	t_token_quote 				quote;
 	int							err;
 }								t_tokenizer;
 
@@ -68,10 +69,8 @@ typedef struct s_token
 	t_token_type				type;
 	t_token_quote				quote;
 	t_expansion_type			expansion_type;
-	t_tokenizer					*tok;
 	struct s_token				*next;
 }								t_token;
-
 
 
 typedef struct s_redir
@@ -80,6 +79,12 @@ typedef struct s_redir
 	char						*filename;
 	struct s_redir				*next;
 }								t_redir;
+
+typedef struct s_redir_list
+{
+	t_redir						*first;
+	t_redir						*last;
+}								t_redir_list;
 
 typedef struct s_command
 {
@@ -91,6 +96,7 @@ typedef struct s_command
 	char						*heredoc_file;
 	struct s_command			*next;
 	t_redir						*redirs;
+	t_redir						*last_redir;
 }								t_command;
 
 typedef struct s_fd_pipex
@@ -103,7 +109,7 @@ typedef struct s_fd_pipex
 	t_command					*commands;
 }								t_pipex;
 
-typedef struct s_minishell 
+typedef struct s_minishell
 {
 	t_env						*env_list;
 	t_token						*t_list;
@@ -111,6 +117,7 @@ typedef struct s_minishell
 	t_command					*head;
 	t_command					*tmp;
 	t_command					*curr;
+	t_tokenizer 				*tokenizer;
 	t_pipex						*pipex_data;
 	t_token						*curr_token;
 }								t_minishell;
@@ -133,31 +140,32 @@ void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
 // Tokens
-t_token	*create_token_and_detect_expansion(t_minishell *minishell, char *val);
+t_token							*create_token_and_detect_expansion(t_minishell *minishell,
+									char *val);
 
-t_token	*add_token(t_minishell *minishell, char *value);
+t_token							*add_token(t_minishell *minishell, char *value);
 char							*extract_word(t_minishell *mini);
 void							free_tokens(t_token *head);
 int								fill_tokens(t_minishell *minishell,
 									char *input);
-char	*extract_metachar(t_minishell *mini);
+char							*extract_metachar(t_minishell *mini);
 char							*extract_quoted_token(t_minishell *mini);
 char							*extract_complex_token(t_minishell *mini);
 int								is_empty_token(char *temp);
-char	*get_next_token_part(t_minishell *m);
-char	*extract_quoted_token(t_minishell *m);
+char							*get_next_token_part(t_minishell *m);
+char							*extract_quoted_token(t_minishell *m);
 
 // Exec
 
 void							execute_pipeline(t_minishell *mini);
-void							execute_command(t_minishell *mini, char **paths, char **envir);
-void							parse_heredoc(t_command *cmd, t_token **token,
-									t_pipex *data, int *index);
-void							process_token(t_command **curr, t_token **token,
-									t_minishell *mini, int *index);
+void							execute_command(t_minishell *mini, char **paths,
+									char **envir);
+void							parse_heredoc(t_minishell *mini,
+									t_token **token, int *index);
+void							process_token(t_minishell *mini, int *index);
 void							child_process(t_minishell *mini, int fd[2]);
 char							*extract_token(t_minishell *mini);
-void							add_redir_to_cmd(t_command *cmd, int type,
+void							add_redir_to_cmd(t_minishell *mini, int type,
 									const char *filename);
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
@@ -165,7 +173,7 @@ void							execute_last_command(t_minishell *mini,
 									t_command *curr, int i);
 
 void							process_and_exec(t_minishell *mini, int i);
-void							add_command_to_list(t_minishell *mini;
+void							add_command_to_list(t_minishell *mini);
 void							free_struct(t_pipex *data, char *message, int i,
 									int std);
 void							free_and_exit(char **args, char **paths,
@@ -174,18 +182,20 @@ void							exit_with_error(char *message, int exit_code,
 									int std);
 int								get_heredoc_index(t_token *token,
 									t_token *target);
-void							parse_red_append(t_command *cmd,
-									t_token **token, t_pipex *data);
+void							parse_red_append(t_minishell *mini,
+									t_token **token);
 void							ft_cmd(t_minishell *mini);
 char							*create_path(char *possible_path,
 									char *command);
-void							parse_red_out(t_command *cmd, t_token **token,
-									t_pipex *data);
+void							parse_red_out(t_minishell *mini,
+									t_token **token);
 t_command						*parse_commands(t_minishell *mini);
 int								here_doc(char *limiter, const char *filename);
 void							init_strucs(t_pipex **data, t_command **cmds);
-void							add_arg_to_command(t_command *cmd, char *arg);
-void							parse_red_in(t_minishell *mini, t_token **token);
+void							add_arg_to_command(t_minishell *mini,
+									char *arg);
+void							parse_red_in(t_minishell *mini,
+									t_token **token);
 char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
@@ -216,9 +226,11 @@ void							check_errno(int err, char **args);
 // Var
 void							expand_token(t_token *token, t_minishell *mini);
 char							*env_value(const char *name, t_env *env);
-void	append_literal(char **res, char *src, int len);
-void	append_var(char **res, char *src, int *i, t_minishell *mini);
-char	*expand_env_in_str(char *src, t_minishell *mini);
+void							append_literal(char **res, char *src, int len);
+void							append_var(char **res, char *src, int *i,
+									t_minishell *mini);
+char							*expand_env_in_str(char *src,
+									t_minishell *mini);
 
 // env
 char							*get_env_name(char **env, const char *name);
@@ -238,7 +250,8 @@ void							execute_buitin(t_command *cmd, t_env *env_list,
 									t_minishell *minishell);
 void							ft_unset(char **argv, t_env **env_list);
 void							ft_cd(char **argv, t_env **env_list);
-void							execute_buitin_args(char **argv, char ***env, t_env *env_list);
+void							execute_buitin_args(char **argv, char ***env,
+									t_env *env_list);
 void							ft_echo(t_command *cmd);
 void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
@@ -265,11 +278,12 @@ void							free_command_list(t_command *cmd);
 void							free_redir_list(t_redir *redir);
 void							free_t_list(t_token *token);
 void							free_env_list(t_env *env);
+void							free_redirs(t_redir *redir);
 void							free_minishell(t_minishell *minishell);
 
 t_pipex							*init_pipex(void);
 t_command						*init_command(void);
-t_redir							*init_redir(int type, char *filename);
+t_redir							*init_redir(int type, const char *filename);
 t_token							*init_token(char *value, t_token_type type,
 									t_token_quote quote, t_expansion_type exp);
 t_env							*init_env_list(char *name, char *value,

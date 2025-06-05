@@ -16,21 +16,19 @@ int	is_empty_token(char *temp)
 	return (1);
 }
 
-
 char	*get_next_token_part(t_minishell *m)
 {
 	char	*temp;
 
-	if (m->t_list->tok->input[m->t_list->tok->pos] == '\''
-		|| m->t_list->tok->input[m->t_list->tok->pos] == '"')
+	if (m->tokenizer->input[m->tokenizer->pos] == '\'' ||
+		m->tokenizer->input[m->tokenizer->pos] == '"')
 	{
 		temp = extract_quoted_token(m);
 	}
 	else
 	{
 		temp = extract_word(m);
-		m->t_list->quote = Q_NONE;
+		m->tokenizer->quote = Q_NONE;  // ← si querés dejar claro que no hay comillas
 	}
 	return (temp);
 }
-

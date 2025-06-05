@@ -15,17 +15,17 @@ void	free_env_list(t_env	*env)
 	}
 }
 
-void	free_t_list(t_token *token)
+void	free_t_list(t_token *list)
 {
 	t_token	*tmp;
 
-	while (token)
+	while (list)
 	{
-		tmp = token->next;
-		if (token->value)
-			free(token->value);
-		free(token);
-		token = tmp;
+		tmp = list->next;
+		if (list->value)
+			free(list->value);
+		free(list);
+		list = tmp;
 	}
 }
 

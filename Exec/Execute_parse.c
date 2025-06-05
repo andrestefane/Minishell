@@ -37,7 +37,7 @@ void	process_token(t_minishell *mini, int *index)
 	else if (token->type == T_RED_IN && token->next)
 		parse_red_in(mini, &mini->t_list);
 	else if (token->type == T_RED_OUT && token->next)
-		parse_red_out(mini, &mini->t_list,);
+		parse_red_out(mini, &mini->t_list);
 	else if (token->type == T_RED_APPEND && token->next)
 		parse_red_append(mini, &mini->t_list);
 	else if (token->type == T_HEREDOC && token->next)

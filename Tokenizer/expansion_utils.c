@@ -73,12 +73,22 @@ t_token	*create_token_and_detect_expansion(t_minishell *minishell, char *val)
 	t_token	*new_token;
 
 	new_token = add_token(minishell, val);
-	if (new_token && new_token->type == T_WORD && new_token->value[0] == '$')
+	if (!new_token)
+		return (NULL);
+
+	// ← Importante: asignar tipo desde el tokenizer
+	new_token->type = minishell->tokenizer->prev_type;
+
+	// Detectar expansión
+	if (new_token->type == T_WORD && new_token->value[0] == '$')
 	{
 		if (new_token->value[1] == '?' && new_token->value[2] == '\0')
 			new_token->expansion_type = EXIT_STATUS_EXPANSION;
 		else
 			new_token->expansion_type = VAR_EXPANSION;
 	}
+	else
+		new_token->expansion_type = NO_EXPANSION;
+
 	return (new_token);
 }
