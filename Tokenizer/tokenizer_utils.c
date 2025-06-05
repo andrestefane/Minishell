@@ -8,45 +8,61 @@ static int	is_token_char(char c)
 int	fill_tokens(t_minishell *minishell, char *input)
 {
 	char	*val;
+	int		success = 1; // bandera para el retorno
 
-	// limpiar tokens previos
+	// Limpiar tokens previos
 	if (minishell->t_list)
 	{
 		free_t_list(minishell->t_list);
 		minishell->t_list = NULL;
 	}
-	// inicializar tokenizer
+	// Liberar tokenizer anterior
 	if (minishell->tokenizer)
 		free(minishell->tokenizer);
+	// Inicializar nuevo tokenizer
 	minishell->tokenizer = malloc(sizeof(t_tokenizer));
 	if (!minishell->tokenizer)
-		return (0);
+		return (0); // error
 	minishell->tokenizer->input = input;
 	minishell->tokenizer->pos = 0;
 	minishell->tokenizer->prev_type = T_WORD;
+	minishell->tokenizer->quote = Q_NONE;
 	minishell->tokenizer->err = 0;
+
 	while (!minishell->tokenizer->err)
 	{
 		val = extract_token(minishell);
-		if (minishell->tokenizer->err)
-			break ;
-		if (!val)
-			return (1);
 
-		create_token_and_detect_expansion(minishell, val); // ← ahora solo trabaja con t_list
+		if (minishell->tokenizer->err)
+			break;
+
+		if (!val) // fin de input
+			break;
+
+		if (!create_token_and_detect_expansion(minishell, val))
+		{
+			success = 0; // error al crear token
+			free(val);
+			break;
+		}
 		free(val);
 	}
+
 	free(minishell->tokenizer);
 	minishell->tokenizer = NULL;
 
-	if (minishell->tokenizer->err)
+	if (minishell->tokenizer && minishell->tokenizer->err)
+		success = 0;
+
+	if (!success)
 	{
 		free_t_list(minishell->t_list);
 		minishell->t_list = NULL;
-		return (0);
 	}
-	return (0);
+
+	return (success);
 }
+
 
 char	*extract_quoted_token(t_minishell *m)
 {
