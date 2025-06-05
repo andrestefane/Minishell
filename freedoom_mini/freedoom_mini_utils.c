@@ -47,7 +47,6 @@ void	free_redir_list(t_redir *redir)
 void	free_command_list(t_command *cmd)
 {
 	t_command	*tmp;
-	int			i;
 
 	while (cmd)
 	{
@@ -56,7 +55,6 @@ void	free_command_list(t_command *cmd)
 			free_redir_list(cmd->redirs);
 		if (cmd->argv)
 		{
-			i = 0;
 			ft_freedoom(cmd->argv);
 		}
 		free(cmd->infile);

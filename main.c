@@ -3,7 +3,6 @@
 
 static void	process_input(char *input, t_minishell *minishell)
 {
-	t_token	*current;
 	char	*status_str;
 
 	add_history(input);
@@ -21,7 +20,6 @@ static void	process_input(char *input, t_minishell *minishell)
 		minishell->token_list = NULL;
 		return ;
 	}
-	current = minishell->token_list;
 	ft_execute(minishell);
 	if (minishell->pipex_data)
 	{
