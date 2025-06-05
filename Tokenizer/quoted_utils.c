@@ -17,17 +17,20 @@ int	is_empty_token(char *temp)
 }
 
 
-char	*get_next_token_part(t_tokenizer *tok,
-				t_token_type *type, t_token_quote *current_quote)
+char	*get_next_token_part(t_minishell *m)
 {
 	char	*temp;
 
-	if (tok->input[tok->pos] == '\'' || tok->input[tok->pos] == '"')
-		temp = extract_quoted_token(tok, type, current_quote);
+	if (m->t_list->tok->input[m->t_list->tok->pos] == '\''
+		|| m->t_list->tok->input[m->t_list->tok->pos] == '"')
+	{
+		temp = extract_quoted_token(m);
+	}
 	else
 	{
-		temp = extract_word(tok, type);
-		*current_quote = Q_NONE;
+		temp = extract_word(m);
+		m->t_list->quote = Q_NONE;
 	}
 	return (temp);
 }
+

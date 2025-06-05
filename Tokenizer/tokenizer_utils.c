@@ -9,27 +9,38 @@ int	fill_tokens(t_minishell *minishell, char *input)
 {
 	char	*val;
 
-	minishell->t_list->tok->input = input;
-	minishell->t_list->tok->pos = 0;
-	minishell->t_list->tok->prev_type = T_WORD;
-	minishell->t_list->tok->err = 0;
+	// Limpiar tokens anteriores
 	if (minishell->t_list)
 	{
 		free_t_list(minishell->t_list);
 		minishell->t_list = NULL;
 	}
+	// Inicializar primer token + tokenizer
+	minishell->t_list = malloc(sizeof(t_token));
+	if (!minishell->t_list)
+		return (0);
+	minishell->t_list->tok = malloc(sizeof(t_tokenizer));
+	if (!minishell->t_list->tok)
+	{
+		free(minishell->t_list);
+		minishell->t_list = NULL;
+		return (0);
+	}
+	minishell->t_list->tok->input = input;
+	minishell->t_list->tok->pos = 0;
+	minishell->t_list->tok->prev_type = T_WORD;
+	minishell->t_list->tok->err = 0;
+	minishell->t_list->next = NULL;
 	while (!minishell->t_list->tok->err)
 	{
 		val = extract_token(minishell);
-		if (tok.err)
+		if (minishell->t_list->tok->err)
 			break ;
-		if (!val)
-			return (1);
-		create_token_and_detect_expansion(minishell, val, type, quote);
-		// printf("DEBUG Token generado: [%s] | Expansion Type: %d\n",
-			tok_debug->value, tok_debug->expansion_type);
+		if (!val )
+			return(1);
+		create_token_and_detect_expansion(minishell, val);
 		free(val);
-		tok.prev_type = type;
+		minishell->t_list->tok->prev_type = minishell->t_list->type;
 	}
 	return (0);
 }
@@ -38,28 +49,22 @@ char	*extract_quoted_token(t_minishell *m)
 {
 	int		j;
 	char	*val;
+	char	quote_char;
 
+	quote_char = m->t_list->tok->input[m->t_list->tok->pos];
 	j = m->t_list->tok->pos + 1;
 	while (m->t_list->tok->input[j] && m->t_list->tok->input[j] != quote_char)
 		j++;
-	if (tok->input[j] == '\0')
+	if (m->t_list->tok->input[j] == '\0')
 	{
-		tok->err = 1;
+		m->t_list->tok->err = 1;
 		return (NULL);
 	}
-	val = ft_substr(tok->input, tok->pos + 1, j - tok->pos - 1);
-	*type = T_WORD;
-	if (tok->input[tok->pos] == '\'')
-	{
-		*quote = Q_SINGLE;
-		// printf("DEBUG: extracted Q_SINGLE\n");
-	}
-	else
-	{
-		*quote = Q_DOUBLE;
-		// printf("DEBUG: extracted Q_DOUBLE\n");
-	}
-	tok->pos = j + 1;
+	val = ft_substr(m->t_list->tok->input, m->t_list->tok->pos + 1, j
+			- m->t_list->tok->pos - 1);
+	m->t_list->type = T_WORD;
+	m->t_list->quote = (quote_char == '\'') ? Q_SINGLE : Q_DOUBLE;
+	m->t_list->tok->pos = j + 1;
 	return (val);
 }
 
@@ -110,8 +115,7 @@ char	*extract_complex_token(t_minishell *m)
 
 	if (m->t_list->tok->input[m->t_list->tok->pos] == '\''
 		|| m->t_list->tok->input[m->t_list->tok->pos] == '"')
-		return (extract_quoted_token(m)); // <<-- LLAMA AQUÍ
-	// el resto igual...
+		return (extract_quoted_token(m));
 	res = malloc(ft_strlen(m->t_list->tok->input) + 1);
 	if (!res)
 	{
@@ -120,7 +124,7 @@ char	*extract_complex_token(t_minishell *m)
 	}
 	m->t_list->quote = Q_NONE;
 	idx = 0;
-	if (!fill_complex_res(tok, res, &idx))
+	if (!fill_complex_res(m->t_list->tok, res, &idx))
 	{
 		m->t_list->tok->err = 1;
 		free(res);
