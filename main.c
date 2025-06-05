@@ -10,14 +10,14 @@ static void	process_input(char *input, t_minishell *minishell)
 	if (!fill_tokens(minishell, input))
 	{
 		ft_putstr("syntax error: unclosed quote\n", 2);
-		free_token_list(minishell->token_list);
-		minishell->token_list = NULL;
+		free_t_list(minishell->t_list);
+		minishell->t_list = NULL;
 		return ;
 	}
-	if (!check_syntax_pipes(minishell->token_list))
+	if (!check_syntax_pipes(minishell->t_list))
 	{
-		free_token_list(minishell->token_list);
-		minishell->token_list = NULL;
+		free_t_list(minishell->t_list);
+		minishell->t_list = NULL;
 		return ;
 	}
 	ft_execute(minishell);
@@ -27,10 +27,10 @@ static void	process_input(char *input, t_minishell *minishell)
 		minishell->pipex_data = NULL;
 		minishell->command_list = NULL;
 	}
-	if (minishell->token_list)
+	if (minishell->t_list)
 	{
-		free_token_list(minishell->token_list);
-		minishell->token_list = NULL;
+		free_t_list(minishell->t_list);
+		minishell->t_list = NULL;
 	}
 	status_str = ft_itoa(g_status);
 	add_env_node(&minishell->env_list, "?", status_str, 1);

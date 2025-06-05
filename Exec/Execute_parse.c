@@ -11,7 +11,7 @@ t_command	*parse_commands(t_minishell *mini)
 	heredoc_index = 0;
 	head = NULL;
 	curr = NULL;
-	token = mini->token_list;
+	token = mini->t_list;
 	while (token)
 	{
 		if (!curr)

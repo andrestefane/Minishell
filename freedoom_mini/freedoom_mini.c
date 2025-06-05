@@ -6,8 +6,8 @@ void	free_minishell(t_minishell *minishell)
 		return ;
 	if (minishell->env_list)
 		free_env_list(minishell->env_list);
-	if (minishell->token_list)
-		free_token_list(minishell->token_list);
+	if (minishell->t_list)
+		free_t_list(minishell->t_list);
 	if (minishell->command_list
 		&& minishell->pipex_data
 		&& minishell->command_list != minishell->pipex_data->commands)

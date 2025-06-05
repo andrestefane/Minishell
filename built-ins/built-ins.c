@@ -4,7 +4,7 @@ int	is_builtin(t_minishell *mini)
 {
 	t_token	*token;
 
-	token = mini->token_list;
+	token = mini->t_list;
 	if (!token || !token->value)
 		return (NO_BUITIN);
 	if (!ft_strcmp(token->value, "echo")

@@ -60,6 +60,7 @@ typedef struct s_token
 	t_token_type				type;
 	t_token_quote				quote;
 	t_expansion_type			expansion_type;
+	t_tokenizer					*tok;
 	struct s_token				*next;
 }								t_token;
 
@@ -103,7 +104,7 @@ typedef struct s_fd_pipex
 typedef struct s_minishell //uwu
 {
 	t_env						*env_list;
-	t_token						*token_list;
+	t_token						*t_list;
 	t_command					*command_list;
 	t_pipex						*pipex_data;
 }								t_minishell;
@@ -131,8 +132,7 @@ t_token							*create_token_and_detect_expansion(t_minishell *minishell,
 									t_token_quote quote);
 t_token							*add_token(t_token **head, char *value,
 									t_token_type type, t_token_quote quote);
-char							*extract_word(t_tokenizer *tok,
-									t_token_type *type);
+char							*extract_word(t_minishell *mini);
 void							free_tokens(t_token *head);
 int								fill_tokens(t_minishell *minishell,
 									char *input);
@@ -158,8 +158,7 @@ void							parse_heredoc(t_command *cmd, t_token **token,
 void							process_token(t_command **curr, t_token **token,
 									t_minishell *mini, int *index);
 void							child_process(t_minishell *mini, int fd[2]);
-char							*extract_token(t_tokenizer *tok,
-									t_token_type *type, t_token_quote *quote);
+char							*extract_token(t_minishell *mini);
 void							add_redir_to_cmd(t_command *cmd, int type,
 									const char *filename);
 char							*handle_heredoc_in_command(t_command *cmd,
@@ -268,7 +267,7 @@ void							add_or_update_env(char *arg, t_env **env_list);
 void							free_pipex_data(t_pipex *data);
 void							free_command_list(t_command *cmd);
 void							free_redir_list(t_redir *redir);
-void							free_token_list(t_token *token);
+void							free_t_list(t_token *token);
 void							free_env_list(t_env *env);
 void							free_minishell(t_minishell *minishell);
 

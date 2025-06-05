@@ -27,7 +27,7 @@ static t_command	*allocate_command(t_token *tokens)
 t_command	*parse_single_command(t_minishell *minishell)
 {
 	t_token *tokens;
-	tokens = minishell->token_list;
+	tokens = minishell->t_list;
 	t_command *cmd = allocate_command(tokens);
 	t_token *tk = tokens;
 	int i = 0;
