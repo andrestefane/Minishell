@@ -1,21 +1,19 @@
 #include "../Mini.h"
 
-void	add_command_to_list(t_command **head, t_command *new_cmd)
+void	add_command_to_list(t_minishell *mini)
 {
-	t_command	*tmp;
-
-	if (!*head)
+	if (!mini->head)
 	{
-		*head = new_cmd;
+		mini->head = mini->curr;
 		return ;
 	}
-	tmp = *head;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new_cmd;
+	mini->tmp = mini->head;
+	while (mini->tmp->next)
+		mini->tmp = mini->tmp->next;
+	mini->tmp->next = mini->curr;
 }
 
-void	add_arg_to_command(t_command *cmd, char *arg)
+void	add_arg_to_command(t_minishell *mini, char *arg)
 {
 	int		count;
 	int		i;
@@ -23,9 +21,9 @@ void	add_arg_to_command(t_command *cmd, char *arg)
 
 	count = 0;
 	i = 0;
-	if (cmd->argv)
+	if (mini->curr->argv)
 	{
-		while (cmd->argv[count])
+		while (mini->curr->argv[count])
 			count++;
 	}
 	new_argv = malloc(sizeof(char *) * (count + 2));
@@ -33,13 +31,13 @@ void	add_arg_to_command(t_command *cmd, char *arg)
 		exit_with_error("Error malloc argv\n", 1, 2);
 	while (i < count)
 	{
-		new_argv[i] = cmd->argv[i];
+		new_argv[i] = mini->curr->argv[i];
 		i++;
 	}
 	new_argv[count] = ft_strdup(arg);
 	new_argv[count + 1] = NULL;
-	free(cmd->argv);
-	cmd->argv = new_argv;
+	free(mini->curr->argv);
+	mini->curr->argv = new_argv;
 }
 
 int	count_commands_list(t_minishell *mini)
