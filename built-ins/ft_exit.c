@@ -25,8 +25,8 @@ int	ft_exit(t_command *cmd, t_minishell *minishell)
 	ft_putstr("exit\n", 2);
 	if (!cmd->argv[1])
 	{
+		// Liberamos la memoria solo una vez antes de salir
 		free_minishell(minishell);
-		free(minishell);
 		exit(g_status);
 	}
 	if (cmd->argv[2])
@@ -39,12 +39,14 @@ int	ft_exit(t_command *cmd, t_minishell *minishell)
 		ft_putstr("exit: ", 2);
 		ft_putstr(cmd->argv[1], 2);
 		ft_putstr(": numeric argument required\n", 2);
-	/* 	free_minishell(minishell);
-		free(minishell); */
+		// Liberamos la memoria solo una vez antes de salir
+		free_minishell(minishell);
+		free(minishell);
 		exit(255);
 	}
 	code = ft_atoi(cmd->argv[1]);
-/* 	free_minishell(minishell);
-	free(minishell); */
+	// Liberamos la memoria solo una vez antes de salir
+	free_minishell(minishell);
+	free(minishell);
 	exit(code % 256);
 }
