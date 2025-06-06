@@ -56,18 +56,18 @@ void	execute_pipeline(t_minishell *mini)
 		mini->command_list = mini->command_list->next;
 		i++;
 	}
-	execute_last_command(mini, mini->command_list, i);
+	execute_last_command(mini, i);
 	if (mini->pipex_data->prev_fd != -1)
 		close(mini->pipex_data->prev_fd);
 	wait_status(mini->pipex_data);
 }
 
-void	execute_last_command(t_minishell *mini, t_command *curr, int i)
+void	execute_last_command(t_minishell *mini, int i)
 {
 	if (mini->pipex_data->builtins == 1)
 	{
-		apply_redirections(curr);
-		execute_buitin(curr, mini->env_list, mini);
+		apply_redirections(mini);
+		execute_buitin(mini);
 		if (mini->pipex_data->prev_fd != -1)
 			close(mini->pipex_data->prev_fd);
 	}
@@ -84,8 +84,8 @@ void	execute_last_command(t_minishell *mini, t_command *curr, int i)
 					exit_with_error("dup2 final prev_fd failed\n", 1, 2);
 				close(mini->pipex_data->prev_fd);
 			}
-			apply_redirections(curr);
-			if (!curr->argv || !curr->argv[0])
+			apply_redirections(mini);
+			if (!mini->command_list->argv || !mini->command_list->argv[0])
 				exit(0);
 			ft_cmd(mini);
 		}
@@ -95,13 +95,17 @@ void	execute_last_command(t_minishell *mini, t_command *curr, int i)
 void	ft_execute(t_minishell *mini)
 {
 	int	i;
+	t_token	*tokken;
 
 	i = 0;
 	mini->pipex_data = init_pipex();
 	if (!mini->pipex_data)
 		exit_with_error("Error init_pipex\n", 1, 2);
 	mini->pipex_data->builtins = is_builtin(mini);
+	tokken = mini->t_list;
 	mini->command_list = parse_commands(mini);
+	mini->t_list = tokken;
+	// printf("t_lista que es: %p\n", mini->t_list);
 	mini->pipex_data->commands = mini->command_list;
 	/* if (!mini->command_list)
 		exit_with_error("Error parsing commands\n", 1, 2); */

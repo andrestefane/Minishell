@@ -7,14 +7,14 @@ void	wait_status(t_pipex *data)
 	int		count;
 
 	count = 0;
-	while (count < data->n_cmds)
+	while (count < data->n_cmds && data->pid[count] != -1)
 	{
-		if (data->pid[count] > 0)
-		{
+		// if (data->pid[count] > 0)
+		// {
 			pid = waitpid(data->pid[count], &status, 0);
 			if (pid == -1)
 				perror("waitpid");
-		}
+		// }
 		if (pid == -1)
 			exit_with_error("Waitpid failed\n", 1, 2);
 		/* printf("status dentro del puto bucle: %d\n", WEXITSTATUS(status)); */

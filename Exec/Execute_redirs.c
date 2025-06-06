@@ -34,8 +34,8 @@ void	apply_one_redirection(t_minishell *mini, t_redir *redir)
 	else
 		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		free_minishell(mini);
-			exit_with_error("Error opening file\n", 1, 2);
+		(free_minishell(mini),
+			exit_with_error("Error opening file\n", 1, 2));
 	if ((redir->type == T_RED_IN || redir->type == T_HEREDOC))
 	{
 		if (dup2(fd, STDIN_FILENO) == -1)

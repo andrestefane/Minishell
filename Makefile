@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -g3 -Wall -Wextra -Werror 
+CFLAGS = -g3 -Wall -Wextra -Werror
 LIBFT = libft
 LIBFT_DIR = libft/
 LIBFT_LIB = $(LIBFT_DIR)libft.a

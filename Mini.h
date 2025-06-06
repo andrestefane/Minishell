@@ -120,9 +120,11 @@ typedef struct s_minishell
 	t_tokenizer 				*tokenizer;
 	t_pipex						*pipex_data;
 	t_token						*curr_token;
-	t_token	*new_token;
-	t_token	*new_node;
-	t_token	*current;
+	t_token						*new_token;
+	t_token						*new_node;
+	t_token						*current;
+	char						**paths_execve;
+	char						**envir_execve;
 }								t_minishell;
 
 typedef enum e_builtin_type
@@ -172,8 +174,7 @@ void							add_redir_to_cmd(t_minishell *mini, int type,
 									const char *filename);
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
-void							execute_last_command(t_minishell *mini,
-									t_command *curr, int i);
+void							execute_last_command(t_minishell *mini, int i);
 
 void							process_and_exec(t_minishell *mini, int i);
 void							add_command_to_list(t_minishell *mini);
@@ -225,7 +226,7 @@ void							free_redirs(t_redir *redir);
 char							**env_to_array(t_env *env_list);
 char							*env_entry(t_env *node);
 int								env_list_size(t_env *env);
-void							check_errno(int err, char **args);
+void							check_errno(int err, t_minishell *mini);
 
 // Var
 void							expand_token(t_token *token, t_minishell *mini);
@@ -244,37 +245,35 @@ char							**append_env_variable(char **env,
 									const char *name, const char *value);
 void							set_env(char ***env, const char *name,
 									const char *value);
-t_env							*create_env_list(char **envp);
 
 // Built-ins
 
 int								is_builtin(t_minishell *mini);
 int								is_builtin_str(char *str);
-void							execute_buitin(t_command *cmd, t_env *env_list,
-									t_minishell *minishell);
-void							ft_unset(char **argv, t_env **env_list);
-void							ft_cd(char **argv, t_env **env_list);
+void							execute_buitin(t_minishell *minishell);
+void							ft_unset(t_minishell *minishell);
+void							ft_cd(t_minishell *minishell);
 void							execute_buitin_args(char **argv, char ***env,
-									t_env *env_list);
-void							ft_echo(t_command *cmd);
+									t_minishell *mini);
+void							ft_echo(t_minishell *minishell);
 void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
 void							ft_env(char **argv, char **env);
 
-int								ft_exit(t_command *cmd, t_minishell *minishell);
+int								ft_exit(t_minishell *minishell);
 
 int								is_numeric(const char *str);
 
-void							ft_export(char **argv, t_env **env_list);
-void							add_env_node(t_env **env_list, char *name,
+void							ft_export(t_minishell *minishell);
+void							add_env_node(t_minishell *mini, char *name,
 									char *value, int exported);
 t_env							*find_env(t_env *env_list, const char *name);
-t_env							*create_env_list(char **envp);
-int								count_exported(t_env *env);
-void							print_sorted_env(t_env *env);
+t_env							*create_env_list(char **envp, t_minishell *mini);
+int								count_exported(t_minishell *minishell);
+void							print_sorted_env(t_minishell *minishell);
 void							print_env_array(t_env **arr, int count);
 void							sort_env_array(t_env **arr, int count);
-void							add_or_update_env(char *arg, t_env **env_list);
+void							add_or_update_env(char *arg, t_minishell *mini);
 
 // Freedom
 void							free_pipex_data(t_pipex *data);

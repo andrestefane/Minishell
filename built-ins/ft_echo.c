@@ -1,6 +1,6 @@
 #include "../Mini.h"
 
-void	ft_echo(t_command *cmd)
+void	ft_echo(t_minishell *mini)
 {
 	int	new_line;
 	int	i;
@@ -9,22 +9,23 @@ void	ft_echo(t_command *cmd)
 // empieza en 1 para evitar el comando y el salto de linea
 	i = 1;
 	new_line = 1;
-	while (cmd->argv[i] && !ft_strncmp(cmd->argv[i], "-n", 2))
+	printf("hola echo \n");
+	while (mini->command_list->argv[i] && !ft_strncmp(mini->command_list->argv[i], "-n", 2))
 	{
 		//empieza el 2 para saltar la primera n y comprobar
 		//que el resto sea solo n
 		j = 2;
-		while (cmd->argv[i][j] == 'n')
+		while (mini->command_list->argv[i][j] == 'n')
 			j++;
-		if (cmd->argv[i][j] != '\0')
+		if (mini->command_list->argv[i][j] != '\0')
 			break ;
 		new_line = 0;
 		i++;
 	}
-	while (cmd->argv[i])
+	while (mini->command_list->argv[i])
 	{
-		ft_putstr(cmd->argv[i], 1);
-		if (cmd->argv[i + 1])
+		ft_putstr(mini->command_list->argv[i], 1);
+		if (mini->command_list->argv[i + 1])
 			ft_putstr(" ", 1);
 		i++;
 	}
