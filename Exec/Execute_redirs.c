@@ -6,24 +6,24 @@ int	is_redir(t_redir *redir)
 		|| redir->type == T_HEREDOC || redir->type == T_RED_APPEND);
 }
 
-void	apply_redirections(t_command *cmd)
+void	apply_redirections(t_minishell *mini)
 {
 	t_redir	*redir;
 
-	redir = cmd->redirs;
+	redir = mini->command_list->redirs;
 	while (redir)
 	{
 		if (is_redir(redir) && ft_strchr("|'\"", redir->filename[0]))
 		{
-			free_redir_list(redir);
+			free_minishell(mini);
 			exit_with_error(SYNTAX_ERROR, 1, 2);
 		}
-		apply_one_redirection(redir);
+		apply_one_redirection(mini, redir);
 		redir = redir->next;
 	}
 }
 
-void	apply_one_redirection(t_redir *redir)
+void	apply_one_redirection(t_minishell *mini, t_redir *redir)
 {
 	int	fd;
 
@@ -34,28 +34,19 @@ void	apply_one_redirection(t_redir *redir)
 	else
 		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-	{
-		free_redir_list(redir);
-		close(fd);
-		exit_with_error("Error opening file\n", 1, 2);
-	}
-	if (redir->type == T_RED_IN || redir->type == T_HEREDOC)
+		free_minishell(mini);
+			exit_with_error("Error opening file\n", 1, 2);
+	if ((redir->type == T_RED_IN || redir->type == T_HEREDOC))
 	{
 		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			free_redir_list(redir);
-			close(fd);
-			exit_with_error("dup2 infile failed\n", 1, 2);
-		}
+			(free_minishell(mini), close(fd),
+				exit_with_error("dup2 infile failed\n", 1, 2));
 	}
 	else
 	{
 		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			free_redir_list(redir);
-			close(fd);
-			exit_with_error("dup2 outfile failed\n", 1, 2);
-		}
+			(free_minishell(mini), close(fd),
+				exit_with_error("dup2 outfile failed\n", 1, 2));
 	}
 	close(fd);
 }

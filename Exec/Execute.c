@@ -22,7 +22,7 @@ void	process_and_exec(t_minishell *mini, int i)
 
 void	child_process(t_minishell *mini, int fd[2])
 {
-	apply_redirections(mini->command_list);
+	apply_redirections(mini);
 	if (!has_redir_type(mini->command_list, T_RED_IN)
 		&& !has_redir_type(mini->command_list, T_HEREDOC)
 		&& mini->pipex_data->prev_fd != -1)

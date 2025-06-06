@@ -203,7 +203,7 @@ char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
-void							apply_redirections(t_command *cmd);
+void							apply_redirections(t_minishell *mini);
 void							free_command_list(t_command *cmd);
 void							redir_heredoc(t_command *cmd);
 void							apply_heredoc(t_command *cmd);
@@ -217,7 +217,8 @@ void							ft_freedoom(char **str);
 int								is_redir(t_redir *redir);
 int								has_redir(t_command *cmd);
 int								has_redir_type(t_command *cmd, int type);
-void							apply_one_redirection(t_redir *redir);
+void							apply_one_redirection(t_minishell *mini,
+									t_redir *redir);
 void							wait_status(t_pipex *data);
 int								token_has_pipe(t_token *token);
 void							free_redirs(t_redir *redir);
