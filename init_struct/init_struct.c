@@ -9,5 +9,12 @@ t_minishell	init_minishell(void)
 	minishell.t_list = NULL;
 	minishell.command_list = NULL;
 	minishell.pipex_data = NULL;
+	minishell.head = NULL;
+	minishell.tmp = NULL;
+	minishell.tokenizer = NULL;
+	minishell.curr_token = NULL;
+	minishell.new_token = NULL;
+	minishell.new_node = NULL;
+	minishell.current = NULL;
 	return (minishell);
 }
