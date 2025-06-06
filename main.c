@@ -47,15 +47,8 @@ static void	process_input(char *input, t_minishell *minishell)
 		minishell->t_list = NULL;
 		return ;
 	}
-	// if (minishell->tokenizer->err)
-	// {
-	// 	// Se detectó error en metacaracteres como <<<
-	// 	free_t_list(minishell->t_list);
-	// 	minishell->t_list = NULL;
-	// 	return ;
-	// }
 
-	// print_token_list(minishell->t_list);
+	/* print_token_list(minishell->t_list); */
 	if (!check_syntax_pipes(minishell->t_list))
 	{
 		free_t_list(minishell->t_list);
@@ -105,10 +98,13 @@ void	mini_loop(t_minishell *minishell)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		prompt = get_prompt();
+
 		input = readline(prompt);
+
 		free(prompt);
 		if (!input)
 		{
+			free_minishell(minishell);
 			close(saved_stdin);
 			break ;
 		}
