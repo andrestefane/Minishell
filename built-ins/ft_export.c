@@ -1,25 +1,24 @@
 #include "../Mini.h"
 
-void	mark_as_exported(char *name, t_env **env_list)
+void	mark_as_exported(char *name, t_minishell *mini)
 {
 	t_env	*var;
 
-	var = find_env(*env_list, name);
+	var = find_env(mini->env_list, name);
 	if (var)
 		var->exported = 1;
 	else
-		add_env_node(env_list, name, NULL, 1);
+		add_env_node(mini, name, NULL, 1);
 }
 
-t_env	*create_env_list(char **envp)
+t_env	*create_env_list(char **envp, t_minishell *mini)
 {
-	t_env	*env_list;
 	int		i;
 	char	*equal;
 	char	*name;
 	char	*value;
 
-	env_list = NULL;
+	mini->env_list = NULL;
 	i = 0;
 	while (envp[i])
 	{
@@ -28,13 +27,13 @@ t_env	*create_env_list(char **envp)
 		{
 			name = ft_substr(envp[i], 0, equal - envp[i]);
 			value = ft_strdup(equal + 1);
-			add_env_node(&env_list, name, value, 1);
+			add_env_node(mini, name, value, 1);
 			free(name);
 			free(value);
 		}
 		i++;
 	}
-	return (env_list);
+	return (mini->env_list);
 }
 
 int	is_valid_identifier(const char *str)
@@ -53,7 +52,7 @@ int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-void	ft_export(char **argv, t_env **env_list)
+void	ft_export(t_minishell *mini)
 {
 	int		i;
 	char	*equal;
@@ -62,29 +61,30 @@ void	ft_export(char **argv, t_env **env_list)
 
 	i = 1;
 	error = 0;
-	if (!argv[1])
+	if (!mini->command_list->argv[1])
 	{
-		print_sorted_env(*env_list);
+		print_sorted_env(mini);
 		return ;
 	}
-	while (argv[i])
+	while (mini->command_list->argv[i])
 	{
-		equal = ft_strchr(argv[i], '=');
+		equal = ft_strchr(mini->command_list->argv[i], '=');
 		if (equal)
-			name = ft_substr(argv[i], 0, equal - argv[i]);
+			name = ft_substr(mini->command_list->argv[i], 0, equal
+					- mini->command_list->argv[i]);
 		else
-			name = ft_strdup(argv[i]);
+			name = ft_strdup(mini->command_list->argv[i]);
 		if (!is_valid_identifier(name))
 		{
 			ft_putstr("export: `", 2);
-			ft_putstr(argv[i], 2);
+			ft_putstr(mini->command_list->argv[i], 2);
 			ft_putstr("': not a valid identifier\n", 2);
 			error = 1;
 		}
 		else if (equal)
-			add_or_update_env(argv[i], env_list);
+			add_or_update_env(mini->command_list->argv[i], mini);
 		else
-			mark_as_exported(name, env_list);
+			mark_as_exported(name, mini);
 		free(name);
 		i++;
 	}

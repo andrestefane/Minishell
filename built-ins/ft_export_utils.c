@@ -26,12 +26,12 @@ t_env	*find_env(t_env *env_list, const char *name)
 	return (NULL);
 }
 
-void	add_env_node(t_env **env_list, char *name, char *value, int exported)
+void	add_env_node(t_minishell *mini, char *name, char *value, int exported)
 {
 	t_env	*tmp;
 	t_env	*new;
 
-	tmp = *env_list;
+	tmp = mini->env_list;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->name, name))
@@ -63,11 +63,11 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 	new->exported = exported;
 	new->signal = 0;
 	new->next = NULL;
-	if (!*env_list)
-		*env_list = new;
+	if (!mini->env_list)
+		mini->env_list = new;
 	else
 	{
-		tmp = *env_list;
+		tmp = mini->env_list;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
@@ -75,43 +75,47 @@ void	add_env_node(t_env **env_list, char *name, char *value, int exported)
 }
 
 
-int	count_exported(t_env *env)
+int	count_exported(t_minishell *mini)
 {
 	int	count;
+	t_env	*tmp;
 
+	tmp = mini->env_list;
 	count = 0;
-	while (env)
+	while (mini->env_list)
 	{
-		if (env->exported)
+		if (mini->env_list->exported)
 			count++;
-		env = env->next;
+		mini->env_list = mini->env_list->next;
 	}
+	mini->env_list = tmp;
 	return (count);
 }
 
-void	print_sorted_env(t_env *env)
+void	print_sorted_env(t_minishell *mini)
 {
 	int		count;
 	int		i;
 	t_env	**arr;
 
-	count = count_exported(env);
+	count = count_exported(mini);
 	arr = malloc(sizeof(t_env *) * count);
 	if (!arr)
 		return ;
 	i = 0;
-	while (env)
+	while (mini->env_list)
 	{
-		if (env->exported)
-			arr[i++] = env;
-		env = env->next;
+		if (mini->env_list->exported)
+			arr[i++] = mini->env_list;
+		ft_putstr("en export arr -1 name:", 2);
+		mini->env_list = mini->env_list->next;
 	}
 	sort_env_array(arr, count);
 	print_env_array(arr, count);
 	free(arr);
 }
 
-void	add_or_update_env(char *arg, t_env **env_list)
+void	add_or_update_env(char *arg, t_minishell *mini)
 {
 	t_env	*var;
 	char	*equal;
@@ -123,13 +127,13 @@ void	add_or_update_env(char *arg, t_env **env_list)
 		return ;
 	name = ft_substr(arg, 0, equal - arg);
 	value = ft_strdup(equal + 1);
-	var = find_env(*env_list, name);
+	var = find_env(mini->env_list, name);
 	if (var)
 	{
 		free(var->value);
 		var->value = value;
 	}
 	else
-		add_env_node(env_list, name, value, 1);
+		add_env_node(mini, name, value, 1);
 	free(name);
 }

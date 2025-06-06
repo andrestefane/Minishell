@@ -48,7 +48,6 @@ static void	process_input(char *input, t_minishell *minishell)
 		return ;
 	}
 
-	/* print_token_list(minishell->t_list); */
 	if (!check_syntax_pipes(minishell->t_list))
 	{
 		free_t_list(minishell->t_list);
@@ -56,19 +55,10 @@ static void	process_input(char *input, t_minishell *minishell)
 		return ;
 	}
 	ft_execute(minishell);
-	if (minishell->pipex_data)
-	{
-		free_pipex_data(minishell->pipex_data);
-		minishell->pipex_data = NULL;
-		minishell->command_list = NULL;
-	}
-	if (minishell->t_list)
-	{
-		free_t_list(minishell->t_list);
-		minishell->t_list = NULL;
-	}
+	/* free_minishell(minishell);
+	free_t_list(minishell->t_list); */
 	status_str = ft_itoa(g_status);
-	add_env_node(&minishell->env_list, "?", status_str, 1);
+	add_env_node(minishell, "?", status_str, 1);
 	free(status_str);
 }
 
@@ -130,6 +120,15 @@ void	mini_loop(t_minishell *minishell)
 	}
 }
 
+void print_env_list(t_env *env)
+{
+	while (env)
+	{
+		if (env->value) // Solo imprimimos las que tienen valor (como env lo hace)
+			env = env->next;
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char		**my_env;
@@ -141,9 +140,10 @@ int	main(int argc, char **argv, char **env)
 		exit_with_error("Too many arguments\n", 1, 1);
 	minishell = init_minishell();
 	my_env = copy_env(env);
-	minishell.env_list = create_env_list(my_env);
+	minishell.env_list = create_env_list(my_env, &minishell);
+	/* print_env_list(minishell.env_list); */
 	status_str = ft_itoa(g_status);
-	add_env_node(&minishell.env_list, "?", status_str, 1);
+	add_env_node(&minishell, "?", status_str, 1);
 	ft_freedoom(my_env);
 	free(status_str);
 	do_signal();

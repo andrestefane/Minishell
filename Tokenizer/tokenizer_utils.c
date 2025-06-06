@@ -48,6 +48,7 @@ int	fill_tokens(t_minishell *minishell, char *input)
 		free(val);
 	}
 
+	// free(minishell->tokenizer->input);
 	free(minishell->tokenizer);
 	minishell->tokenizer = NULL;
 

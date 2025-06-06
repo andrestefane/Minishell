@@ -11,19 +11,19 @@ char	*get_env_value(char *name, t_env *env)
 	return (NULL);
 }
 
-void	ft_cd(char **argv, t_env **env_list)
+void	ft_cd(t_minishell *mini)
 {
 	char	*path;
 
-	if (argv[1] && argv[2])
+	if (mini->command_list->argv[1] && mini->command_list->argv[2])
 	{
 		ft_putstr("cd: too many arguments\n", 2);
 		g_status = 1;
 		return ;
 	}
-	if (!argv[1])
+	if (!mini->command_list->argv[1])
 	{
-		path = get_env_value("HOME", *env_list);
+		path = get_env_value("HOME", mini->env_list);
 		if (!path)
 		{
 			ft_putstr("cd: HOME not set\n", 2);
@@ -32,7 +32,7 @@ void	ft_cd(char **argv, t_env **env_list)
 		}
 	}
 	else
-		path = argv[1];
+		path = mini->command_list->argv[1];
 	if (chdir(path) == -1)
 	{
 		perror("cd");
@@ -40,6 +40,6 @@ void	ft_cd(char **argv, t_env **env_list)
 	}
 	else
 		g_status = 0;
-	if (!argv[1])
+	if (!mini->command_list->argv[1])
 		free(path);
 }

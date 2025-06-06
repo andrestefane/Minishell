@@ -2,12 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "lldb",
+            "name": "Debug Minishell con GDB",
+            "type": "cppdbg",
             "request": "launch",
-            "name": "Debug Minishell",
             "program": "${workspaceFolder}/minishell",
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Seguir proceso hijo tras fork",
+                    "text": "set follow-fork-mode child",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

@@ -26,6 +26,7 @@ char	*expand_env_in_str(char *src, t_minishell *mini)
 void	append_var(char **res, char *src, int *i, t_minishell *mini)
 {
 	char	*var;
+	char	*tmp;
 	char	*val;
 	int		len;
 	int		j;
@@ -35,10 +36,19 @@ void	append_var(char **res, char *src, int *i, t_minishell *mini)
 	{
 		val = get_env_value("?", mini->env_list);
 		if (val)
+		{
+			tmp = *res;
 			*res = ft_strjoin(*res, val);
+			free(tmp);
+		}
 		else
+		{
+			tmp = *res;
 			*res = ft_strjoin(*res, "");
+			free(tmp);
+		}
 		*i += 2;
+		free(val);
 		return ;
 	}
 	while (src[j] && (ft_isalnum(src[j]) || src[j] == '_'))

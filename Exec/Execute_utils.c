@@ -10,12 +10,12 @@ void	ft_cmd(t_minishell *mini)
 	envir = env_to_array(mini->env_list);
 	if (is_builtin_str(mini->command_list->argv[0]))
 	{
-		execute_buitin_args(mini->command_list->argv, &envir, mini->env_list);
-		free_env_list(mini->env_list);
-		free_pipex_data(mini->pipex_data);
+		execute_buitin_args(mini->command_list->argv, &envir, mini);
 		ft_freedoom(envir);
+		free_minishell(mini);
 		exit(0);
 	}
+
 	if (!envir || !*envir)
 		exit_with_error("Missing environment\n", 1, 2);
 	path_line = find_execpath(envir);
@@ -24,7 +24,6 @@ void	ft_cmd(t_minishell *mini)
 	possible_paths = ft_split(path_line, ':');
 	if (!possible_paths)
 		exit_with_error("Error possible path\n", 1, 2);
-	free_env_list(mini->env_list);
 	execute_command(mini, possible_paths, envir);
 }
 
@@ -75,42 +74,41 @@ void	execute_command(t_minishell *mini, char **paths, char **envir)
 		if (access(path, F_OK) != -1 && access(path, X_OK) == 0)
 		{
 			execve(path, mini->command_list->argv, envir);
-			free_pipex_data(mini->pipex_data);
-			ft_freedoom(paths);
 			free(path);
-			check_errno(errno, mini->command_list->argv);
+			check_errno(errno, mini);
 		}
 		free(path);
 		i++;
 	}
-	(check_errno(errno, mini->command_list->argv),
-		free_pipex_data(mini->pipex_data), ft_freedoom(envir),
-		ft_freedoom(paths), exit(127));
+	mini->paths_execve = paths;
+	mini->envir_execve = envir;
+	(check_errno(errno, mini), exit(127));
 }
 
-void	check_errno(int err, char **args)
+void	check_errno(int err, t_minishell *mini)
 {
 	if (err == EISDIR)
 	{
 		ft_putstr(": Is a directory\n", 2);
-		(ft_freedoom(args), exit(126));
+		(free_minishell(mini), exit(126));
 	}
 	else if (err == EACCES)
 	{
-		if (args[0] && !ft_strchr(args[0], '/'))
+		if (mini->command_list->argv[0]
+			&& !ft_strchr(mini->command_list->argv[0], '/'))
 			ft_putstr(": command not found\n", 2);
 		else
 			ft_putstr(": Permission denied\n", 2);
-		(ft_freedoom(args), exit(126));
+		(free_minishell(mini), exit(126));
 	}
 	else if (err == ENOENT)
 	{
 		ft_putstr(": command not found\n", 2);
-		(ft_freedoom(args), exit(127));
+		(free_minishell(mini), exit(127));
 	}
 	else
 	{
 		(ft_putstr(": ", 2), ft_putstr(strerror(err), 2),
-			ft_putstr("\n", 2), ft_freedoom(args), exit(1));
+			ft_putstr("\n", 2), free_minishell(mini), exit(1));
 	}
 }

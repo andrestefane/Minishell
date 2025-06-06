@@ -30,32 +30,32 @@ int	is_builtin_str(char *str)
 		|| !ft_strcmp(str, "exit"));
 }
 
-void	execute_buitin(t_command *cmd, t_env *env_list, t_minishell *minishell)
+void	execute_buitin(t_minishell *minishell)
 {
 	/* printf("DEBUG: estás usando TU built-in para %s en el padre\n", cmd->argv[0]);
  */
-	if (!ft_strcmp(cmd->argv[0], "echo"))
-		ft_echo(cmd);
-	if (!ft_strcmp(cmd->argv[0], "exit"))
-		ft_exit(cmd, minishell);
- 	else if (!ft_strcmp(cmd->argv[0], "cd"))
-		ft_cd(cmd->argv, &env_list);
-	else if (!ft_strcmp(cmd->argv[0], "unset"))
-		ft_unset(cmd->argv, &env_list);
-	else if (!ft_strcmp(cmd->argv[0], "export"))
-		ft_export(cmd->argv, &env_list);
+	/* if (!ft_strcmp(minishell->command_list->argv[0], "echo"))
+		ft_echo(minishell); */
+	if (!ft_strcmp(minishell->command_list->argv[0], "exit"))
+		ft_exit(minishell);
+ 	else if (!ft_strcmp(minishell->command_list->argv[0], "cd"))
+		ft_cd(minishell);
+	else if (!ft_strcmp(minishell->command_list->argv[0], "unset"))
+		ft_unset(minishell);
+	else if (!ft_strcmp(minishell->command_list->argv[0], "export"))
+		ft_export(minishell);
 
 }
 
-void	execute_buitin_args(char **argv, char ***env, t_env *env_list)
+void	execute_buitin_args(char **argv, char ***env, t_minishell *mini)
 {
 	/* printf("DEBUG: estás usando TU built-in para %s\n", argv[0]); */
 	if (!ft_strcmp(argv[0], "echo"))
 		ft_echo_arg(argv);
-	else if (!ft_strcmp(argv[0], "export"))
-		ft_export(argv, &env_list);
 	else if (!ft_strcmp(argv[0], "pwd"))
 		ft_pwd(argv, *env);
+	else if (!ft_strcmp(argv[0], "export"))
+		ft_export(mini);
 	else if (!ft_strcmp(argv[0], "env"))
 		ft_env(argv, *env);
 }
