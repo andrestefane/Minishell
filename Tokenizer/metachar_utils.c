@@ -2,17 +2,28 @@
 
 static int	extract_double_metachar(t_minishell *m)
 {
-	char	c;
+	char	*input = m->tokenizer->input + m->tokenizer->pos;
 
-	c = m->tokenizer->input[m->tokenizer->pos];
-	if ((c == '>'
-			&& m->tokenizer->input[m->tokenizer->pos + 1] == '>')
-		|| (c == '<' && m->tokenizer->input[m->tokenizer->pos + 1] == '<'))
-	{
-		if (c == '>')
-			m->tokenizer->prev_type = T_RED_APPEND;
-		else
+	// Contar cuántos '<' seguidos hay
+	if (input[0] == '<') {
+		int count = 0;
+		while (input[count] == '<')
+			count++;
+		if (count > 2) {
+			ft_putstr("minishell: syntax error near unexpected token `<<<'\n", STDERR_FILENO);
+			m->tokenizer->err = 1;
+			return (0);
+		}
+		if (count == 2) {
 			m->tokenizer->prev_type = T_HEREDOC;
+			m->tokenizer->pos += 2;
+			return (1);
+		}
+	}
+	// Lo mismo para '>' si quieres hacer validaciones similares, aunque no suele ser necesario
+
+	if (input[0] == '>' && input[1] == '>') {
+		m->tokenizer->prev_type = T_RED_APPEND;
 		m->tokenizer->pos += 2;
 		return (1);
 	}
