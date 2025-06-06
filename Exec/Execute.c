@@ -103,8 +103,8 @@ void	ft_execute(t_minishell *mini)
 	mini->pipex_data->builtins = is_builtin(mini);
 	mini->command_list = parse_commands(mini);
 	mini->pipex_data->commands = mini->command_list;
-	if (!mini->command_list)
-		exit_with_error("Error parsing commands\n", 1, 2);
+	/* if (!mini->command_list)
+		exit_with_error("Error parsing commands\n", 1, 2); */
 	mini->pipex_data->n_cmds = count_commands_list(mini);
 	mini->pipex_data->pid = malloc(sizeof(pid_t) * mini->pipex_data->n_cmds);
 	if (!mini->pipex_data->pid)
