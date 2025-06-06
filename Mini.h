@@ -120,6 +120,9 @@ typedef struct s_minishell
 	t_tokenizer 				*tokenizer;
 	t_pipex						*pipex_data;
 	t_token						*curr_token;
+	t_token	*new_token;
+	t_token	*new_node;
+	t_token	*current;
 }								t_minishell;
 
 typedef enum e_builtin_type
@@ -280,6 +283,8 @@ void							free_t_list(t_token *token);
 void							free_env_list(t_env *env);
 void							free_redirs(t_redir *redir);
 void							free_minishell(t_minishell *minishell);
+void free_tokenizer(t_tokenizer *tok);
+void free_and_reset_token_list(t_minishell *mini);
 
 t_pipex							*init_pipex(void);
 t_command						*init_command(void);
