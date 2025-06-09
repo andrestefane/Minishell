@@ -14,6 +14,7 @@ SRCS = \
 	./init_struct/init_struct.c \
 	./Tokenizer/Tokens.c \
 	./Tokenizer/tokenizer_utils.c \
+	./Tokenizer/tokenizer_more_utils.c \
 	./Tokenizer/metachar_utils.c \
 	./Tokenizer/quoted_utils.c \
 	./Tokenizer/expansion_utils.c \
