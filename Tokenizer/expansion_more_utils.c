@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:05:31 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 16:47:52 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:53:42 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_token	*check_expansion(t_minishell *minishell, char *val)
 		new_token->expansion_type = NO_EXPANSION;
 	return (new_token);
 }
-
 
 char	*expand_env_in_str(char *src, t_minishell *mini)
 {
