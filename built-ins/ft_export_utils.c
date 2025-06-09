@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 12:25:49 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 14:15:34 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:45:15 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,21 @@ void	print_sorted_env(t_minishell *mini)
 	int		count;
 	int		i;
 	t_env	**arr;
+	t_env	*tmp;
 
 	count = count_exported(mini);
 	arr = malloc(sizeof(t_env *) * count);
 	if (!arr)
 		return ;
 	i = 0;
-	while (mini->env_list)
+	tmp = mini->env_list;
+	while (tmp)
 	{
-		if (mini->env_list->exported)
-			arr[i++] = mini->env_list;
-		ft_putstr("en export arr -1 name:", 2);
-		mini->env_list = mini->env_list->next;
+		if (tmp->exported)
+			arr[i++] = tmp;
+		tmp = tmp->next;
 	}
 	sort_env_array(arr, count);
 	print_env_array(arr, count);
 	free(arr);
 }
-
