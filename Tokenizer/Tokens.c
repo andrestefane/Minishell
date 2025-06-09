@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Tokens.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 16:07:19 by alejaro2          #+#    #+#             */
+/*   Updated: 2025/06/09 16:07:22 by alejaro2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../Mini.h"
 
@@ -23,13 +33,11 @@ t_token	*add_token(t_minishell *minishell, char *value)
 	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
-
 	new_node->value = ft_strdup(value);
-	new_node->type = minishell->tokenizer->prev_type;  // ✅ usa tokenizer real
-	new_node->quote = Q_NONE; // o usa minishell->tokenizer->quote si lo implementás
+	new_node->type = minishell->tokenizer->prev_type;
+	new_node->quote = Q_NONE;
 	new_node->expansion_type = NO_EXPANSION;
 	new_node->next = NULL;
-
 	if (minishell->t_list == NULL)
 	{
 		minishell->t_list = new_node;
@@ -62,19 +70,12 @@ char	*extract_word(t_minishell *m)
 	int		start;
 	char	*word;
 
-	// ✅ Usar tokenizer directamente
 	start = m->tokenizer->pos;
-
-	// ✅ Avanzar mientras sea carácter válido
 	while (is_word_char(m->tokenizer->input[m->tokenizer->pos]))
 		m->tokenizer->pos++;
-
 	if (m->tokenizer->pos == start)
-		return (NULL);  // nada extraído
-
-	// ✅ Extraer la subcadena
+		return (NULL);
 	word = ft_substr(m->tokenizer->input, start, m->tokenizer->pos - start);
-
 	return (word);
 }
 
@@ -82,20 +83,13 @@ char	*extract_token(t_minishell *m)
 {
 	char	*val;
 
-	// Saltar espacios
-	while (m->tokenizer->input[m->tokenizer->pos] == ' ' ||
-		   m->tokenizer->input[m->tokenizer->pos] == '\t')
+	while (m->tokenizer->input[m->tokenizer->pos] == ' '
+		|| m->tokenizer->input[m->tokenizer->pos] == '\t')
 		m->tokenizer->pos++;
-
-	// Fin de input
 	if (m->tokenizer->input[m->tokenizer->pos] == '\0')
 		return (NULL);
-
-	// Intentar extraer metacharacter (|, >, <, etc.)
 	val = extract_metachar(m);
 	if (val)
 		return (val);
-
-	// Si no, extraer token complejo o palabra
 	return (extract_complex_token(m));
 }
