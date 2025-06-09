@@ -6,41 +6,11 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 14:45:06 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 14:45:07 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:41:41 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
-
-void	print_token_list(t_token *head)
-{
-	int	i;
-
-	i = 0;
-	if (!head)
-	{
-		printf("Token list is empty.\n");
-		return ;
-	}
-	while (head)
-	{
-		printf("Token %d:\n", i);
-		if (!head)
-		{
-			printf("  Invalid head pointer\n");
-			break ;
-		}
-		if (!head->value)
-			printf("  value: (null)\n");
-		else
-			printf("  value: %s\n", head->value);
-		printf("  type: %d\n", head->type);
-		printf("  quote: %d\n", head->quote);
-		printf("  expansion: %d\n", head->expansion_type);
-		head = head->next;
-		i++;
-	}
-}
 
 static void	process_input(char *input, t_minishell *minishell)
 {

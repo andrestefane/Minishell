@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 12:05:40 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 14:37:09 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:45:32 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,6 @@ void	ft_execute(t_minishell *mini)
 	}
 	execute_pipeline(mini);
 	delete_heredoc_files(mini->pipex_data->count_heredoc);
-	/* if (mini->pipex_data)
-		free_pipex_data(mini->pipex_data); */
+	if (mini->pipex_data)
+		free_pipex_data(mini->pipex_data);
 }
