@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 12:27:15 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 12:27:16 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 static int	env_len(char **env)
@@ -44,4 +56,27 @@ char	*get_env_name(char **env, const char *name)
 		i++;
 	}
 	return (NULL);
+}
+
+void	add_or_update_env(char *arg, t_minishell *mini)
+{
+	t_env	*var;
+	char	*equal;
+	char	*name;
+	char	*value;
+
+	equal = ft_strchr(arg, '=');
+	if (!equal)
+		return ;
+	name = ft_substr(arg, 0, equal - arg);
+	value = ft_strdup(equal + 1);
+	var = find_env(mini->env_list, name);
+	if (var)
+	{
+		free(var->value);
+		var->value = value;
+	}
+	else
+		add_env_node(mini, name, value, 1);
+	free(name);
 }

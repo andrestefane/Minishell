@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:50:21 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 15:30:12 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 char	*expand_env_in_str(char *src, t_minishell *mini)
@@ -85,11 +97,7 @@ t_token	*create_token_and_detect_expansion(t_minishell *minishell, char *val)
 	new_token = add_token(minishell, val);
 	if (!new_token)
 		return (NULL);
-
-	// ← Importante: asignar tipo desde el tokenizer
 	new_token->type = minishell->tokenizer->prev_type;
-
-	// Detectar expansión
 	if (new_token->type == T_WORD && new_token->value[0] == '$')
 	{
 		if (new_token->value[1] == '?' && new_token->value[2] == '\0')

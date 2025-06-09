@@ -17,6 +17,7 @@ SRCS = \
 	./Tokenizer/metachar_utils.c \
 	./Tokenizer/quoted_utils.c \
 	./Tokenizer/expansion_utils.c \
+	./Tokenizer/expansion_more_utils.c \
 	./Varibles/variables.c \
 	./Varibles/variables_utils.c \
 	./Exec/Execute_add_commands.c \
@@ -47,6 +48,7 @@ SRCS = \
 	./built-ins/ft_cd.c \
 	./built-ins/ft_unset.c\
 	./built-ins/ft_export_utils.c \
+	./built-ins/ft_export_more_utils.c \
 
 OBJS = $(SRCS:.c=.o)
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJS))

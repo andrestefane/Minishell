@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Execute_wait_status.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:38:51 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 14:39:04 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 void	wait_status(t_pipex *data)
@@ -9,15 +21,11 @@ void	wait_status(t_pipex *data)
 	count = 0;
 	while (count < data->n_cmds && data->pid[count] != -1)
 	{
-		// if (data->pid[count] > 0)
-		// {
-			pid = waitpid(data->pid[count], &status, 0);
-			if (pid == -1)
-				perror("waitpid");
-		// }
+		pid = waitpid(data->pid[count], &status, 0);
+		if (pid == -1)
+			perror("waitpid");
 		if (pid == -1)
 			exit_with_error("Waitpid failed\n", 1, 2);
-		/* printf("status dentro del puto bucle: %d\n", WEXITSTATUS(status)); */
 		if (pid == data->pid[data->n_cmds - 1])
 		{
 			if (WIFEXITED(status))

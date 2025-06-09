@@ -1,15 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:14:30 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 15:26:52 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
-
-void	mark_as_exported(char *name, t_minishell *mini)
-{
-	t_env	*var;
-
-	var = find_env(mini->env_list, name);
-	if (var)
-		var->exported = 1;
-	else
-		add_env_node(mini, name, NULL, 1);
-}
 
 t_env	*create_env_list(char **envp, t_minishell *mini)
 {
@@ -54,10 +55,8 @@ int	is_valid_identifier(const char *str)
 
 void	ft_export(t_minishell *mini)
 {
-	int		i;
-	char	*equal;
-	char	*name;
-	int		error;
+	int	i;
+	int	error;
 
 	i = 1;
 	error = 0;
@@ -68,27 +67,37 @@ void	ft_export(t_minishell *mini)
 	}
 	while (mini->command_list->argv[i])
 	{
-		equal = ft_strchr(mini->command_list->argv[i], '=');
-		if (equal)
-			name = ft_substr(mini->command_list->argv[i], 0, equal
-					- mini->command_list->argv[i]);
-		else
-			name = ft_strdup(mini->command_list->argv[i]);
-		if (!is_valid_identifier(name))
-		{
-			ft_putstr("export: `", 2);
-			ft_putstr(mini->command_list->argv[i], 2);
-			ft_putstr("': not a valid identifier\n", 2);
-			error = 1;
-		}
-		else if (equal)
-			add_or_update_env(mini->command_list->argv[i], mini);
-		else
-			mark_as_exported(name, mini);
-		free(name);
+		error = process_export_argument(mini->command_list->argv[i], mini);
 		i++;
 	}
 	g_status = error;
+}
+
+int	process_export_argument(char *arg, t_minishell *mini)
+{
+	char	*equal;
+	char	*name;
+	int		error;
+
+	error = 0;
+	equal = ft_strchr(arg, '=');
+	if (equal)
+		name = ft_substr(arg, 0, equal - arg);
+	else
+		name = ft_strdup(arg);
+	if (!is_valid_identifier(name))
+	{
+		ft_putstr("export: `", 2);
+		ft_putstr(arg, 2);
+		ft_putstr("': not a valid identifier\n", 2);
+		error = 1;
+	}
+	else if (equal)
+		add_or_update_env(arg, mini);
+	else
+		mark_as_exported(name, mini);
+	free(name);
+	return (error);
 }
 
 void	sort_env_array(t_env **arr, int count)

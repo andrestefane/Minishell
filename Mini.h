@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Mini.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 12:38:46 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 15:08:13 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINI_H
 
 # define MINI_H
@@ -56,10 +68,10 @@ typedef enum e_expansion_type
 
 typedef struct s_tokenizer
 {
-	char *input; // String completo
-	int pos;     // Posición actual
+	char						*input;
+	int							pos;
 	t_token_type				prev_type;
-	t_token_quote 				quote;
+	t_token_quote				quote;
 	int							err;
 }								t_tokenizer;
 
@@ -71,7 +83,6 @@ typedef struct s_token
 	t_expansion_type			expansion_type;
 	struct s_token				*next;
 }								t_token;
-
 
 typedef struct s_redir
 {
@@ -117,7 +128,7 @@ typedef struct s_minishell
 	t_command					*head;
 	t_command					*tmp;
 	t_command					*curr;
-	t_tokenizer 				*tokenizer;
+	t_tokenizer					*tokenizer;
 	t_pipex						*pipex_data;
 	t_token						*curr_token;
 	t_token						*new_token;
@@ -135,7 +146,6 @@ typedef enum e_builtin_type
 }								t_builtin_type;
 
 // signals
-int								get_heredoc(char *limiter, char **my_env);
 void							do_signal(void);
 void							sighandler(int signal);
 
@@ -175,7 +185,7 @@ void							add_redir_to_cmd(t_minishell *mini, int type,
 char							*handle_heredoc_in_command(t_command *cmd,
 									char *limiter, int index);
 void							execute_last_command(t_minishell *mini, int i);
-
+int								process_heredoc(int fd, char *limiter);
 void							process_and_exec(t_minishell *mini, int i);
 void							add_command_to_list(t_minishell *mini);
 void							free_struct(t_pipex *data, char *message, int i,
@@ -200,7 +210,6 @@ void							add_arg_to_command(t_minishell *mini,
 									char *arg);
 void							parse_red_in(t_minishell *mini,
 									t_token **token);
-char							**cmd_managment(t_pipex *data, char *cmd);
 void							heredoc_signal(int sing);
 int								count_commands_list(t_minishell *mini);
 void							ft_execute(t_minishell *mini);
@@ -234,6 +243,12 @@ char							*env_value(const char *name, t_env *env);
 void							append_literal(char **res, char *src, int len);
 void							append_var(char **res, char *src, int *i,
 									t_minishell *mini);
+void							get_variable_length(char *src, int *i,
+									int *len);
+void							handle_variable(char **res, char *var,
+									t_minishell *mini);
+void							handle_question_mark(char **res, int *i,
+									t_minishell *mini);
 char							*expand_env_in_str(char *src,
 									t_minishell *mini);
 
@@ -255,20 +270,30 @@ void							ft_unset(t_minishell *minishell);
 void							ft_cd(t_minishell *minishell);
 void							execute_buitin_args(char **argv, char ***env,
 									t_minishell *mini);
-void							ft_echo(t_minishell *minishell);
+void							mark_as_exported(char *name, t_minishell *mini);
+int								process_export_argument(char *arg,
+									t_minishell *mini);
 void							ft_pwd(char **argv, char **env);
 void							ft_echo_arg(char **argv);
 void							ft_env(char **argv, char **env);
-
 int								ft_exit(t_minishell *minishell);
 
 int								is_numeric(const char *str);
 
 void							ft_export(t_minishell *minishell);
+int								update_existing_node(t_env *tmp, char *name,
+									char *value, int exported);
+void							update_node_value(t_env *tmp, char *value,
+									int exported);
+t_env							*create_new_node(char *name, char *value,
+									int exported);
+void							append_node_to_list(t_minishell *mini,
+									t_env *new);
 void							add_env_node(t_minishell *mini, char *name,
 									char *value, int exported);
 t_env							*find_env(t_env *env_list, const char *name);
-t_env							*create_env_list(char **envp, t_minishell *mini);
+t_env							*create_env_list(char **envp,
+									t_minishell *mini);
 int								count_exported(t_minishell *minishell);
 void							print_sorted_env(t_minishell *minishell);
 void							print_env_array(t_env **arr, int count);
@@ -283,8 +308,8 @@ void							free_t_list(t_token *token);
 void							free_env_list(t_env *env);
 void							free_redirs(t_redir *redir);
 void							free_minishell(t_minishell *minishell);
-void free_tokenizer(t_tokenizer *tok);
-void free_and_reset_token_list(t_minishell *mini);
+void							free_tokenizer(t_tokenizer *tok);
+void							free_and_reset_token_list(t_minishell *mini);
 
 t_pipex							*init_pipex(void);
 t_command						*init_command(void);

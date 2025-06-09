@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Execute_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:21:25 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 15:25:35 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
-// Puede ser que haya que liberar el env si falla
 void	ft_cmd(t_minishell *mini)
 {
 	char	**possible_paths;
@@ -15,15 +26,17 @@ void	ft_cmd(t_minishell *mini)
 		free_minishell(mini);
 		exit(0);
 	}
-
 	if (!envir || !*envir)
-		exit_with_error("Missing environment\n", 1, 2);
+		(exit_with_error("Missing environment\n", 1, 2), free_minishell(mini),
+			ft_freedoom(envir));
 	path_line = find_execpath(envir);
 	if (!path_line)
-		exit_with_error("Error with path\n", 1, 2);
+		(exit_with_error("Error with path\n", 1, 2), free_minishell(mini),
+			ft_freedoom(envir));
 	possible_paths = ft_split(path_line, ':');
 	if (!possible_paths)
-		exit_with_error("Error possible path\n", 1, 2);
+		(exit_with_error("Error with possible path\n", 1, 2),
+			free_minishell(mini), ft_freedoom(envir));
 	execute_command(mini, possible_paths, envir);
 }
 
@@ -74,7 +87,7 @@ void	execute_command(t_minishell *mini, char **paths, char **envir)
 		if (access(path, F_OK) != -1 && access(path, X_OK) == 0)
 		{
 			execve(path, mini->command_list->argv, envir);
-			free(path);
+			/* free(path); */
 			check_errno(errno, mini);
 		}
 		free(path);

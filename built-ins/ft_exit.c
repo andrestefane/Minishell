@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 12:25:43 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 13:12:07 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 int	is_numeric(const char *str)
@@ -25,28 +37,23 @@ int	ft_exit(t_minishell *minishell)
 	ft_putstr("exit\n", 2);
 	if (!minishell->command_list->argv[1])
 	{
-		// Liberamos la memoria solo una vez antes de salir
 		free_minishell(minishell);
 		exit(g_status);
 	}
 	if (minishell->command_list->argv[2])
 	{
 		ft_putstr(" too many arguments\n", 2);
-		return (1);
+		exit (1);
 	}
 	if (!is_numeric(minishell->command_list->argv[1]))
 	{
 		ft_putstr("exit: ", 2);
 		ft_putstr(minishell->command_list->argv[1], 2);
 		ft_putstr(": numeric argument required\n", 2);
-		// Liberamos la memoria solo una vez antes de salir
 		free_minishell(minishell);
-		free(minishell);
-		exit(255);
+		exit(2);
 	}
 	code = ft_atoi(minishell->command_list->argv[1]);
-	// Liberamos la memoria solo una vez antes de salir
 	free_minishell(minishell);
-	free(minishell);
 	exit(code % 256);
 }
