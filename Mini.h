@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Mini.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/09 12:38:46 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 16:43:11 by astefane         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINI_H
 
 # define MINI_H
@@ -169,6 +157,29 @@ char							*extract_complex_token(t_minishell *mini);
 int								is_empty_token(char *temp);
 char							*get_next_token_part(t_minishell *m);
 char							*extract_quoted_token(t_minishell *m);
+void							print_unclosed_error(char d);
+int								is_token_char(char c);
+int								handle_quote(t_tokenizer *tok, char *res,
+									size_t *i, char d);
+int								init_tokenizer(t_minishell *minishell,
+									char *input);
+int								tokenize_input(t_minishell *minishell);
+void							cleanup_tokenizer(t_minishell *minishell,
+									int success);
+int								fill_complex_res(t_tokenizer *tok, char *res,
+									size_t *idx);
+void							append_var(char **res, char *src, int *i,
+									t_minishell *mini);
+int								handle_special_var(char **res, char *src,
+									int *i, t_minishell *mini);
+int								handle_quote(t_tokenizer *tok, char *res,
+									size_t *i, char d);
+int								find_var_end(char *src, int start);
+void							handle_env_variable(char **res, char *src,
+									int *i, t_minishell *mini);
+void							append_env_value(char **res, char *src,
+									int var_start, int var_end,
+									t_minishell *mini);
 
 // Exec
 
