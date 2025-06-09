@@ -33,7 +33,7 @@ int	fill_tokens(t_minishell *minishell, char *input)
 			break ;
 		if (!val)
 			break ;
-		if (!create_token_and_detect_expansion(minishell, val))
+		if (!check_expansion(minishell, val))
 		{
 			success = 0;
 			free(val);

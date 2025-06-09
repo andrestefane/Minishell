@@ -6,11 +6,13 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 14:45:06 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 15:41:41 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:42:31 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mini.h"
+
+volatile sig_atomic_t	g_status = 0;
 
 static void	process_input(char *input, t_minishell *minishell)
 {
@@ -55,9 +57,9 @@ char	*get_prompt(void)
 
 void	mini_loop(t_minishell *mini)
 {
+	int		saved_stdin;
 	char	*prompt;
 	char	*input;
-	int		saved_stdin;
 
 	while (1)
 	{
@@ -67,30 +69,18 @@ void	mini_loop(t_minishell *mini)
 		free(prompt);
 		if (!input)
 		{
-			(free_env_list(mini->env_list),
-				free_tokenizer(mini->tokenizer), free_tokens(mini->t_list),
-				close(saved_stdin), free_pipex_data(mini->pipex_data));
+			(free_env_list(mini->env_list), free_tokenizer(mini->tokenizer),
+				free_tokens(mini->t_list), close(saved_stdin));
 			break ;
 		}
-		if (input[0] == '\0')
+		if (*input == '\0' || g_status == 128 + SIGINT)
 		{
-			free(input);
-			dup2(saved_stdin, STDIN_FILENO);
-			close(saved_stdin);
+			(free(input), g_status = 0, dup2(saved_stdin, STDIN_FILENO),
+				close(saved_stdin));
 			continue ;
 		}
-		if (g_status == 128 + SIGINT)
-		{
-			g_status = 0;
-			free(input);
-			dup2(saved_stdin, STDIN_FILENO);
-			close(saved_stdin);
-			continue ;
-		}
-		process_input(input, mini);
-		free(input);
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
+		(process_input(input, mini), free(input), dup2(saved_stdin,
+				STDIN_FILENO), close(saved_stdin));
 	}
 }
 

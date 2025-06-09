@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 11:25:54 by astefane          #+#    #+#             */
-/*   Updated: 2025/05/02 18:01:32 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:06:14 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,7 @@ char	*get_next_line(int fd, int mode)
 	{
 		while (i < 1024)
 		{
-			free(str[i]);
-			str[i] = NULL;
+			(free(str[i]), str[i] = NULL);
 			i++;
 		}
 		return (NULL);

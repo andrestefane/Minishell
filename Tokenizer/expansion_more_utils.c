@@ -6,68 +6,52 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:05:31 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 15:28:32 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:47:52 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Mini.h"
 
-// void	handle_question_mark(char **res, int *i, t_minishell *mini)
-// {
-// 	char	*val;
-// 	char	*tmp;
+t_token	*check_expansion(t_minishell *minishell, char *val)
+{
+	t_token	*new_token;
 
-// 	val = get_env_value("?", mini->env_list);
-// 	tmp = *res;
-// 	if (val)
-// 		*res = ft_strjoin(*res, val);
-// 	else
-// 		*res = ft_strjoin(*res, "");
-// 	free(tmp);
-// 	*i += 2;
-// 	free(val);
-// }
+	new_token = add_token(minishell, val);
+	if (!new_token)
+		return (NULL);
+	new_token->type = minishell->tokenizer->prev_type;
+	if (new_token->type == T_WORD && new_token->value[0] == '$')
+	{
+		if (new_token->value[1] == '?' && new_token->value[2] == '\0')
+			new_token->expansion_type = EXIT_STATUS_EXPANSION;
+		else
+			new_token->expansion_type = VAR_EXPANSION;
+	}
+	else
+		new_token->expansion_type = NO_EXPANSION;
+	return (new_token);
+}
 
-// void	handle_variable(char **res, char *var, t_minishell *mini)
-// {
-// 	char	*val;
 
-// 	val = env_value(var, mini->env_list);
-// 	if (val)
-// 		*res = ft_strjoin(*res, val);
-// 	else
-// 		*res = ft_strjoin(*res, "");
-// 	free(var);
-// }
+char	*expand_env_in_str(char *src, t_minishell *mini)
+{
+	char	*res;
+	int		i;
+	int		start;
 
-// void	get_variable_length(char *src, int *i, int *len)
-// {
-// 	int	j;
-
-// 	j = *i + 1;
-// 	while (src[j] && (ft_isalnum(src[j]) || src[j] == '_'))
-// 		j++;
-// 	*len = j - (*i + 1);
-// }
-
-// void	append_var(char **res, char *src, int *i, t_minishell *mini)
-// {
-// 	int		len;
-// 	char	*var;
-
-// 	if (src[*i + 1] == '?')
-// 	{
-// 		handle_question_mark(res, i, mini);
-// 		return ;
-// 	}
-// 	get_variable_length(src, i, &len);
-// 	if (len > 0)
-// 	{
-// 		var = ft_substr(src, *i + 1, len);
-// 		handle_variable(res, var, mini);
-// 	}
-// 	else
-// 	{
-// 		*res = ft_strjoin(*res, "$");
-// 	}
-// }
+	res = ft_strdup("");
+	i = 0;
+	while (src[i])
+	{
+		if (src[i] == '$')
+			append_var(&res, src, &i, mini);
+		else
+		{
+			start = i;
+			while (src[i] && src[i] != '$')
+				i++;
+			append_literal(&res, src + start, i - start);
+		}
+	}
+	return (res);
+}

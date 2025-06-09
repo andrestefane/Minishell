@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 12:38:46 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 15:08:13 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:43:11 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
 // Tokens
-t_token							*create_token_and_detect_expansion(t_minishell *minishell,
+t_token							*check_expansion(t_minishell *minishell,
 									char *val);
 
 t_token							*add_token(t_minishell *minishell, char *value);
