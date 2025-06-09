@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Mini.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/09 12:38:46 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 16:38:35 by alejaro2         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINI_H
 
 # define MINI_H
@@ -155,7 +143,7 @@ void							free_commands(t_command *cmd);
 int								check_syntax_pipes(t_token *tok);
 
 // Tokens
-t_token							*create_token_and_detect_expansion(t_minishell *minishell,
+t_token							*check_expansion(t_minishell *minishell,
 									char *val);
 
 t_token							*add_token(t_minishell *minishell, char *value);

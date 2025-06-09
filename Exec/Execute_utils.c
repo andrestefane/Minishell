@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 14:21:25 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 15:25:35 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:04:38 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	execute_command(t_minishell *mini, char **paths, char **envir)
 		if (access(path, F_OK) != -1 && access(path, X_OK) == 0)
 		{
 			execve(path, mini->command_list->argv, envir);
-			/* free(path); */
+			free(path);
 			check_errno(errno, mini);
 		}
 		free(path);

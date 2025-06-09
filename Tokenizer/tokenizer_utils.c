@@ -53,7 +53,7 @@ int	tokenize_input(t_minishell *minishell)
 		val = extract_token(minishell);
 		if (minishell->tokenizer->err || !val)
 			break ;
-		if (!create_token_and_detect_expansion(minishell, val))
+		if (!check_expansion(minishell, val))
 		{
 			free(val);
 			return (0);

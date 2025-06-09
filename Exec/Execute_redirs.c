@@ -6,7 +6,7 @@
 /*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 14:38:43 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 14:38:44 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:23:05 by astefane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	apply_one_redirection(t_minishell *mini, t_redir *redir)
 	}
 	close(fd);
 }
+
 void	add_redir_to_cmd(t_minishell *mini, int type, const char *filename)
 {
 	t_redir	*new;
