@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Execute_heredoc.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:31:48 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 14:34:05 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../Mini.h"
 
@@ -13,9 +24,9 @@ int	is_limiter(char *line, char *limiter)
 
 int	here_doc(char *limiter, const char *filename)
 {
-	int		fd;
-	int		save_in;
-	char	*line;
+	int	fd;
+	int	save_in;
+	int	result;
 
 	save_in = dup(STDIN_FILENO);
 	signal(SIGINT, heredoc_signal);
@@ -27,10 +38,23 @@ int	here_doc(char *limiter, const char *filename)
 	}
 	if (!limiter || !*limiter)
 		exit_with_error(SYNTAX_ERROR, 1, 2);
+	result = process_heredoc(fd, limiter);
+	close(fd);
+	if (dup2(save_in, STDIN_FILENO) == -1)
+		ft_putstr("error stdin heredoc\n", 2);
+	close(save_in);
+	signal(SIGINT, sighandler);
+	return (result);
+}
+
+int	process_heredoc(int fd, char *limiter)
+{
+	char	*line;
+
 	while (1)
 	{
 		if (g_status == 130)
-			break ;
+			return (130);
 		write(1, "> ", 2);
 		line = get_next_line(0, 0);
 		if (!line || ft_strcmp(line, limiter) == 0 || is_limiter(line, limiter))
@@ -44,13 +68,6 @@ int	here_doc(char *limiter, const char *filename)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	close(fd);
-	if (dup2(save_in, STDIN_FILENO) == -1)
-		ft_putstr("error stdin heredoc\n", 2);
-	close(save_in);
-	signal(SIGINT, sighandler);
-	if (g_status == 130)
-		return (130);
 	return (0);
 }
 
@@ -83,5 +100,5 @@ void	heredoc_signal(int sing)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	g_status = 130;
-	close (0);
+	close(0);
 }

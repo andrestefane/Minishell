@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:24:34 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 14:24:35 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 void	remove_env_var(const char *name, t_minishell *mini)
@@ -32,7 +44,7 @@ void	ft_unset(t_minishell *mini)
 	i = 1;
 	while (mini->command_list->argv[i])
 	{
-		remove_env_var(mini->command_list->argv[i], mini);  // sin validación
+		remove_env_var(mini->command_list->argv[i], mini);
 		i++;
 	}
 }

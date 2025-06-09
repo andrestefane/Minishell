@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 12:05:40 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 14:37:09 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 void	process_and_exec(t_minishell *mini, int i)
@@ -47,7 +59,7 @@ void	child_process(t_minishell *mini, int fd[2])
 
 void	execute_pipeline(t_minishell *mini)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while (mini->command_list && i < mini->pipex_data->n_cmds - 1)
@@ -66,8 +78,7 @@ void	execute_last_command(t_minishell *mini, int i)
 {
 	if (mini->pipex_data->builtins == 1)
 	{
-		apply_redirections(mini);
-		execute_buitin(mini);
+		(apply_redirections(mini), execute_buitin(mini));
 		if (mini->pipex_data->prev_fd != -1)
 			close(mini->pipex_data->prev_fd);
 	}
@@ -94,7 +105,7 @@ void	execute_last_command(t_minishell *mini, int i)
 
 void	ft_execute(t_minishell *mini)
 {
-	int	i;
+	int		i;
 	t_token	*tokken;
 
 	i = 0;
@@ -105,10 +116,7 @@ void	ft_execute(t_minishell *mini)
 	tokken = mini->t_list;
 	mini->command_list = parse_commands(mini);
 	mini->t_list = tokken;
-	// printf("t_lista que es: %p\n", mini->t_list);
 	mini->pipex_data->commands = mini->command_list;
-	/* if (!mini->command_list)
-		exit_with_error("Error parsing commands\n", 1, 2); */
 	mini->pipex_data->n_cmds = count_commands_list(mini);
 	mini->pipex_data->pid = malloc(sizeof(pid_t) * mini->pipex_data->n_cmds);
 	if (!mini->pipex_data->pid)
@@ -120,4 +128,6 @@ void	ft_execute(t_minishell *mini)
 	}
 	execute_pipeline(mini);
 	delete_heredoc_files(mini->pipex_data->count_heredoc);
+	/* if (mini->pipex_data)
+		free_pipex_data(mini->pipex_data); */
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 14:46:01 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 14:46:13 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Mini.h"
 
 static t_command	*allocate_command(t_token *tokens)
@@ -26,12 +38,15 @@ static t_command	*allocate_command(t_token *tokens)
 
 t_command	*parse_single_command(t_minishell *minishell)
 {
-	t_token *tokens;
-	tokens = minishell->t_list;
-	t_command *cmd = allocate_command(tokens);
-	t_token *tk = tokens;
-	int i = 0;
+	t_token		*tokens;
+	t_command	*cmd;
+	t_token		*tk;
+	int			i;
 
+	tokens = minishell->t_list;
+	cmd = allocate_command(tokens);
+	tk = tokens;
+	i = 0;
 	while (tk)
 	{
 		if (tk->type == T_WORD)
