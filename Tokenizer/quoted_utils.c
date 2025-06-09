@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quoted_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:34:29 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 15:34:30 by astefane         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:07:24 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@ char	*get_next_token_part(t_minishell *m)
 {
 	char	*temp;
 
-	if (m->tokenizer->input[m->tokenizer->pos] == '\''
-		|| m->tokenizer->input[m->tokenizer->pos] == '"')
+	if (m->tokenizer->input[m->tokenizer->pos] == '\'')
 	{
+		m->tokenizer->quote = Q_SINGLE;
+		temp = extract_quoted_token(m);
+	}
+	else if (m->tokenizer->input[m->tokenizer->pos] == '"')
+	{
+		m->tokenizer->quote = Q_DOUBLE;
 		temp = extract_quoted_token(m);
 	}
 	else

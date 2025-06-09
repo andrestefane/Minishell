@@ -6,7 +6,7 @@
 /*   By: alejaro2 <alejaro2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:08:56 by alejaro2          #+#    #+#             */
-/*   Updated: 2025/06/09 16:43:04 by alejaro2         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:17:10 by alejaro2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*extract_complex_token(t_minishell *m)
 
 	if (m->tokenizer->input[m->tokenizer->pos] == '\''
 		|| m->tokenizer->input[m->tokenizer->pos] == '"')
-		return (extract_quoted_token(m));
+		return (get_next_token_part(m));
 	res = malloc(ft_strlen(m->tokenizer->input) + 1);
 	if (!res)
 	{
