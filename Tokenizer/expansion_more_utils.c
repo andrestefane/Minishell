@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expansion_more_utils.c                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/09 15:05:31 by astefane          #+#    #+#             */
-/*   Updated: 2025/06/09 16:53:42 by astefane         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../Mini.h"
 
 t_token	*check_expansion(t_minishell *minishell, char *val)
@@ -20,9 +8,12 @@ t_token	*check_expansion(t_minishell *minishell, char *val)
 	if (!new_token)
 		return (NULL);
 	new_token->type = minishell->tokenizer->prev_type;
+	new_token->quote = minishell->tokenizer->quote;
 	if (new_token->type == T_WORD && new_token->value[0] == '$')
 	{
-		if (new_token->value[1] == '?' && new_token->value[2] == '\0')
+		if (new_token->quote == Q_SINGLE)
+			new_token->expansion_type = NO_EXPANSION;
+		else if (new_token->value[1] == '?' && new_token->value[2] == '\0')
 			new_token->expansion_type = EXIT_STATUS_EXPANSION;
 		else
 			new_token->expansion_type = VAR_EXPANSION;
