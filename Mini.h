@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Mini.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: astefane <astefane@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/09 16:54:39 by astefane          #+#    #+#             */
+/*   Updated: 2025/06/09 16:54:40 by astefane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINI_H
 
 # define MINI_H
@@ -170,16 +182,8 @@ int								fill_complex_res(t_tokenizer *tok, char *res,
 									size_t *idx);
 void							append_var(char **res, char *src, int *i,
 									t_minishell *mini);
-int								handle_special_var(char **res, char *src,
-									int *i, t_minishell *mini);
 int								handle_quote(t_tokenizer *tok, char *res,
 									size_t *i, char d);
-int								find_var_end(char *src, int start);
-void							handle_env_variable(char **res, char *src,
-									int *i, t_minishell *mini);
-void							append_env_value(char **res, char *src,
-									int var_start, int var_end,
-									t_minishell *mini);
 
 // Exec
 
